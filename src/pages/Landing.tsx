@@ -13,7 +13,9 @@ export function Landing() {
       <BanksStrip />
       <PillarsSection />
       <HowItWorks />
+      <CtaBanner />
       <SecuritySection />
+      <PricingSection />
       <WaitlistSection />
       <Footer />
     </div>
@@ -30,8 +32,9 @@ function Nav() {
       <div className="flex items-center gap-9">
         <a href="#how" className="hidden md:inline text-sm font-medium text-slate-500 hover:text-white transition-colors">How it works</a>
         <a href="#security" className="hidden md:inline text-sm font-medium text-slate-500 hover:text-white transition-colors">Security</a>
+        <Link to="/login" className="hidden md:inline text-sm font-medium text-slate-500 hover:text-white transition-colors">Log in</Link>
         <Link to="/signup" className="text-sm font-semibold bg-blue-600 text-white px-5 py-2 rounded-lg hover:bg-blue-700 hover:-translate-y-px transition-all">
-          Get early access
+          Start free trial
         </Link>
       </div>
     </nav>
@@ -48,7 +51,7 @@ function HeroSection() {
       <div className="relative z-10 max-w-[860px]">
         <div className="inline-flex items-center gap-2 bg-blue-600/10 border border-blue-400/25 text-blue-300 text-xs font-semibold tracking-widest uppercase px-4 py-1.5 rounded-full mb-9">
           <span className="w-[7px] h-[7px] rounded-full bg-emerald-400 shadow-[0_0_8px_#34d399] animate-pulse" />
-          Open banking &middot; AI agent &middot; Dutch tax automation
+          For expats &amp; ZZP&apos;ers &middot; AI agent &middot; English + Dutch
         </div>
 
         <h1 className="font-display text-[clamp(44px,7vw,82px)] leading-[1.06] tracking-tight text-white mb-7">
@@ -56,17 +59,18 @@ function HeroSection() {
         </h1>
 
         <p className="text-[clamp(17px,2.2vw,21px)] text-slate-400 max-w-[580px] mx-auto mb-12 leading-relaxed font-normal">
-          Connect your bank. askwijs categorizes every transaction, tracks your live BTW position, and files your returns — automatically. In English or Dutch.
+          Built for expats and ZZP&apos;ers in the Netherlands. askwijs categorizes every transaction, tracks your live BTW position, and files your returns — automatically. Fully in English, or Dutch.
         </p>
 
-        <div className="flex items-center justify-center gap-3.5 flex-wrap mb-16">
+        <div className="flex items-center justify-center gap-3.5 flex-wrap mb-4">
           <Link to="/signup" className="inline-flex items-center gap-2 bg-blue-600 text-white text-base font-semibold px-8 py-4 rounded-[10px] hover:bg-blue-700 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(37,99,235,0.35)] transition-all">
-            Connect my bank &rarr;
+            Start free trial &rarr;
           </Link>
           <a href="#how" className="inline-flex items-center gap-2 bg-transparent text-slate-400 text-base font-medium px-7 py-4 rounded-[10px] border border-white/[0.12] hover:border-white/30 hover:text-white transition-all">
             See how it works
           </a>
         </div>
+        <p className="text-sm text-slate-600 mb-16">1 month free &middot; then &euro;19.99/mo &middot; no credit card needed</p>
 
         <DashboardPreview />
       </div>
@@ -128,7 +132,7 @@ function DashboardPreview() {
               {stats.map((s) => (
                 <div key={s.label} className="bg-[#0f1623] border border-white/[0.06] rounded-xl p-3.5">
                   <div className="text-[10px] font-semibold uppercase tracking-wider text-slate-700">{s.label}</div>
-                  <div className="font-mono text-xl font-medium text-white mt-1">{s.val}</div>
+                  <div className="text-xl font-bold text-white mt-1 tabular-nums">{s.val}</div>
                   <span className={`inline-block text-[10px] font-bold px-2 py-0.5 rounded-full mt-1.5 ${badgeColor[s.color]}`}>{s.badge}</span>
                 </div>
               ))}
@@ -140,7 +144,7 @@ function DashboardPreview() {
                   <div key={tx.name} className="flex items-center justify-between py-1.5 border-b border-white/[0.04] last:border-0 text-[11px]">
                     <span className="text-slate-400">{tx.name}</span>
                     <span className="text-[10px] px-2 py-0.5 rounded-full bg-blue-600/10 text-blue-400">{tx.cat}</span>
-                    <span className={`font-mono text-[11px] ${tx.pos ? "text-emerald-400" : "text-red-400"}`}>{tx.amt}</span>
+                    <span className={`text-[11px] font-semibold tabular-nums ${tx.pos ? "text-emerald-400" : "text-red-400"}`}>{tx.amt}</span>
                   </div>
                 ))}
               </div>
@@ -164,13 +168,26 @@ function DashboardPreview() {
 
 /* --- BANKS STRIP --- */
 function BanksStrip() {
+  const banks = [
+    { name: "ING", color: "#ff6200" },
+    { name: "ABN AMRO", color: "#004c3f" },
+    { name: "Rabobank", color: "#0068b4" },
+    { name: "bunq", color: "#30c381" },
+    { name: "Revolut", color: "#0075eb" },
+    { name: "N26", color: "#48d2a0" },
+    { name: "SNS", color: "#e5007d" },
+  ];
+
   return (
     <div className="py-16 px-6 bg-[#080c14]">
       <div className="max-w-[900px] mx-auto text-center">
         <div className="text-xs text-slate-700 font-semibold tracking-widest uppercase mb-7">Connects to all major Dutch banks</div>
-        <div className="flex items-center justify-center gap-4 md:gap-8 flex-wrap">
-          {["ING", "ABN AMRO", "Rabobank", "SNS Bank", "Bunq", "Revolut", "N26"].map((b) => (
-            <div key={b} className="bg-white/[0.04] border border-white/[0.07] rounded-[10px] px-5 py-2.5 text-sm font-semibold text-slate-600 tracking-wide">{b}</div>
+        <div className="flex items-center justify-center gap-4 md:gap-6 flex-wrap">
+          {banks.map((b) => (
+            <div key={b.name} className="bg-white/[0.04] border border-white/[0.07] rounded-[12px] px-6 py-3.5 flex items-center gap-2.5 hover:bg-white/[0.08] transition-colors group">
+              <div className="w-2.5 h-2.5 rounded-full opacity-60 group-hover:opacity-100 transition-opacity" style={{ backgroundColor: b.color }} />
+              <span className="text-sm font-semibold text-slate-500 group-hover:text-slate-300 transition-colors tracking-wide">{b.name}</span>
+            </div>
           ))}
         </div>
       </div>
@@ -196,7 +213,7 @@ function PillarsSection() {
         <h2 className="font-display text-[clamp(32px,4.5vw,54px)] leading-[1.12] tracking-tight text-white mb-4">
           Five pillars.<br /><em className="text-blue-400 italic">One platform.</em>
         </h2>
-        <p className="text-lg text-slate-400 max-w-[560px] leading-relaxed">Everything a Dutch freelancer needs — connected, automated, and always working in the background.</p>
+        <p className="text-lg text-slate-400 max-w-[560px] leading-relaxed">Everything an expat freelancer in the Netherlands needs — connected, automated, and fully in English.</p>
         <div className="grid md:grid-cols-3 gap-px mt-16 border border-white/[0.07] rounded-[20px] overflow-hidden">
           {pillars.map((p) => (
             <div key={p.num} className="bg-[#0d1220] p-8 md:p-9 border-r border-b border-white/[0.06] last:border-r-0 hover:bg-[#111827] transition-colors">
@@ -229,7 +246,7 @@ function HowItWorks() {
         <h2 className="font-display text-[clamp(32px,4.5vw,54px)] leading-[1.12] tracking-tight text-slate-900 mb-4">
           Up and running<br /><em className="text-blue-600 italic">in 5 minutes.</em>
         </h2>
-        <p className="text-lg text-slate-500 max-w-[560px] leading-relaxed">No accountant onboarding, no spreadsheets, no Dutch required. Connect and go.</p>
+        <p className="text-lg text-slate-500 max-w-[560px] leading-relaxed">No accountant, no spreadsheets, no Dutch language skills required. Connect and go.</p>
         <div className="relative grid grid-cols-2 md:grid-cols-4 gap-8 mt-16">
           <div className="hidden md:block absolute top-9 left-[12.5%] right-[12.5%] h-0.5 border-t-2 border-dashed border-slate-200 z-0" />
           {steps.map((s, i) => (
@@ -240,6 +257,24 @@ function HowItWorks() {
             </div>
           ))}
         </div>
+      </div>
+    </section>
+  );
+}
+
+/* --- CTA BANNER --- */
+function CtaBanner() {
+  return (
+    <section className="py-20 px-6 bg-[#0b0e17] text-center">
+      <div className="max-w-[700px] mx-auto">
+        <h2 className="font-display text-[clamp(28px,4vw,44px)] leading-[1.12] tracking-tight text-white mb-4">
+          Ready to stop worrying<br />about <em className="text-blue-400 italic">Dutch taxes?</em>
+        </h2>
+        <p className="text-lg text-slate-400 mb-8">Join hundreds of expats and freelancers who let Wijs handle their Dutch taxes — in English.</p>
+        <Link to="/signup" className="inline-flex items-center gap-2 bg-blue-600 text-white text-base font-semibold px-8 py-4 rounded-[10px] hover:bg-blue-700 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(37,99,235,0.35)] transition-all">
+          Start free trial &rarr;
+        </Link>
+        <p className="text-sm text-slate-600 mt-3">No credit card &middot; Cancel anytime</p>
       </div>
     </section>
   );
@@ -276,6 +311,62 @@ function SecuritySection() {
   );
 }
 
+/* --- PRICING --- */
+function PricingSection() {
+  const features = [
+    "Unlimited bank connections (PSD2)",
+    "AI transaction categorization",
+    "Live BTW dashboard & tax forecast",
+    "Automatic BTW aangifte filing",
+    "Receipt scanning (OCR)",
+    "Ask Wijs \u2014 your AI financial advisor",
+    "WhatsApp & Telegram notifications",
+    "English & Dutch bilingual support",
+  ];
+
+  return (
+    <section className="py-28 px-6 bg-[#0b0e17]">
+      <div className="max-w-[1060px] mx-auto">
+        <div className="text-center mb-16">
+          <div className="text-[11px] font-bold tracking-[0.15em] uppercase text-blue-400 mb-3.5">Pricing</div>
+          <h2 className="font-display text-[clamp(32px,4.5vw,54px)] leading-[1.12] tracking-tight text-white mb-4">
+            Simple pricing.<br /><em className="text-blue-400 italic">No surprises.</em>
+          </h2>
+          <p className="text-lg text-slate-400 max-w-[500px] mx-auto leading-relaxed">One plan. Everything included. Cancel anytime.</p>
+        </div>
+
+        <div className="max-w-md mx-auto">
+          <div className="bg-[#0d1220] border border-white/[0.08] rounded-[20px] p-8 md:p-10 relative overflow-hidden">
+            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-600 to-emerald-500" />
+            <div className="text-center mb-8">
+              <span className="inline-block text-xs font-semibold tracking-widest uppercase text-blue-400 bg-blue-600/10 border border-blue-400/25 px-3 py-1 rounded-full mb-4">askwijs Pro</span>
+              <div className="flex items-baseline justify-center gap-1">
+                <span className="text-5xl font-bold text-white tabular-nums">&euro;19.99</span>
+                <span className="text-slate-500 text-lg">/month</span>
+              </div>
+              <p className="text-sm text-slate-600 mt-2">excl. BTW &middot; first month free</p>
+            </div>
+
+            <div className="space-y-3 mb-8">
+              {features.map((f) => (
+                <div key={f} className="flex items-start gap-3">
+                  <span className="text-emerald-400 mt-0.5 shrink-0">&#10003;</span>
+                  <span className="text-sm text-slate-300">{f}</span>
+                </div>
+              ))}
+            </div>
+
+            <Link to="/signup" className="block w-full text-center bg-blue-600 text-white py-4 rounded-[10px] text-base font-semibold hover:bg-blue-700 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(37,99,235,0.35)] transition-all">
+              Start free trial &rarr;
+            </Link>
+            <p className="text-center text-xs text-slate-600 mt-3">No credit card required &middot; Cancel anytime</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 /* --- WAITLIST --- */
 function WaitlistSection() {
   return (
@@ -284,7 +375,7 @@ function WaitlistSection() {
       <div className="relative max-w-[620px] mx-auto">
         <div className="text-[11px] font-bold tracking-[0.15em] uppercase text-blue-400 mb-3.5">Early access</div>
         <h2 className="font-display text-[clamp(32px,4.5vw,54px)] leading-[1.12] tracking-tight text-white mb-4">Be first to connect.</h2>
-        <p className="text-lg text-slate-400 leading-relaxed">Join the waitlist and get early access when we launch. Free during beta — no credit card, no accountant needed.</p>
+        <p className="text-lg text-slate-400 leading-relaxed">Join the waitlist and get early access when we launch. Free during beta — no credit card, no accountant, no Dutch required.</p>
         <div className="flex flex-col sm:flex-row gap-3 mt-10 mb-3.5 justify-center">
           <input type="email" placeholder="your@email.com" className="flex-1 bg-white/[0.06] border border-white/[0.12] rounded-[10px] px-5 py-4 text-base text-white outline-none placeholder:text-slate-700 focus:border-blue-500 transition-colors" />
           <Link to="/signup" className="bg-blue-600 text-white text-base font-semibold px-8 py-4 rounded-[10px] hover:bg-blue-700 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(37,99,235,0.35)] transition-all whitespace-nowrap inline-flex items-center justify-center">
