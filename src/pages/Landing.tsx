@@ -27,7 +27,7 @@ function Nav() {
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-5 md:px-14 h-[68px] bg-[rgba(11,14,23,0.85)] backdrop-blur-xl border-b border-white/[0.08]">
       <Link to="/" className="font-display text-2xl text-white no-underline tracking-tight">
-        ask<span className="text-blue-400 font-normal italic">wijs</span>
+        ask<span className="text-blue-400 font-normal">wijs</span>
       </Link>
       <div className="flex items-center gap-9">
         <a href="#how" className="hidden md:inline text-sm font-medium text-slate-500 hover:text-white transition-colors">How it works</a>
@@ -55,7 +55,7 @@ function HeroSection() {
         </div>
 
         <h1 className="font-display text-[clamp(44px,7vw,82px)] leading-[1.06] tracking-tight text-white mb-7">
-          Your Dutch tax.<br /><em className="text-blue-400 italic">Fully automated.</em>
+          Your Dutch tax.<br /><span className="text-blue-400">Fully automated.</span>
         </h1>
 
         <p className="text-[clamp(17px,2.2vw,21px)] text-slate-400 max-w-[580px] mx-auto mb-12 leading-relaxed font-normal">
@@ -115,7 +115,7 @@ function DashboardPreview() {
 
         <div className="grid md:grid-cols-[200px_1fr]">
           <div className="hidden md:block bg-[#080c14] border-r border-white/[0.05] p-5 min-h-[400px]">
-            <div className="font-display text-lg text-white mb-6 px-2">ask<span className="text-blue-400 font-normal italic">wijs</span></div>
+            <div className="font-display text-lg text-white mb-6 px-2">ask<span className="text-blue-400 font-normal">wijs</span></div>
             {["Dashboard", "Transactions", "BTW Aangifte", "Ask Wijs", "Invoices", "Deadlines"].map((item, i) => (
               <div key={item} className={`flex items-center gap-2.5 px-3 py-2.5 rounded-lg mb-0.5 text-[13px] ${i === 0 ? "bg-blue-600/15 text-blue-300" : "text-slate-600"}`}>
                 <span className="w-2 h-2 rounded-full bg-current opacity-50" />{item}
@@ -211,7 +211,7 @@ function PillarsSection() {
       <div className="max-w-[1060px] mx-auto">
         <div className="text-[11px] font-bold tracking-[0.15em] uppercase text-blue-400 mb-3.5">What askwijs does</div>
         <h2 className="font-display text-[clamp(32px,4.5vw,54px)] leading-[1.12] tracking-tight text-white mb-4">
-          Five pillars.<br /><em className="text-blue-400 italic">One platform.</em>
+          Five pillars.<br /><span className="text-blue-400">One platform.</span>
         </h2>
         <p className="text-lg text-slate-400 max-w-[560px] leading-relaxed">Everything an expat freelancer in the Netherlands needs — connected, automated, and fully in English.</p>
         <div className="grid md:grid-cols-3 gap-px mt-16 border border-white/[0.07] rounded-[20px] overflow-hidden">
@@ -244,7 +244,7 @@ function HowItWorks() {
       <div className="max-w-[1060px] mx-auto">
         <div className="text-[11px] font-bold tracking-[0.15em] uppercase text-blue-600 mb-3.5">How it works</div>
         <h2 className="font-display text-[clamp(32px,4.5vw,54px)] leading-[1.12] tracking-tight text-slate-900 mb-4">
-          Up and running<br /><em className="text-blue-600 italic">in 5 minutes.</em>
+          Up and running<br /><span className="text-blue-600">in 5 minutes.</span>
         </h2>
         <p className="text-lg text-slate-500 max-w-[560px] leading-relaxed">No accountant, no spreadsheets, no Dutch language skills required. Connect and go.</p>
         <div className="relative grid grid-cols-2 md:grid-cols-4 gap-8 mt-16">
@@ -268,7 +268,7 @@ function CtaBanner() {
     <section className="py-20 px-6 bg-[#0b0e17] text-center">
       <div className="max-w-[700px] mx-auto">
         <h2 className="font-display text-[clamp(28px,4vw,44px)] leading-[1.12] tracking-tight text-white mb-4">
-          Ready to stop worrying<br />about <em className="text-blue-400 italic">Dutch taxes?</em>
+          Ready to stop worrying<br />about <span className="text-blue-400">Dutch taxes?</span>
         </h2>
         <p className="text-lg text-slate-400 mb-8">Join hundreds of expats and freelancers who let Wijs handle their Dutch taxes — in English.</p>
         <Link to="/signup" className="inline-flex items-center gap-2 bg-blue-600 text-white text-base font-semibold px-8 py-4 rounded-[10px] hover:bg-blue-700 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(37,99,235,0.35)] transition-all">
@@ -294,7 +294,7 @@ function SecuritySection() {
       <div className="max-w-[900px] mx-auto">
         <div className="text-center mb-2 text-[11px] font-bold tracking-[0.15em] uppercase text-blue-600">Security</div>
         <h2 className="text-center font-display text-[clamp(28px,3.5vw,42px)] text-slate-900 tracking-tight mb-3">
-          Bank-level security.<br /><em className="text-blue-600 italic">Always.</em>
+          Bank-level security.<br /><span className="text-blue-600">Always.</span>
         </h2>
         <p className="text-center text-slate-500 text-[17px] max-w-[500px] mx-auto mb-10">Your financial data is as sensitive as it gets. We treat it that way.</p>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
@@ -330,7 +330,7 @@ function PricingSection() {
         <div className="text-center mb-16">
           <div className="text-[11px] font-bold tracking-[0.15em] uppercase text-blue-400 mb-3.5">Pricing</div>
           <h2 className="font-display text-[clamp(32px,4.5vw,54px)] leading-[1.12] tracking-tight text-white mb-4">
-            Simple pricing.<br /><em className="text-blue-400 italic">No surprises.</em>
+            Simple pricing.<br /><span className="text-blue-400">No surprises.</span>
           </h2>
           <p className="text-lg text-slate-400 max-w-[500px] mx-auto leading-relaxed">One plan. Everything included. Cancel anytime.</p>
         </div>
@@ -399,7 +399,7 @@ function Footer() {
   return (
     <footer className="bg-[#06080f] border-t border-white/[0.05] py-10 px-6 md:px-14">
       <div className="max-w-[1060px] mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-        <Link to="/" className="font-display text-xl text-white no-underline">ask<span className="text-blue-400 font-normal italic">wijs</span></Link>
+        <Link to="/" className="font-display text-xl text-white no-underline">ask<span className="text-blue-400 font-normal">wijs</span></Link>
         <div className="flex gap-7">
           {["Features", "Security", "Privacy", "Contact"].map((l) => (
             <a key={l} href="#" className="text-[13px] text-slate-700 hover:text-slate-500 transition-colors">{l}</a>
