@@ -204,8 +204,8 @@ function Hero() {
 
       <div ref={ref} className="relative z-10 max-w-3xl">
         <h1 className="text-[clamp(40px,6.5vw,72px)] font-semibold leading-[1.08] tracking-[-0.03em] text-[#f7f8f8] mb-6">
-          Your freelance finances.{" "}
-          <span className="block" style={{ color: C.muted }}>Finally clear.</span>
+          Your Dutch taxes.{" "}
+          <span className="block" style={{ color: C.muted }}>Fully automated.</span>
         </h1>
 
         <p className="text-lg text-[#8a8f98] max-w-xl mx-auto mb-10 leading-relaxed">
