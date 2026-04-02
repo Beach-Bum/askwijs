@@ -9,6 +9,23 @@ app.use("/*", cors());
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, { apiVersion: "2024-12-18.acacia" });
 
+// ── Helper: Get Tink access token ─────────────────────────────────
+async function getTinkToken(scope: string): Promise<string> {
+  const res = await fetch("https://api.tink.com/api/v1/oauth/token", {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: new URLSearchParams({
+      client_id: process.env.TINK_CLIENT_ID!,
+      client_secret: process.env.TINK_CLIENT_SECRET!,
+      grant_type: "client_credentials",
+      scope,
+    }),
+  });
+  const data = await res.json();
+  if (!data.access_token) throw new Error(`Tink auth failed: ${JSON.stringify(data)}`);
+  return data.access_token;
+}
+
 // ── Stripe: Create checkout session ────────────────────────────────
 app.post("/api/stripe/checkout", async (c) => {
   const { userId, email } = await c.req.json();
@@ -37,7 +54,6 @@ app.post("/api/stripe/webhook", async (c) => {
   switch (event.type) {
     case "customer.subscription.created":
     case "customer.subscription.updated":
-      // TODO: update user subscription status in DB
       console.log("Subscription event:", event.type);
       break;
     case "customer.subscription.deleted":
@@ -48,102 +64,128 @@ app.post("/api/stripe/webhook", async (c) => {
   return c.json({ received: true });
 });
 
-// ── Nordigen: Initiate bank connection ─────────────────────────────
+// ── Tink: Create user and get authorization link ──────────────────
 app.post("/api/banking/connect", async (c) => {
   const { bankId, userId } = await c.req.json();
+  const redirectUri = `${process.env.VITE_APP_URL || "http://localhost:5173"}/dashboard?bank_connected=true`;
 
-  // Get Nordigen access token
-  const tokenRes = await fetch("https://bankaccountdata.gocardless.com/api/v2/token/new/", {
+  // 1. Get client access token
+  const token = await getTinkToken("user:create,authorization:grant");
+
+  // 2. Create a Tink user (or use existing external user ID)
+  const userRes = await fetch("https://api.tink.com/api/v1/user/create", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
     body: JSON.stringify({
-      secret_id: process.env.NORDIGEN_SECRET_ID,
-      secret_key: process.env.NORDIGEN_SECRET_KEY,
+      external_user_id: userId,
+      market: "NL",
+      locale: "en_US",
     }),
   });
-  const { access } = await tokenRes.json();
+  const userData = await userRes.json();
 
-  // Map bank ID to Nordigen institution ID
-  const institutionMap: Record<string, string> = {
-    ING: "ING_INGBNL2A",
-    ABNAMRO: "ABNAMRO_ABNANL2A",
-    RABOBANK: "RABOBANK_RABONL2U",
-    BUNQ: "BUNQ_BUNQNL2A",
-    SNS: "SNS_SNSBNL2A",
-    REVOLUT: "REVOLUT_REVOLT21",
-  };
-
-  const institutionId = institutionMap[bankId] || bankId;
-
-  // Create end user agreement
-  const agreementRes = await fetch("https://bankaccountdata.gocardless.com/api/v2/agreements/enduser/", {
+  // 3. Grant authorization code for the user
+  const authRes = await fetch("https://api.tink.com/api/v1/oauth/authorization-grant", {
     method: "POST",
-    headers: { "Content-Type": "application/json", Authorization: `Bearer ${access}` },
-    body: JSON.stringify({
-      institution_id: institutionId,
-      max_historical_days: 90,
-      access_valid_for_days: 90,
-      access_scope: ["balances", "details", "transactions"],
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      Authorization: `Bearer ${token}`,
+    },
+    body: new URLSearchParams({
+      external_user_id: userId,
+      scope: "accounts:read,transactions:read,credentials:write,credentials:read",
     }),
   });
-  const agreement = await agreementRes.json();
+  const authData = await authRes.json();
 
-  // Create requisition (link)
-  const reqRes = await fetch("https://bankaccountdata.gocardless.com/api/v2/requisitions/", {
-    method: "POST",
-    headers: { "Content-Type": "application/json", Authorization: `Bearer ${access}` },
-    body: JSON.stringify({
-      redirect: `${process.env.VITE_APP_URL || "http://localhost:5173"}/dashboard?bank_connected=true`,
-      institution_id: institutionId,
-      reference: userId,
-      agreement: agreement.id,
-      user_language: "EN",
-    }),
-  });
-  const requisition = await reqRes.json();
+  // 4. Build Tink Link URL for bank connection
+  const tinkLinkUrl = new URL("https://link.tink.com/1.0/transactions/connect-accounts");
+  tinkLinkUrl.searchParams.set("client_id", process.env.TINK_CLIENT_ID!);
+  tinkLinkUrl.searchParams.set("redirect_uri", redirectUri);
+  tinkLinkUrl.searchParams.set("authorization_code", authData.code);
+  tinkLinkUrl.searchParams.set("market", "NL");
+  tinkLinkUrl.searchParams.set("locale", "en_US");
 
-  return c.json({ redirectUrl: requisition.link, requisitionId: requisition.id });
+  return c.json({ redirectUrl: tinkLinkUrl.toString(), tinkUserId: userData.user_id || userId });
 });
 
-// ── Nordigen: Fetch transactions after bank connect ────────────────
-app.get("/api/banking/transactions/:requisitionId", async (c) => {
-  const { requisitionId } = c.req.param();
+// ── Tink: Fetch transactions after bank connect ───────────────────
+app.get("/api/banking/transactions/:userId", async (c) => {
+  const { userId } = c.req.param();
 
-  // Get access token
-  const tokenRes = await fetch("https://bankaccountdata.gocardless.com/api/v2/token/new/", {
+  // 1. Get client token and then user-scoped token
+  const clientToken = await getTinkToken("authorization:grant");
+
+  // 2. Get authorization code for this user
+  const authRes = await fetch("https://api.tink.com/api/v1/oauth/authorization-grant", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      secret_id: process.env.NORDIGEN_SECRET_ID,
-      secret_key: process.env.NORDIGEN_SECRET_KEY,
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      Authorization: `Bearer ${clientToken}`,
+    },
+    body: new URLSearchParams({
+      external_user_id: userId,
+      scope: "accounts:read,transactions:read",
     }),
   });
-  const { access } = await tokenRes.json();
+  const { code } = await authRes.json();
 
-  // Get requisition to find account IDs
-  const reqRes = await fetch(`https://bankaccountdata.gocardless.com/api/v2/requisitions/${requisitionId}/`, {
-    headers: { Authorization: `Bearer ${access}` },
+  // 3. Exchange code for user access token
+  const tokenRes = await fetch("https://api.tink.com/api/v1/oauth/token", {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: new URLSearchParams({
+      client_id: process.env.TINK_CLIENT_ID!,
+      client_secret: process.env.TINK_CLIENT_SECRET!,
+      grant_type: "authorization_code",
+      code,
+    }),
   });
-  const requisition = await reqRes.json();
+  const { access_token: userToken } = await tokenRes.json();
 
-  if (!requisition.accounts || requisition.accounts.length === 0) {
-    return c.json({ error: "No accounts linked yet", status: requisition.status }, 400);
+  // 4. Fetch accounts
+  const accountsRes = await fetch("https://api.tink.com/data/v2/accounts", {
+    headers: { Authorization: `Bearer ${userToken}` },
+  });
+  const accountsData = await accountsRes.json();
+
+  if (!accountsData.accounts || accountsData.accounts.length === 0) {
+    return c.json({ error: "No accounts linked yet" }, 400);
   }
 
-  // Fetch transactions from first account
-  const accountId = requisition.accounts[0];
-  const txRes = await fetch(`https://bankaccountdata.gocardless.com/api/v2/accounts/${accountId}/transactions/`, {
-    headers: { Authorization: `Bearer ${access}` },
+  // 5. Fetch transactions
+  const txRes = await fetch("https://api.tink.com/data/v2/transactions?pageSize=100", {
+    headers: { Authorization: `Bearer ${userToken}` },
   });
   const txData = await txRes.json();
 
-  return c.json({ transactions: txData.transactions?.booked || [], accountId });
+  const transactions = (txData.transactions || []).map((tx: any) => ({
+    id: tx.id,
+    date: tx.dates?.booked || tx.dates?.value,
+    amount: parseFloat(tx.amount?.value?.unscaledValue || "0") / Math.pow(10, tx.amount?.value?.scale || 0),
+    currency: tx.amount?.currencyCode || "EUR",
+    counterpartyName: tx.descriptions?.display || tx.descriptions?.original || "Unknown",
+    description: tx.descriptions?.original || "",
+    status: tx.status,
+  }));
+
+  return c.json({
+    transactions,
+    accounts: accountsData.accounts.map((a: any) => ({
+      id: a.id,
+      name: a.name,
+      iban: a.identifiers?.iban?.iban,
+      balance: a.balances?.booked?.amount,
+    })),
+  });
 });
 
 // ── User profile ───────────────────────────────────────────────────
 app.post("/api/user/profile", async (c) => {
   const body = await c.req.json();
-  // TODO: save to database
   console.log("Profile saved:", body);
   return c.json({ ok: true });
 });
