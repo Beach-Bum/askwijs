@@ -1,8 +1,8 @@
 # askwijs.ai 🧠
 
-> **De slimste belastingadviseur voor ZZP'ers — powered by AI**
+> **The smartest tax advisor for Dutch freelancers — in English & Nederlands**
 
-askwijs is a conversational AI tax advisor built specifically for Dutch freelancers (ZZP'ers) and small businesses. It answers tax questions, tracks BTW deadlines, calculates deductions, and makes the Belastingdienst feel less scary.
+askwijs is a bilingual AI tax advisor built for Dutch ZZP'ers and expat freelancers in the Netherlands. It answers tax questions in plain English or Dutch, tracks BTW/VAT deadlines, calculates deductions, and makes the Belastingdienst feel a lot less scary.
 
 ---
 
@@ -18,7 +18,11 @@ askwijs is a conversational AI tax advisor built specifically for Dutch freelanc
 
 ## Target audience
 
-Dutch ZZP'ers and small business owners (eenmanszaak) who want a smart, friendly alternative to hiring an accountant for routine tax questions.
+- 🇳🇱 **Dutch ZZP'ers** — freelancers and eenmanszaak owners navigating the Dutch tax system
+- 🌍 **Expats in the Netherlands** — 500k+ internationals, many running their own business, dealing with an unfamiliar tax system in a foreign language
+- 🏢 **Small businesses (MKB)** — sole traders and micro-businesses, especially under the KOR threshold
+
+Both audiences want the same thing: a smart, friendly alternative to expensive accountants and confusing government portals.
 
 ---
 
@@ -81,4 +85,4 @@ askwijs/
 
 ---
 
-*Built for the ~1.5 million ZZP'ers in the Netherlands 🇳🇱*
+*Built for the ~1.5 million ZZP'ers and 500k+ expats running businesses in the Netherlands 🇳🇱🌍*

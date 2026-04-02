@@ -2,9 +2,9 @@
 
 ## Positioning
 
-**Category:** AI tax advisor for Dutch freelancers  
-**Target:** ZZP'ers and eenmanszaak owners in the Netherlands  
-**Against:** Expensive accountants, confusing Belastingdienst portals, generic bookkeeping apps
+**Category:** Bilingual AI tax advisor for Dutch freelancers and expats  
+**Target:** ZZP'ers, eenmanszaak owners, and international freelancers in the Netherlands  
+**Against:** Expensive accountants, confusing Belastingdienst portals, Dutch-only bookkeeping apps that exclude expats
 
 ---
 
@@ -24,20 +24,27 @@ askwijs is your **calm, brilliant friend** who happens to know everything about 
 
 ## Voice & Tone
 
+askwijs speaks **English first, Dutch fluently** — the only tax AI that feels native to both communities.
+
 **Do:**
-- Write in plain Dutch first, English optional
-- Use first-person friendly language ("Wijs heeft dit berekend voor je")
-- Proactively surface deadlines and risks
-- Confirm actions warmly ("✅ Je aangifte is ingediend!")
+- Default to English, switch to Dutch naturally when the user does
+- Use Dutch tax terms with immediate plain-English explanations (e.g. "zelfstandigenaftrek — your self-employment deduction")
+- Write in first-person friendly language ("Wijs has calculated this for you")
+- Proactively surface deadlines and risks in the user's preferred language
+- Confirm actions warmly ("✅ Your return has been filed!")
 
 **Don't:**
-- Use accountant/government language
+- Force users into Dutch-only flows — expats will leave immediately
+- Assume knowledge of Dutch tax vocabulary without explaining it
+- Use accountant/government language in either language
 - Show raw numbers without context
 - Use urgency or fear as motivation
 - Bury important info in small print
 
-### Example copy
+### Example copy — English
+> "You qualify for the self-employment deduction (zelfstandigenaftrek) of €2,470 this year. I've already applied it to your return. Want to see what your net income looks like?"
 
+### Example copy — Dutch
 > "Je hebt recht op €2.470 zelfstandigenaftrek dit jaar. Ik heb dit al verwerkt in je aangifte. Wil je zien hoe je nettobedrag eruitziet?"
 
 ---
@@ -97,6 +104,9 @@ Mono      JetBrains Mono     Numbers, tax amounts
 
 - ~1.51 million ZZP'ers in the Netherlands (UWV 2022)
 - 20% of Dutch labour force is self-employed
-- Key pain points: BTW deadlines, zelfstandigenaftrek complexity, schijnzelfstandigheid anxiety
+- **500,000+ expats** in the Netherlands — a large and underserved segment with no Dutch-native tax knowledge
+- Expats face a double burden: unfamiliar tax system + language barrier
+- Key pain points for both groups: BTW deadlines, zelfstandigenaftrek complexity, schijnzelfstandigheid anxiety
 - Key tax events: Quarterly BTW aangifte, May 1 income tax deadline
 - The self-employment deduction drops from €3,750 (2024) → €1,200 (2026) — ZZPers need guidance now more than ever
+- **No existing tool** serves both communities fluently — askwijs owns this gap

@@ -9,7 +9,7 @@
 5. **Visible security cues** — trust must be earned visually
 6. **Mobile-first** — ZZPers check taxes on the go
 7. **Accessible contrast** — WCAG AA minimum, AAA where possible
-8. **Conversational tone** — UI copy reads like a helpful person
+8. **Bilingual by default** — English primary, Dutch seamlessly supported. Dutch tax terms always accompanied by an English gloss on first use.
 
 ---
 
