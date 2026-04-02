@@ -3,19 +3,21 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>askwijs — Your complete Dutch tax picture, automated</title>
-  <meta name="description" content="Connect your bank. Wijs categorizes everything, calculates your live tax position, and files your returns automatically. For Dutch ZZP'ers and expats." />
+  <title>askwijs — Your Dutch tax, fully automated</title>
+  <meta name="description" content="Connect your bank, let Wijs handle the rest. Automatic categorization, live BTW dashboard, and an AI agent that files your Dutch tax returns for you." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Sora:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --blue: #2563eb; --blue-mid: #1d4ed8; --blue-pale: #eff6ff;
-      --green: #059669; --green-pale: #ecfdf5; --green-light: #34d399;
-      --amber: #d97706; --amber-pale: #fffbeb;
+      --blue: #2563eb; --blue-mid: #1d4ed8; --blue-light: #3b82f6;
+      --blue-pale: #eff6ff; --green: #059669; --green-pale: #ecfdf5;
+      --green-light: #10b981; --amber: #d97706; --amber-pale: #fffbeb;
       --slate-950: #0a0f1a; --slate-900: #0f172a; --slate-800: #1e293b;
       --slate-700: #334155; --slate-500: #64748b; --slate-300: #cbd5e1;
       --slate-200: #e2e8f0; --slate-100: #f1f5f9; --slate-50: #f8fafc;
+      --white: #ffffff;
       --font-display: 'DM Serif Display', serif;
       --font-body: 'Sora', sans-serif;
       --font-mono: 'JetBrains Mono', monospace;
@@ -25,157 +27,164 @@
 
     /* NAV */
     nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 0 48px; height: 64px; background: rgba(10,15,26,0.94); backdrop-filter: blur(16px); border-bottom: 1px solid rgba(255,255,255,0.06); }
-    .nav-logo { font-family: var(--font-display); font-size: 22px; color: white; text-decoration: none; }
+    .nav-logo { font-family: var(--font-display); font-size: 22px; color: var(--white); text-decoration: none; }
     .nav-logo span { color: #93c5fd; }
     .nav-links { display: flex; align-items: center; gap: 32px; list-style: none; }
     .nav-links a { font-size: 14px; font-weight: 500; color: #94a3b8; text-decoration: none; transition: color 0.15s; }
-    .nav-links a:hover { color: white; }
-    .nav-cta { background: var(--blue) !important; color: white !important; padding: 8px 20px; border-radius: 8px; font-weight: 600 !important; }
+    .nav-links a:hover { color: var(--white); }
+    .nav-cta { background: var(--blue) !important; color: var(--white) !important; padding: 8px 20px; border-radius: 8px; font-weight: 600 !important; }
 
     /* HERO */
     .hero { min-height: 100vh; background: var(--slate-950); display: flex; align-items: center; justify-content: center; padding: 120px 24px 80px; position: relative; overflow: hidden; }
-    .hero-bg { position: absolute; inset: 0; background: radial-gradient(ellipse 60% 70% at 65% 40%, rgba(37,99,235,0.13), transparent 65%), radial-gradient(ellipse 40% 50% at 20% 70%, rgba(5,150,105,0.08), transparent); }
-    .hero-bg::after { content: ''; position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,0.022) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.022) 1px, transparent 1px); background-size: 56px 56px; mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 10%, transparent 70%); }
-    .hero-inner { position: relative; max-width: 920px; text-align: center; }
-    .hero-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(37,99,235,0.1); border: 1px solid rgba(59,130,246,0.25); color: #93c5fd; font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; padding: 6px 16px; border-radius: 100px; margin-bottom: 32px; animation: fadeUp 0.6s ease both; }
-    .badge-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green-light); box-shadow: 0 0 6px var(--green-light); animation: pulse 2s infinite; }
-    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)} }
-    @keyframes fadeUp { from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)} }
-    .hero h1 { font-family: var(--font-display); font-size: clamp(38px, 6.5vw, 72px); line-height: 1.08; letter-spacing: -0.02em; color: white; margin-bottom: 24px; animation: fadeUp 0.7s ease 0.1s both; }
+    .hero-bg { position: absolute; inset: 0; background: radial-gradient(ellipse 60% 70% at 65% 40%, rgba(37,99,235,0.16) 0%, transparent 65%), radial-gradient(ellipse 40% 50% at 20% 70%, rgba(5,150,105,0.09) 0%, transparent 55%); }
+    .hero-bg::after { content: ''; position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px); background-size: 64px 64px; mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 20%, transparent 70%); }
+    .hero-inner { position: relative; max-width: 900px; text-align: center; }
+    .hero-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(37,99,235,0.12); border: 1px solid rgba(59,130,246,0.28); color: #93c5fd; font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; padding: 6px 16px; border-radius: 100px; margin-bottom: 28px; animation: fadeUp 0.5s ease both; }
+    .badge-dot { width: 6px; height: 6px; border-radius: 50%; background: #34d399; box-shadow: 0 0 6px #34d399; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(0.8)} }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)} }
+    .hero h1 { font-family: var(--font-display); font-size: clamp(38px, 6.5vw, 72px); line-height: 1.08; letter-spacing: -0.02em; color: var(--white); margin-bottom: 20px; animation: fadeUp 0.6s ease 0.1s both; }
     .hero h1 em { font-style: italic; color: #93c5fd; }
-    .hero-sub { font-size: clamp(16px, 2vw, 18px); color: #94a3b8; max-width: 580px; margin: 0 auto 16px; line-height: 1.7; animation: fadeUp 0.7s ease 0.2s both; }
-    .hero-lang { display: inline-block; font-family: var(--font-mono); font-size: 12px; color: #475569; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.07); padding: 3px 12px; border-radius: 100px; margin-bottom: 40px; }
-    .hero-actions { display: flex; align-items: center; justify-content: center; gap: 14px; flex-wrap: wrap; animation: fadeUp 0.7s ease 0.3s both; }
-    .btn-primary { display: inline-flex; align-items: center; gap: 8px; background: var(--blue); color: white; font-family: var(--font-body); font-size: 15px; font-weight: 600; padding: 14px 28px; border-radius: 8px; border: none; cursor: pointer; text-decoration: none; transition: background 0.15s, transform 0.1s; }
+    .hero-sub { font-size: clamp(16px, 2vw, 18px); color: #94a3b8; max-width: 580px; margin: 0 auto 36px; line-height: 1.7; animation: fadeUp 0.6s ease 0.2s both; }
+    .hero-actions { display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; margin-bottom: 64px; animation: fadeUp 0.6s ease 0.3s both; }
+    .btn-primary { display: inline-flex; align-items: center; gap: 8px; background: var(--blue); color: var(--white); font-family: var(--font-body); font-size: 15px; font-weight: 600; padding: 14px 28px; border-radius: 8px; border: none; cursor: pointer; text-decoration: none; transition: background 0.15s, transform 0.1s; }
     .btn-primary:hover { background: var(--blue-mid); transform: translateY(-1px); }
-    .btn-ghost { display: inline-flex; align-items: center; gap: 8px; background: transparent; color: #94a3b8; font-family: var(--font-body); font-size: 15px; font-weight: 500; padding: 14px 24px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); cursor: pointer; text-decoration: none; transition: border-color 0.15s, color 0.15s; }
-    .btn-ghost:hover { border-color: rgba(255,255,255,0.25); color: white; }
+    .btn-ghost { display: inline-flex; align-items: center; gap: 8px; background: transparent; color: #94a3b8; font-family: var(--font-body); font-size: 15px; font-weight: 500; padding: 14px 24px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); cursor: pointer; text-decoration: none; transition: all 0.15s; }
+    .btn-ghost:hover { border-color: rgba(255,255,255,0.25); color: var(--white); }
 
     /* DASHBOARD PREVIEW */
-    .hero-preview { margin-top: 64px; animation: fadeUp 0.8s ease 0.4s both; position: relative; }
-    .hero-preview-glow { position: absolute; inset: -60px; background: radial-gradient(ellipse 70% 50% at 50% 50%, rgba(37,99,235,0.1), transparent); pointer-events: none; }
-    .dashboard-preview { background: var(--slate-900); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; overflow: hidden; max-width: 780px; margin: 0 auto; }
-    .db-topbar { background: var(--slate-800); border-bottom: 1px solid rgba(255,255,255,0.06); padding: 12px 20px; display: flex; align-items: center; gap: 10px; }
-    .db-dot { width: 10px; height: 10px; border-radius: 50%; }
-    .db-url { flex: 1; background: rgba(255,255,255,0.05); border-radius: 6px; padding: 4px 12px; font-family: var(--font-mono); font-size: 11px; color: #475569; margin-left: 8px; }
-    .db-body { display: grid; grid-template-columns: 180px 1fr; min-height: 340px; }
-    .db-sidebar { background: var(--slate-950); padding: 20px 12px; border-right: 1px solid rgba(255,255,255,0.05); }
-    .db-logo { font-family: var(--font-display); font-size: 16px; color: white; padding: 0 8px; margin-bottom: 20px; }
-    .db-logo span { color: #93c5fd; }
-    .db-nav-item { display: flex; align-items: center; gap: 8px; padding: 8px 10px; border-radius: 7px; font-size: 12px; color: #64748b; margin-bottom: 2px; }
-    .db-nav-item.active { background: rgba(37,99,235,0.15); color: #93c5fd; }
-    .db-main { padding: 20px; background: #0d1422; }
-    .db-greeting { margin-bottom: 16px; }
-    .db-greeting h3 { font-size: 16px; font-weight: 600; color: white; }
-    .db-greeting p { font-size: 12px; color: #64748b; margin-top: 2px; }
-    .db-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 14px; }
-    .db-stat { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.07); border-radius: 10px; padding: 12px; }
-    .db-stat-label { font-size: 10px; color: #475569; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; }
-    .db-stat-value { font-size: 18px; font-weight: 700; color: white; margin: 4px 0; font-family: var(--font-mono); }
-    .db-stat-badge { font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 100px; }
-    .badge-g { background: rgba(5,150,105,0.15); color: var(--green-light); }
-    .badge-a { background: rgba(217,119,6,0.15); color: #fbbf24; }
-    .badge-b { background: rgba(37,99,235,0.15); color: #93c5fd; }
-    .db-transactions { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 10px; padding: 12px; }
-    .db-tx-title { font-size: 11px; font-weight: 600; color: #475569; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px; }
-    .db-tx { display: flex; align-items: center; justify-content: space-between; padding: 7px 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
-    .db-tx:last-child { border: none; }
-    .db-tx-left { display: flex; align-items: center; gap: 10px; }
-    .db-tx-icon { width: 28px; height: 28px; border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: 13px; }
-    .db-tx-name { font-size: 12px; color: #cbd5e1; }
-    .db-tx-cat { font-size: 10px; color: #475569; }
-    .db-tx-right { text-align: right; }
-    .db-tx-amount { font-size: 12px; font-weight: 600; font-family: var(--font-mono); }
-    .db-tx-tag { font-size: 10px; padding: 1px 6px; border-radius: 100px; margin-top: 2px; display: inline-block; }
-    .tx-deduct { background: rgba(5,150,105,0.12); color: var(--green-light); }
-    .tx-personal { background: rgba(100,116,139,0.15); color: #64748b; }
+    .dashboard-preview { animation: fadeUp 0.7s ease 0.4s both; position: relative; }
+    .preview-glow { position: absolute; inset: -60px; background: radial-gradient(ellipse 70% 50% at 50% 50%, rgba(37,99,235,0.1), transparent); pointer-events: none; }
+    .preview-window { background: var(--slate-900); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; overflow: hidden; max-width: 780px; margin: 0 auto; box-shadow: 0 32px 80px rgba(0,0,0,0.5); }
+    .preview-topbar { background: var(--slate-800); border-bottom: 1px solid rgba(255,255,255,0.06); padding: 12px 18px; display: flex; align-items: center; gap: 8px; }
+    .dot { width: 10px; height: 10px; border-radius: 50%; }
+    .dot-r{background:#ff5f56}.dot-y{background:#febc2e}.dot-g{background:#28c840}
+    .preview-url { flex:1; background: rgba(255,255,255,0.05); border-radius: 5px; padding: 4px 12px; font-size: 12px; color: var(--slate-500); margin-left: 8px; font-family: var(--font-mono); }
+    .preview-app { display: grid; grid-template-columns: 200px 1fr; min-height: 400px; }
+    .preview-sidebar { background: var(--slate-950); padding: 20px 12px; display: flex; flex-direction: column; gap: 2px; border-right: 1px solid rgba(255,255,255,0.05); }
+    .sidebar-logo { font-family: var(--font-display); font-size: 16px; color: white; margin-bottom: 20px; padding: 0 8px; }
+    .sidebar-logo span { color: #93c5fd; }
+    .s-item { display: flex; align-items: center; gap: 8px; padding: 8px 10px; border-radius: 7px; font-size: 12.5px; color: #64748b; }
+    .s-item.active { background: rgba(37,99,235,0.15); color: #93c5fd; }
+    .preview-main { padding: 20px; background: var(--slate-900); }
+    .preview-greeting { margin-bottom: 16px; }
+    .preview-greeting h3 { font-size: 16px; font-weight: 600; color: white; }
+    .preview-greeting p { font-size: 12px; color: var(--slate-500); margin-top: 2px; }
+    .preview-bank-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.2); border-radius: 100px; padding: 4px 10px; font-size: 11px; color: #34d399; margin-bottom: 14px; }
+    .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 14px; }
+    .stat { background: var(--slate-800); border-radius: 10px; padding: 12px; border: 1px solid rgba(255,255,255,0.05); }
+    .stat-label { font-size: 10px; color: var(--slate-500); text-transform: uppercase; letter-spacing: 0.08em; font-weight: 600; }
+    .stat-val { font-size: 20px; font-weight: 700; color: white; margin: 4px 0; font-family: var(--font-mono); }
+    .stat-badge { display: inline-block; font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 100px; }
+    .b-green{background:rgba(5,150,105,0.15);color:#34d399}.b-amber{background:rgba(217,119,6,0.15);color:#fbbf24}.b-blue{background:rgba(37,99,235,0.15);color:#93c5fd}
+    .txn-list { background: var(--slate-800); border-radius: 10px; padding: 12px; border: 1px solid rgba(255,255,255,0.05); }
+    .txn-title { font-size: 11px; font-weight: 600; color: var(--slate-500); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px; }
+    .txn { display: flex; align-items: center; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+    .txn:last-child { border-bottom: none; }
+    .txn-left { display: flex; align-items: center; gap: 8px; }
+    .txn-icon { width: 26px; height: 26px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 13px; }
+    .txn-name { font-size: 12px; color: #e2e8f0; }
+    .txn-cat { font-size: 10px; color: var(--slate-500); }
+    .txn-right { text-align: right; }
+    .txn-amount { font-size: 12px; font-weight: 600; font-family: var(--font-mono); }
+    .txn-tag { font-size: 10px; padding: 1px 6px; border-radius: 100px; }
+    .t-biz{background:rgba(5,150,105,0.15);color:#34d399}.t-per{background:rgba(100,116,139,0.2);color:#94a3b8}
 
     /* SECTIONS */
     section { padding: 96px 24px; }
     .section-inner { max-width: 1040px; margin: 0 auto; }
-    .section-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--blue); margin-bottom: 12px; }
-    .section-title { font-family: var(--font-display); font-size: clamp(28px, 4vw, 46px); line-height: 1.12; letter-spacing: -0.02em; color: var(--slate-900); margin-bottom: 16px; }
-    .section-title em { font-style: italic; color: var(--blue); }
-    .section-desc { font-size: 17px; color: var(--slate-500); max-width: 560px; line-height: 1.7; }
+    .eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--blue); margin-bottom: 12px; }
+    .s-title { font-family: var(--font-display); font-size: clamp(28px, 4vw, 46px); line-height: 1.12; letter-spacing: -0.02em; color: var(--slate-900); margin-bottom: 14px; }
+    .s-title em { font-style: italic; color: var(--blue); }
+    .s-desc { font-size: 16px; color: var(--slate-500); max-width: 540px; line-height: 1.7; }
 
     /* HOW IT WORKS */
-    .how { background: white; }
-    .pillars { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0; margin-top: 56px; border: 1px solid var(--slate-200); border-radius: 16px; overflow: hidden; }
-    .pillar { padding: 28px 20px; border-right: 1px solid var(--slate-200); }
-    .pillar:last-child { border-right: none; }
-    .pillar-num { font-family: var(--font-mono); font-size: 11px; font-weight: 500; color: var(--blue); margin-bottom: 14px; }
-    .pillar-icon { font-size: 28px; margin-bottom: 12px; display: block; }
-    .pillar h3 { font-size: 14px; font-weight: 700; color: var(--slate-900); margin-bottom: 8px; }
-    .pillar p { font-size: 13px; color: var(--slate-500); line-height: 1.6; }
+    .how { background: var(--white); }
+    .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; margin-top: 52px; position: relative; }
+    .steps::before { content: ''; position: absolute; top: 28px; left: 12.5%; right: 12.5%; height: 2px; border-top: 2px dashed var(--slate-200); }
+    .step { padding: 0 16px; text-align: center; }
+    .step-num { width: 56px; height: 56px; border-radius: 50%; background: var(--white); border: 2px solid var(--blue); display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-size: 22px; color: var(--blue); margin: 0 auto 16px; position: relative; z-index: 1; }
+    .step-icon { font-size: 22px; margin-bottom: 16px; display: block; }
+    .step h3 { font-size: 15px; font-weight: 600; color: var(--slate-900); margin-bottom: 6px; }
+    .step p { font-size: 13px; color: var(--slate-500); line-height: 1.6; }
 
-    /* FEATURES */
-    .features { background: var(--slate-50); }
-    .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 56px; }
-    .feature-card { background: white; border: 1px solid var(--slate-200); border-radius: 14px; padding: 24px; transition: box-shadow 0.2s, transform 0.2s; }
-    .feature-card:hover { box-shadow: 0 8px 32px rgba(0,0,0,0.07); transform: translateY(-2px); }
-    .feature-icon { width: 44px; height: 44px; border-radius: 11px; display: flex; align-items: center; justify-content: center; font-size: 20px; margin-bottom: 16px; }
-    .feature-card h3 { font-size: 15px; font-weight: 600; color: var(--slate-900); margin-bottom: 7px; }
-    .feature-card p { font-size: 13.5px; color: var(--slate-500); line-height: 1.65; }
-    .ftag { display: inline-block; margin-top: 12px; font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 100px; }
-    .ftag-b { background: var(--blue-pale); color: var(--blue); }
-    .ftag-g { background: var(--green-pale); color: var(--green); }
-    .ftag-a { background: var(--amber-pale); color: var(--amber); }
+    /* PILLARS */
+    .pillars { background: var(--slate-50); }
+    .pillars-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 52px; }
+    .pillar { background: var(--white); border: 1px solid var(--slate-200); border-radius: 16px; padding: 28px; transition: box-shadow 0.2s, transform 0.2s; }
+    .pillar:hover { box-shadow: 0 8px 32px rgba(0,0,0,0.07); transform: translateY(-2px); }
+    .pillar-icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; margin-bottom: 16px; }
+    .pillar h3 { font-size: 15px; font-weight: 600; color: var(--slate-900); margin-bottom: 8px; }
+    .pillar p { font-size: 13.5px; color: var(--slate-500); line-height: 1.65; }
+    .pillar-tag { display: inline-block; margin-top: 12px; font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 100px; }
+    .pt-blue{background:var(--blue-pale);color:var(--blue)}.pt-green{background:var(--green-pale);color:var(--green)}.pt-amber{background:var(--amber-pale);color:var(--amber)}
 
     /* SECURITY */
     .security { background: var(--slate-950); position: relative; overflow: hidden; }
-    .security::before { content:''; position:absolute; inset:0; background: radial-gradient(ellipse 50% 80% at 80% 50%, rgba(37,99,235,0.1), transparent), radial-gradient(ellipse 40% 60% at 10% 30%, rgba(5,150,105,0.07), transparent); }
+    .security::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 50% 70% at 80% 50%, rgba(37,99,235,0.1), transparent), radial-gradient(ellipse 40% 60% at 10% 40%, rgba(5,150,105,0.07), transparent); }
     .security .section-inner { position: relative; }
-    .security .section-eyebrow { color: #93c5fd; }
-    .security .section-title { color: white; }
-    .security .section-desc { color: #94a3b8; }
-    .security-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 48px; }
-    .security-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 24px; }
-    .security-card h3 { font-size: 15px; font-weight: 600; color: white; margin: 12px 0 8px; }
-    .security-card p { font-size: 13px; color: #64748b; line-height: 1.6; }
-    .security-icon { font-size: 28px; }
+    .security .eyebrow { color: #93c5fd; }
+    .security .s-title { color: var(--white); }
+    .security .s-title em { color: #93c5fd; }
+    .security .s-desc { color: #94a3b8; }
+    .security-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 48px; }
+    .sec-item { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.07); border-radius: 14px; padding: 24px; display: flex; gap: 14px; align-items: flex-start; }
+    .sec-icon { font-size: 24px; flex-shrink: 0; margin-top: 2px; }
+    .sec-item h4 { font-size: 14px; font-weight: 600; color: var(--white); margin-bottom: 4px; }
+    .sec-item p { font-size: 13px; color: #64748b; line-height: 1.6; }
+
+    /* BANKS */
+    .banks { background: var(--white); }
+    .banks-logos { display: flex; align-items: center; justify-content: center; gap: 32px; flex-wrap: wrap; margin-top: 40px; }
+    .bank-pill { background: var(--slate-50); border: 1px solid var(--slate-200); border-radius: 100px; padding: 10px 24px; font-size: 14px; font-weight: 600; color: var(--slate-700); display: flex; align-items: center; gap: 8px; }
 
     /* WAITLIST */
-    .waitlist { background: linear-gradient(135deg, var(--slate-950) 0%, #0d1a3a 100%); text-align: center; position: relative; overflow: hidden; }
-    .waitlist::before { content:''; position:absolute; inset:0; background: radial-gradient(ellipse 60% 80% at 50% 50%, rgba(37,99,235,0.13), transparent); }
+    .waitlist { background: linear-gradient(135deg, var(--slate-950) 0%, #0c1a38 100%); text-align: center; position: relative; overflow: hidden; }
+    .waitlist::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 60% 80% at 50% 50%, rgba(37,99,235,0.13), transparent); }
     .waitlist .section-inner { position: relative; }
-    .waitlist .section-eyebrow { color: #93c5fd; }
-    .waitlist .section-title { color: white; }
-    .waitlist .section-desc { color: #94a3b8; margin: 0 auto 40px; }
-    .waitlist-form { display: flex; gap: 12px; max-width: 460px; margin: 0 auto 12px; justify-content: center; }
-    .waitlist-input { flex: 1; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: 8px; padding: 13px 18px; font-family: var(--font-body); font-size: 15px; color: white; outline: none; transition: border-color 0.15s; }
-    .waitlist-input::placeholder { color: #475569; }
-    .waitlist-input:focus { border-color: #3b82f6; }
-    .waitlist-note { font-size: 13px; color: #475569; margin-bottom: 40px; }
-    .proof { display: flex; align-items: center; justify-content: center; gap: 14px; flex-wrap: wrap; }
-    .proof-avs { display: flex; }
-    .proof-av { width: 30px; height: 30px; border-radius: 50%; border: 2px solid var(--slate-950); margin-left: -7px; font-size: 14px; display: flex; align-items: center; justify-content: center; background: var(--slate-800); }
+    .waitlist .eyebrow { color: #93c5fd; }
+    .waitlist .s-title { color: var(--white); }
+    .waitlist .s-title em { color: #93c5fd; }
+    .waitlist .s-desc { color: #94a3b8; margin: 0 auto 36px; }
+    .wl-form { display: flex; gap: 10px; max-width: 460px; margin: 0 auto 14px; }
+    .wl-input { flex: 1; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: 8px; padding: 13px 16px; font-family: var(--font-body); font-size: 14px; color: var(--white); outline: none; }
+    .wl-input::placeholder { color: #475569; }
+    .wl-note { font-size: 12px; color: #475569; }
+    .social-proof { display: flex; align-items: center; justify-content: center; gap: 14px; margin-top: 36px; flex-wrap: wrap; }
+    .proof-avatars { display: flex; }
+    .proof-av { width: 30px; height: 30px; border-radius: 50%; border: 2px solid var(--slate-950); margin-left: -8px; background: var(--slate-700); display: flex; align-items: center; justify-content: center; font-size: 13px; }
     .proof-av:first-child { margin-left: 0; }
-    .proof-text { font-size: 14px; color: #94a3b8; }
-    .proof-text strong { color: white; }
+    .proof-txt { font-size: 13px; color: #94a3b8; }
+    .proof-txt strong { color: var(--white); }
 
     /* FOOTER */
-    footer { background: var(--slate-950); border-top: 1px solid rgba(255,255,255,0.06); padding: 36px 48px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
-    .footer-logo { font-family: var(--font-display); font-size: 20px; color: white; text-decoration: none; }
+    footer { background: var(--slate-950); border-top: 1px solid rgba(255,255,255,0.05); padding: 36px 48px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+    .footer-logo { font-family: var(--font-display); font-size: 20px; color: var(--white); text-decoration: none; }
     .footer-logo span { color: #93c5fd; }
-    .footer-links { display: flex; gap: 28px; list-style: none; }
+    .footer-links { display: flex; gap: 24px; list-style: none; }
     .footer-links a { font-size: 13px; color: #475569; text-decoration: none; transition: color 0.15s; }
     .footer-links a:hover { color: #94a3b8; }
-    .footer-copy { font-size: 13px; color: #334155; }
+    .footer-copy { font-size: 12px; color: #334155; }
 
-    @media(max-width:768px) {
-      nav { padding: 0 20px; }
-      .nav-links { display: none; }
-      .pillars, .features-grid, .security-grid { grid-template-columns: 1fr; }
-      .db-body { grid-template-columns: 1fr; }
-      .db-sidebar { display: none; }
-      .db-stats { grid-template-columns: 1fr 1fr; }
-      .waitlist-form { flex-direction: column; }
-      footer { flex-direction: column; text-align: center; padding: 28px 20px; }
+    @media(max-width:768px){
+      nav{padding:0 20px}
+      .nav-links{display:none}
+      .preview-app{grid-template-columns:1fr}
+      .preview-sidebar{display:none}
+      .stats-grid{grid-template-columns:1fr}
+      .steps{grid-template-columns:1fr 1fr;gap:24px}
+      .steps::before{display:none}
+      .pillars-grid{grid-template-columns:1fr}
+      .security-grid{grid-template-columns:1fr}
+      .wl-form{flex-direction:column}
+      footer{flex-direction:column;text-align:center;padding:28px 20px}
+      .footer-links{flex-wrap:wrap;justify-content:center}
     }
   </style>
 </head>
 <body>
 
+<!-- NAV -->
 <nav>
   <a href="#" class="nav-logo">ask<span>wijs</span></a>
   <ul class="nav-links">
@@ -190,87 +199,68 @@
 <section class="hero">
   <div class="hero-bg"></div>
   <div class="hero-inner">
-    <div class="hero-badge"><div class="badge-dot"></div>Now in early access — Netherlands</div>
-    <h1>Your complete Dutch<br>tax picture, <em>automated.</em></h1>
-    <p class="hero-sub">Connect your bank. Wijs automatically categorizes every transaction, calculates your live BTW position, and files your returns — in English or Dutch.</p>
-    <div class="hero-lang">🇬🇧 English · 🇳🇱 Nederlands · 🔒 PSD2 Secure</div>
+    <div class="hero-badge"><div class="badge-dot"></div>Now in early access · Netherlands 🇳🇱</div>
+    <h1>Your Dutch taxes,<br><em>fully automated.</em></h1>
+    <p class="hero-sub">Connect your bank. Wijs categorizes every transaction, tracks your BTW, and files your returns — automatically. In English or Dutch.</p>
     <div class="hero-actions">
-      <a href="#waitlist" class="btn-primary">Join the waitlist →</a>
+      <a href="#waitlist" class="btn-primary">Get early access →</a>
       <a href="#how" class="btn-ghost">See how it works</a>
     </div>
 
-    <!-- Dashboard preview -->
-    <div class="hero-preview">
-      <div class="hero-preview-glow"></div>
-      <div class="dashboard-preview">
-        <div class="db-topbar">
-          <div class="db-dot" style="background:#ff5f56"></div>
-          <div class="db-dot" style="background:#febc2e"></div>
-          <div class="db-dot" style="background:#28c840"></div>
-          <div class="db-url">app.askwijs.ai/dashboard</div>
+    <!-- Dashboard Preview -->
+    <div class="dashboard-preview">
+      <div class="preview-glow"></div>
+      <div class="preview-window">
+        <div class="preview-topbar">
+          <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+          <div class="preview-url">app.askwijs.ai/dashboard</div>
         </div>
-        <div class="db-body">
-          <div class="db-sidebar">
-            <div class="db-logo">ask<span>wijs</span></div>
-            <div class="db-nav-item active">📊 Dashboard</div>
-            <div class="db-nav-item">🏦 Bank</div>
-            <div class="db-nav-item">📄 BTW Filing</div>
-            <div class="db-nav-item">💬 Ask Wijs</div>
-            <div class="db-nav-item">🗄️ Vault</div>
+        <div class="preview-app">
+          <div class="preview-sidebar">
+            <div class="sidebar-logo">ask<span>wijs</span></div>
+            <div class="s-item active">📊 Dashboard</div>
+            <div class="s-item">🏦 Bank accounts</div>
+            <div class="s-item">🔄 Transactions</div>
+            <div class="s-item">📄 BTW returns</div>
+            <div class="s-item">💬 Ask Wijs</div>
+            <div class="s-item" style="margin-top:auto">⚙️ Settings</div>
           </div>
-          <div class="db-main">
-            <div class="db-greeting">
+          <div class="preview-main">
+            <div class="preview-greeting">
               <h3>Good morning, Thomas 👋</h3>
-              <p>ING account synced · 3 new transactions categorized · BTW due in 18 days</p>
+              <p>Your Q1 BTW return is ready to review — Wijs has prepared it automatically.</p>
             </div>
-            <div class="db-stats">
-              <div class="db-stat">
-                <div class="db-stat-label">Netto Q1</div>
-                <div class="db-stat-value">€8,420</div>
-                <div class="db-stat-badge badge-g">↑ +12%</div>
+            <div class="preview-bank-badge">🏦 ING Business · IBAN NL91INGB0001234567 · Synced 2 min ago</div>
+            <div class="stats-grid">
+              <div class="stat">
+                <div class="stat-label">Netto Q1</div>
+                <div class="stat-val">€12.840</div>
+                <div class="stat-badge b-green">↑ +18% vs Q4</div>
               </div>
-              <div class="db-stat">
-                <div class="db-stat-label">BTW Owed</div>
-                <div class="db-stat-value">€1,890</div>
-                <div class="db-stat-badge badge-a">Due Jan 31</div>
+              <div class="stat">
+                <div class="stat-label">BTW to pay</div>
+                <div class="stat-val">€1.890</div>
+                <div class="stat-badge b-amber">Due 30 Apr</div>
               </div>
-              <div class="db-stat">
-                <div class="db-stat-label">Deductions</div>
-                <div class="db-stat-value">€3,750</div>
-                <div class="db-stat-badge badge-b">Auto-found</div>
+              <div class="stat">
+                <div class="stat-label">Deductions found</div>
+                <div class="stat-val">€4.220</div>
+                <div class="stat-badge b-blue">Auto-detected</div>
               </div>
             </div>
-            <div class="db-transactions">
-              <div class="db-tx-title">Recent transactions — auto-categorized</div>
-              <div class="db-tx">
-                <div class="db-tx-left">
-                  <div class="db-tx-icon" style="background:rgba(37,99,235,0.15)">💻</div>
-                  <div><div class="db-tx-name">Adobe Creative Cloud</div><div class="db-tx-cat">Software · Business</div></div>
-                </div>
-                <div class="db-tx-right">
-                  <div class="db-tx-amount" style="color:#f87171">-€65.00</div>
-                  <div class="db-tx-tag tx-deduct">100% deductible</div>
-                </div>
+            <div class="txn-list">
+              <div class="txn-title">🔄 Recent transactions — auto-categorized</div>
+              <div class="txn">
+                <div class="txn-left"><div class="txn-icon" style="background:rgba(37,99,235,0.15)">💻</div><div><div class="txn-name">Adobe Creative Cloud</div><div class="txn-cat">Software · 100% deductible</div></div></div>
+                <div class="txn-right"><div class="txn-amount" style="color:#f1f5f9">-€65.99</div><div class="txn-tag t-biz">Business</div></div>
               </div>
-              <div class="db-tx">
-                <div class="db-tx-left">
-                  <div class="db-tx-icon" style="background:rgba(5,150,105,0.15)">🚂</div>
-                  <div><div class="db-tx-name">NS Reizen</div><div class="db-tx-cat">Travel · Business</div></div>
-                </div>
-                <div class="db-tx-right">
-                  <div class="db-tx-amount" style="color:#f87171">-€24.50</div>
-                  <div class="db-tx-tag tx-deduct">100% deductible</div>
-                </div>
+              <div class="txn">
+                <div class="txn-left"><div class="txn-icon" style="background:rgba(5,150,105,0.15)">🚂</div><div><div class="txn-name">NS Intercity</div><div class="txn-cat">Travel · 100% deductible</div></div></div>
+                <div class="txn-right"><div class="txn-amount" style="color:#f1f5f9">-€18.40</div><div class="txn-tag t-biz">Business</div></div>
               </div>
-              <div class="db-tx">
-                <div class="db-tx-left">
-                  <div class="db-tx-icon" style="background:rgba(100,116,139,0.15)">🛒</div>
-                  <div><div class="db-tx-name">Albert Heijn</div><div class="db-tx-cat">Groceries · Personal</div></div>
-                </div>
-                <div class="db-tx-right">
-                  <div class="db-tx-amount" style="color:#f87171">-€42.80</div>
-                  <div class="db-tx-tag tx-personal">Personal</div>
-                </div>
+              <div class="txn">
+                <div class="txn-left"><div class="txn-icon" style="background:rgba(100,116,139,0.15)">🛒</div><div><div class="txn-name">Albert Heijn</div><div class="txn-cat">Groceries · Personal</div></div></div>
+                <div class="txn-right"><div class="txn-amount" style="color:#64748b">-€43.20</div><div class="txn-tag t-per">Personal</div></div>
               </div>
             </div>
           </div>
@@ -283,86 +273,76 @@
 <!-- HOW IT WORKS -->
 <section class="how" id="how">
   <div class="section-inner">
-    <div class="section-eyebrow">How it works</div>
-    <div class="section-title">Five pillars.<br><em>One platform.</em></div>
-    <p class="section-desc">askwijs connects every layer of your financial life — from your bank account to the Belastingdienst — automatically.</p>
-    <div class="pillars">
-      <div class="pillar">
-        <div class="pillar-num">01</div>
-        <span class="pillar-icon">🏦</span>
-        <h3>Connect</h3>
-        <p>Link ING, ABN AMRO, Rabobank and more via secure PSD2 Open Banking. Read-only. Wijs never moves money.</p>
+    <div class="eyebrow">How it works</div>
+    <div class="s-title">From bank account<br><em>to filed return.</em></div>
+    <p class="s-desc">Four steps. Most of them happen automatically while you focus on your work.</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <h3>Connect your bank</h3>
+        <p>Securely link ING, ABN AMRO, Rabobank, or Bunq via PSD2 Open Banking. Takes 60 seconds.</p>
       </div>
-      <div class="pillar">
-        <div class="pillar-num">02</div>
-        <span class="pillar-icon">🔄</span>
-        <h3>Categorize</h3>
-        <p>Every transaction auto-tagged: business or personal, deductible or not, with the correct Dutch tax category.</p>
+      <div class="step">
+        <div class="step-num">2</div>
+        <h3>Wijs categorizes everything</h3>
+        <p>Every transaction — past 90 days and going forward — is automatically sorted: business, personal, deductible.</p>
       </div>
-      <div class="pillar">
-        <div class="pillar-num">03</div>
-        <span class="pillar-icon">📊</span>
-        <h3>Dashboard</h3>
-        <p>Live BTW position, netto income, tax forecast, and upcoming deadlines — all in one place, in plain language.</p>
+      <div class="step">
+        <div class="step-num">3</div>
+        <h3>Your dashboard goes live</h3>
+        <p>Real-time BTW position, income tax forecast, deductions found, deadlines — all from your actual bank data.</p>
       </div>
-      <div class="pillar">
-        <div class="pillar-num">04</div>
-        <span class="pillar-icon">📤</span>
-        <h3>File</h3>
-        <p>Wijs prepares your BTW aangifte from real data. You review, approve, and Wijs submits to the Belastingdienst.</p>
-      </div>
-      <div class="pillar">
-        <div class="pillar-num">05</div>
-        <span class="pillar-icon">💬</span>
-        <h3>Advise</h3>
-        <p>Ask Wijs anything — in English or Dutch. Every answer is grounded in your actual transactions, not generic advice.</p>
+      <div class="step">
+        <div class="step-num">4</div>
+        <h3>Wijs files for you</h3>
+        <p>Review your prepared return, approve it, and Wijs submits it to the Belastingdienst. Done.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- FEATURES -->
-<section class="features" id="features">
+<!-- PILLARS -->
+<section class="pillars" id="features">
   <div class="section-inner">
-    <div class="section-eyebrow">Everything included</div>
-    <div class="section-title">Built for how<br><em>ZZP'ers actually work.</em></div>
-    <p class="section-desc">Every feature is designed around the real pain points of Dutch freelancers and expats.</p>
-    <div class="features-grid">
-      <div class="feature-card">
-        <div class="feature-icon" style="background:#eff6ff">🏦</div>
-        <h3>All Dutch banks connected</h3>
-        <p>ING, ABN AMRO, Rabobank, SNS, Bunq, Revolut NL, N26 — all linked via PSD2 Open Banking. Transactions sync in real-time.</p>
-        <span class="ftag ftag-b">PSD2 secure</span>
+    <div class="eyebrow">Everything included</div>
+    <div class="s-title">Not a chatbot.<br><em>A financial OS.</em></div>
+    <p class="s-desc">Every tool a Dutch freelancer or expat needs — in one place, in your language.</p>
+    <div class="pillars-grid">
+      <div class="pillar">
+        <div class="pillar-icon" style="background:#eff6ff">🏦</div>
+        <h3>Bank connections</h3>
+        <p>PSD2 Open Banking connects all major Dutch banks automatically. Transactions sync in real time — no CSV uploads, no manual entry.</p>
+        <span class="pillar-tag pt-blue">ING · ABN · Rabobank · Bunq</span>
       </div>
-      <div class="feature-card">
-        <div class="feature-icon" style="background:#ecfdf5">🔄</div>
+      <div class="pillar">
+        <div class="pillar-icon" style="background:#ecfdf5">🔄</div>
         <h3>Auto-categorization</h3>
-        <p>Every transaction automatically tagged with the correct Dutch tax category and deductibility. You just review and confirm.</p>
-        <span class="ftag ftag-g">AI-powered</span>
+        <p>Every transaction is tagged: business or personal, deductible percentage, expense category. Wijs learns from your corrections.</p>
+        <span class="pillar-tag pt-green">AI-powered</span>
       </div>
-      <div class="feature-card">
-        <div class="feature-icon" style="background:#fffbeb">📅</div>
-        <h3>Deadline never missed</h3>
-        <p>Quarterly BTW, annual income tax, KOR applications — Wijs tracks every deadline and reminds you with enough time to act.</p>
-        <span class="ftag ftag-a">Proactive</span>
+      <div class="pillar">
+        <div class="pillar-icon" style="background:#eff6ff">📊</div>
+        <h3>Live tax dashboard</h3>
+        <p>Your real netto income, exact BTW position, income tax forecast, and every deduction found — all calculated from real bank data.</p>
+        <span class="pillar-tag pt-blue">Always up to date</span>
       </div>
-      <div class="feature-card">
-        <div class="feature-icon" style="background:#ecfdf5">🧾</div>
-        <h3>Deductions auto-found</h3>
-        <p>Zelfstandigenaftrek, startersaftrek, home office, equipment, travel — found and applied automatically from your real spending.</p>
-        <span class="ftag ftag-g">Saves money</span>
+      <div class="pillar">
+        <div class="pillar-icon" style="background:#ecfdf5">🤖</div>
+        <h3>Wijs files for you</h3>
+        <p>Wijs prepares your BTW aangifte and income tax return from your actual data, then submits to the Belastingdienst on your behalf.</p>
+        <span class="pillar-tag pt-green">Full agent, not just advice</span>
       </div>
-      <div class="feature-card">
-        <div class="feature-icon" style="background:#eff6ff">📤</div>
-        <h3>One-click BTW filing</h3>
-        <p>Wijs prepares your BTW aangifte from actual transactions, shows you every line item, and submits to the Belastingdienst on your behalf.</p>
-        <span class="ftag ftag-b">Agent-powered</span>
+      <div class="pillar">
+        <div class="pillar-icon" style="background:#fffbeb">📅</div>
+        <h3>Deadline tracker</h3>
+        <p>Quarterly BTW returns, annual income tax, KOR thresholds — Wijs watches everything and notifies you before penalties apply.</p>
+        <span class="pillar-tag pt-amber">Proactive alerts</span>
       </div>
-      <div class="feature-card">
-        <div class="feature-icon" style="background:#eff6ff">🌍</div>
-        <h3>English & Nederlands</h3>
-        <p>Full bilingual support — switch languages mid-session. Dutch tax terms explained in plain English. Built for both communities.</p>
-        <span class="ftag ftag-b">Bilingual</span>
+      <div class="pillar">
+        <div class="pillar-icon" style="background:#eff6ff">🌍</div>
+        <h3>English & Dutch</h3>
+        <p>The only Dutch tax platform truly fluent in English. All Dutch tax terms explained in plain English. Switch languages anytime.</p>
+        <span class="pillar-tag pt-blue">For ZZP'ers & expats</span>
       </div>
     </div>
   </div>
@@ -371,40 +351,43 @@
 <!-- SECURITY -->
 <section class="security" id="security">
   <div class="section-inner">
-    <div class="section-eyebrow">Security & trust</div>
-    <div class="section-title">Bank-level security.<br><em>Zero compromises.</em></div>
-    <p class="section-desc">You're trusting us with your financial data. We take that seriously — here's exactly how we protect it.</p>
+    <div class="eyebrow">Built to be trusted</div>
+    <div class="s-title">Bank-grade security.<br><em>Zero compromises.</em></div>
+    <p class="s-desc">Your financial data is the most sensitive data there is. Here's exactly how we protect it.</p>
     <div class="security-grid">
-      <div class="security-card">
-        <div class="security-icon">🔒</div>
-        <h3>PSD2 Compliant</h3>
-        <p>Bank connections through regulated Open Banking. The same standard used by every major European bank.</p>
+      <div class="sec-item">
+        <div class="sec-icon">🔐</div>
+        <div><h4>PSD2 compliant Open Banking</h4><p>We never store your bank credentials. Access is token-only via regulated Open Banking APIs. You can revoke at any time.</p></div>
       </div>
-      <div class="security-card">
-        <div class="security-icon">👁️</div>
-        <h3>Read-only access</h3>
-        <p>Wijs can see your transactions. It cannot move money, make payments, or change anything in your bank account. Ever.</p>
+      <div class="sec-item">
+        <div class="sec-icon">🔒</div>
+        <div><h4>AES-256 encryption at rest</h4><p>All transaction data is encrypted at rest and in transit. Dutch data residency — your data never leaves the EU.</p></div>
       </div>
-      <div class="security-card">
-        <div class="security-icon">🔐</div>
-        <h3>AES-256 encrypted</h3>
-        <p>All data encrypted at rest with AES-256 and in transit with TLS 1.3. Your data is unreadable without your keys.</p>
+      <div class="sec-item">
+        <div class="sec-icon">📋</div>
+        <div><h4>Full audit log of agent actions</h4><p>Every action Wijs takes on your behalf is logged and visible to you. You review before anything is filed.</p></div>
       </div>
-      <div class="security-card">
-        <div class="security-icon">🇪🇺</div>
-        <h3>GDPR compliant</h3>
-        <p>Your data stays in the EU. You own it entirely — export or delete everything at any time, instantly.</p>
+      <div class="sec-item">
+        <div class="sec-icon">🇳🇱</div>
+        <div><h4>GDPR compliant</h4><p>Built for Dutch and EU law from day one. You own your data. Export or delete at any time, no questions asked.</p></div>
       </div>
-      <div class="security-card">
-        <div class="security-icon">🚫</div>
-        <h3>No data sold. Ever.</h3>
-        <p>Our only revenue is your subscription. We never sell, share, or monetize your financial data. Full stop.</p>
-      </div>
-      <div class="security-card">
-        <div class="security-icon">✅</div>
-        <h3>DigiD integration</h3>
-        <p>Filing uses the same authentication as the Belastingdienst itself — so the government trusts exactly who is submitting.</p>
-      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BANKS -->
+<section class="banks">
+  <div class="section-inner" style="text-align:center">
+    <div class="eyebrow">Supported banks</div>
+    <div class="s-title" style="margin:0 auto 8px">Works with your bank,<br><em>out of the box.</em></div>
+    <p class="s-desc" style="margin:0 auto 0">All major Dutch banks supported via PSD2. More added continuously.</p>
+    <div class="banks-logos">
+      <div class="bank-pill">🟠 ING</div>
+      <div class="bank-pill">🟡 ABN AMRO</div>
+      <div class="bank-pill">🔴 Rabobank</div>
+      <div class="bank-pill">🔵 Bunq</div>
+      <div class="bank-pill">⚫ SNS Bank</div>
+      <div class="bank-pill">💜 Revolut</div>
     </div>
   </div>
 </section>
@@ -412,27 +395,25 @@
 <!-- WAITLIST -->
 <section class="waitlist" id="waitlist">
   <div class="section-inner">
-    <div class="section-eyebrow">Early access</div>
-    <div class="section-title">Your taxes.<br><em>On autopilot.</em></div>
-    <p class="section-desc">Join the waitlist and be first when we launch. Free during beta — no credit card, no accountant, no stress.</p>
-    <div class="waitlist-form">
-      <input type="email" class="waitlist-input" placeholder="your@email.com" />
+    <div class="eyebrow">Early access</div>
+    <div class="s-title">Be first to let<br><em>Wijs handle it.</em></div>
+    <p class="s-desc">Join the waitlist. Free during beta — connect your bank, let Wijs categorize everything, and never miss a deadline again.</p>
+    <div class="wl-form">
+      <input type="email" class="wl-input" placeholder="your@email.com" />
       <button class="btn-primary">Get early access →</button>
     </div>
-    <p class="waitlist-note">🔒 No spam. Unsubscribe anytime.</p>
-    <div class="proof">
-      <div class="proof-avs">
-        <div class="proof-av">🇳🇱</div>
-        <div class="proof-av">🇬🇧</div>
-        <div class="proof-av">🇩🇪</div>
-        <div class="proof-av">🇺🇸</div>
-        <div class="proof-av">🇫🇷</div>
+    <p class="wl-note">🔒 No spam. Unsubscribe anytime. Free during beta.</p>
+    <div class="social-proof">
+      <div class="proof-avatars">
+        <div class="proof-av">🇳🇱</div><div class="proof-av">🇬🇧</div>
+        <div class="proof-av">🇩🇪</div><div class="proof-av">🇺🇸</div><div class="proof-av">🇫🇷</div>
       </div>
-      <p class="proof-text"><strong>240+ ZZP'ers and expats</strong> already on the waitlist</p>
+      <p class="proof-txt"><strong>240+ ZZP'ers and expats</strong> already on the waitlist</p>
     </div>
   </div>
 </section>
 
+<!-- FOOTER -->
 <footer>
   <a href="#" class="footer-logo">ask<span>wijs</span></a>
   <ul class="footer-links">
@@ -442,7 +423,7 @@
     <li><a href="#">Privacy</a></li>
     <li><a href="#">Contact</a></li>
   </ul>
-  <p class="footer-copy">© 2026 askwijs · For ZZP'ers & expats in 🇳🇱</p>
+  <p class="footer-copy">© 2026 askwijs · Built for ZZP'ers & expats in 🇳🇱</p>
 </footer>
 
 </body>

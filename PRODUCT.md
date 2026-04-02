@@ -1,199 +1,216 @@
-# askwijs — Product Architecture
+# askwijs — Product Specification
 
 ## Vision
 
-askwijs is a **financial OS for Dutch ZZP'ers and expat freelancers** — not a chatbot.
+askwijs is a **financial OS for Dutch ZZP'ers and expats** — not a chat app.
 
-It connects to your bank accounts, automatically categorizes every transaction, calculates your live tax position, and lets an AI agent (Wijs) file returns on your behalf. The chat interface sits on top of real financial data — making advice personal, not generic.
-
-**Think:** Revolut Business + Bench Accounting + Dutch tax expertise + an AI agent that acts for you.
+The AI agent (Wijs) sits on top of real connected bank data and operates autonomously:
+auto-categorizing transactions, calculating live tax positions, and filing returns on your behalf.
+The dashboard gives you a secure, complete view of your financial picture at all times.
 
 ---
 
 ## Core Pillars
 
-### 1. 🏦 Connect
-**Bank connections via PSD2 / Open Banking**
-- Auto-connect ING, ABN AMRO, Rabobank, SNS, Bunq, Revolut NL
-- Provider: **Nordigen (GoCardless)** or **Tink** (Visa-owned, best NL coverage)
-- Transactions sync automatically — no manual import
-- Real-time balance and transaction feed
+### 1. 🏦 Connect — Open Banking (PSD2)
+- Connect Dutch bank accounts automatically: ING, ABN AMRO, Rabobank, SNS, Bunq, Revolut NL
+- Uses **Nordigen/GoCardless** or **Tink** (Visa) as the PSD2 aggregator
+- Real-time transaction sync — new payments appear within minutes
+- Users see a live, accurate financial picture — not estimates
+- Bank-level security messaging front and centre
 
-### 2. 🔄 Categorize
-**Automatic transaction categorization**
-- Every transaction tagged: business / personal / mixed
-- Sub-categories: office, travel, equipment, meals, subscriptions
-- Deductible percentage calculated automatically
-- User can override with one tap — Wijs learns from corrections
+### 2. 🔄 Categorize — Auto Transaction Engine
+- Every transaction automatically tagged: business / personal
+- Sub-categories: travel, equipment, software, office, meals, subcontractors
+- BTW (VAT) rate auto-detected per transaction (21%, 9%, 0%, exempt)
+- Mixed-use rules applied automatically (e.g. phone: 70% business)
+- One-click correction if Wijs gets it wrong — learns from corrections
+- Receipt/invoice matching: upload a PDF, Wijs matches it to a transaction
 
-### 3. 📊 Dashboard
-**Live financial picture**
-- Netto income (real-time, from connected accounts)
-- BTW (VAT) position — owed vs reclaimable
-- Income tax forecast for the year
-- Deductions found automatically
-- Upcoming deadlines with countdown
-- Quarter-by-quarter comparison
+### 3. 📊 Dashboard — Financial Command Centre
+- **Netto income** — what you actually keep, live
+- **BTW position** — what you owe or will reclaim this quarter
+- **Income tax forecast** — projected annual tax bill based on YTD data
+- **Deductions found** — zelfstandigenaftrek, startersaftrek, home office, equipment
+- **Deadline tracker** — next BTW aangifte, income tax, KOR applications
+- **Cash flow** — 30/60/90 day view based on actual transactions
+- Everything in English with Dutch tax terms explained inline
 
-### 4. 🤖 Wijs Agent
-**AI agent that acts on your behalf**
-- Prepares BTW aangifte from real transaction data
-- Submits returns to Belastingdienst (via DigiD integration)
+### 4. 🤖 Wijs Agent — Autonomous Tax Operations
+
+Wijs is not a chatbot. Wijs is an agent that acts:
+
+**Automatic actions (no confirmation needed):**
 - Categorizes new transactions as they arrive
-- Flags anomalies, missing receipts, risky classifications
-- Proactive: "Your Q1 BTW return is due in 12 days. I've prepared it — want to review?"
+- Updates BTW position in real time
+- Flags mixed-use items for review
+- Sends deadline reminders 2 weeks + 3 days before due
 
-### 5. 💬 Ask
-**Conversational interface on real data**
-- English or Dutch — seamlessly
-- Questions answered with your actual numbers
-- "Am I on track for zelfstandigenaftrek?" → Yes, you've logged 847 hours. Target: 1,225.
+**Agent actions (user confirmation required):**
+- Prepares quarterly BTW aangifte from real transaction data
+- Submits BTW aangifte to Belastingdienst via DigiD/API
+- Prepares annual income tax return (IB)
+- Generates profit & loss statement on demand
+- Exports accountant-ready bookkeeping report
+
+**Conversational (ask anything):**
+- Answers tax questions grounded in YOUR actual data
+- "Can I deduct this?" → checks your transaction history for context
+- "How much tax will I pay this year?" → calculates from real YTD figures
+- "Am I better off with KOR?" → runs the actual numbers for your situation
+
+### 5. 🔒 Security — Bank-Level Trust
+- PSD2 compliant — read-only bank access by default
+- No credentials stored — OAuth token-based connections
+- SOC 2 Type II target (year 1)
+- Data stored in EU (Netherlands/Germany)
+- GDPR compliant by design
+- 2FA required for filing actions
+- Audit log of every agent action
 
 ---
 
-## User Flow
+## User Journeys
 
-```
-1. Sign up → enter KVK number + BTW number
-2. Connect bank account(s) via Open Banking (one click)
-3. Wijs categorizes last 90 days of transactions automatically
-4. Dashboard populates with live tax position
-5. Wijs notifies of upcoming deadlines
-6. User reviews → Wijs files → done
-```
+### Journey 1: Dutch ZZP'er onboarding
+1. Sign up with KVK number
+2. Connect ING/ABN AMRO via PSD2 (2 clicks)
+3. Wijs categorizes last 90 days of transactions
+4. Dashboard shows: netto earnings, BTW owed, next deadline
+5. BTW aangifte prepared and submitted — first time in 5 minutes
+
+### Journey 2: Expat freelancer onboarding
+1. Sign up in English
+2. Connect bank (Bunq/Revolut/ING)
+3. Wijs explains Dutch tax system in plain English as it sets up
+4. Dashboard shows everything translated: "VAT you owe: €1,890 (due Jan 31)"
+5. Ask Wijs anything — answers in English with Dutch context
+
+### Journey 3: Ongoing autonomous operation
+- Wijs runs in the background every day
+- New transactions categorized automatically
+- Monthly: Wijs sends "your financial snapshot" email
+- Quarterly: "Your BTW return is ready — review and approve"
+- Annually: "Your income tax return is ready — here's what you'll pay"
 
 ---
 
-## Tech Architecture
+## Tech Stack (Recommended)
 
 ### Frontend
 ```
 Framework:    React + Vite
 Styling:      Tailwind CSS
-State:        Zustand or TanStack Query
 Charts:       Recharts or Tremor
-Auth:         Clerk or Supabase Auth
+Auth UI:      Clerk or Auth0
+State:        Zustand
 ```
 
 ### Backend
 ```
-Runtime:      Node.js / Bun
-API:          REST + WebSockets for real-time updates
+Runtime:      Node.js (Hono) or Python (FastAPI)
 Database:     PostgreSQL (Supabase)
-Queue:        BullMQ for async categorization jobs
-Storage:      Supabase Storage (receipts, documents)
+Queue:        BullMQ (Redis) — for transaction processing
+Auth:         Clerk / Auth0
 ```
 
-### Key Integrations
+### Banking
 ```
-Open Banking: Nordigen/GoCardless API (PSD2, covers all NL banks)
-              OR Tink API (Visa-owned, enterprise-grade)
-Tax Filing:   Belastingdienst API + DigiD OAuth
-AI:           Claude API — claude-sonnet-4-6
-OCR:          AWS Textract or Google Document AI (receipts)
+Primary:      Nordigen (GoCardless) — EU PSD2, free tier available
+Alternative:  Tink — enterprise, excellent NL coverage
+NL Banks:     ING, ABN AMRO, Rabobank, SNS, ASN, Triodos, Bunq
 ```
 
-### Wijs Agent Tools
+### AI Agent
 ```
-get_transactions(dateRange, category)
-categorize_transaction(id, category, deductiblePct)
-calculate_btw_position(quarter, year)
-prepare_btw_return(quarter, year)
-submit_btw_return(quarter, year, digiDToken)
-get_deadlines(userId)
-find_deductions(year)
-calculate_income_tax(year)
-scan_receipt(imageUrl)
-flag_transaction(id, reason)
+Model:        Claude API (claude-sonnet-4-6)
+Tools:        categorize_transaction, calculate_btw, prepare_return,
+              submit_return, search_transactions, get_tax_rules
+Memory:       User transaction history + tax preferences in context
 ```
 
----
+### Tax Filing
+```
+BTW:          Belastingdienst API (or interim: PDF generation + DigiD guide)
+IB:           Belastingdienst IB aangifte API
+KOR:          Application form generation
+```
 
-## Data Model
-
-```sql
-users
-  id, email, name, language, kvk_number, btw_number, created_at
-
-bank_connections
-  id, user_id, provider, account_id, iban, bank_name, synced_at, active
-
-transactions
-  id, user_id, connection_id, date, amount, currency,
-  merchant, description, category, subcategory,
-  deductible_pct, is_business, receipt_url, notes, reviewed
-
-btw_returns
-  id, user_id, quarter, year, status, btw_collected,
-  btw_paid, btw_owed, filed_at, submitted_by
-
-tax_years
-  id, user_id, year, gross_income, deductions,
-  taxable_income, estimated_tax, actual_tax, zza_eligible
+### Hosting
+```
+Frontend:     Vercel
+Backend:      Railway or Render
+Database:     Supabase (EU region)
+Domain:       askwijs.ai + askwijs.nl
 ```
 
 ---
 
-## Security
+## Data Model (Core)
 
-- All bank data encrypted at rest (AES-256)
-- PSD2 compliant — no bank credentials stored, token-only
-- DigiD: user authorizes per filing session, never stored
-- GDPR compliant — Dutch data residency
-- Full audit log of all agent actions
-- User can revoke bank connections instantly
+```
+User
+  ├── profile (name, KVK, BTW number, language preference)
+  ├── bank_connections[] (via Nordigen)
+  ├── transactions[] (synced from bank)
+  │     ├── category (auto-assigned by Wijs)
+  │     ├── btw_rate (0, 9, 21, exempt)
+  │     ├── deductible_percentage
+  │     └── receipt_match (optional)
+  ├── tax_periods[]
+  │     ├── btw_returns[]
+  │     └── income_tax_returns[]
+  └── wijs_actions[] (audit log)
+```
 
 ---
 
-## Roadmap
+## MVP Scope (Phase 1)
 
-### Phase 1 — Foundation (MVP)
-- [ ] Auth + onboarding (KVK/BTW input)
-- [ ] Bank connection via Nordigen (ING, ABN AMRO, Rabobank)
+- [ ] Auth + onboarding (KVK, BTW number, language)
+- [ ] Nordigen bank connection (ING, ABN AMRO, Rabobank)
 - [ ] Transaction sync + auto-categorization
-- [ ] Dashboard (netto, BTW position, deadlines)
-- [ ] Wijs chat grounded in real transaction data
+- [ ] Dashboard: netto, BTW position, deadlines
+- [ ] Wijs chat: questions answered from real data
+- [ ] BTW return preparation (PDF + review UI)
+- [ ] Deadline notifications (email)
 
-### Phase 2 — Agent
-- [ ] BTW return preparation + submission
-- [ ] Receipt scanning + OCR-to-transaction matching
-- [ ] Proactive deadline notifications (email + push)
-- [ ] Income tax forecasting
+## Phase 2
 
-### Phase 3 — Intelligence
-- [ ] DigiD integration for full autonomous filing
-- [ ] Schijnzelfstandigheid risk scoring
-- [ ] Multi-year comparison + trends
-- [ ] Accountant handoff export
-- [ ] Business health score
+- [ ] BTW submission via Belastingdienst API
+- [ ] Income tax return preparation
+- [ ] Receipt/invoice scanning + matching
+- [ ] KOR calculator + application
+- [ ] Accountant export (PDF/CSV)
+- [ ] Mobile app (React Native)
 
----
+## Phase 3
 
-## Competitive Gap
-
-| Product | What's missing |
-|---|---|
-| Moneybird | No AI agent, no English, no auto bank connect |
-| e-Boekhouden | Dated UI, Dutch-only, no AI |
-| Twinfield | Enterprise complexity, expensive |
-| Belastingdienst portal | Government UX, zero guidance |
-| ChatGPT / generic AI | No real data, generic advice only |
-
-**askwijs is the only product that:**
-1. Works natively in English AND Dutch
-2. Auto-connects bank accounts (PSD2)
-3. Has an AI agent that categorizes AND files
-4. Is built specifically for ZZP + expat market in NL
+- [ ] Income tax submission
+- [ ] Multi-year comparison
+- [ ] Pension/AOV recommendations
+- [ ] Business structure advice (eenmanszaak vs BV)
+- [ ] Expat-specific: 30% ruling tracker, M-form assistance
 
 ---
 
-## Notes for Claude Code
+## Pricing Model (Planned)
 
-Consolidate the existing codebase against this spec:
+| Plan | Price | For |
+|---|---|---|
+| **Starter** | Free | 1 bank account, dashboard only |
+| **ZZP** | €12/mo | Full automation, BTW filing, 3 bank accounts |
+| **Pro** | €29/mo | Multiple entities, accountant export, priority support |
 
-1. Dashboard must reflect the 5 pillars above
-2. Wijs agent needs tool-use implementation (see Tools list)
-3. Bank connection flow → Nordigen/GoCardless API
-4. All UI → design system in `brand/DESIGN.md`
-5. Landing page → `src/index.html` (reflects full product vision)
-6. Prioritize Phase 1 for MVP
+*Cheaper than 1 hour with an accountant.*
+
+---
+
+## Key Differentiators
+
+1. **Only bilingual tool** — genuine English + Dutch, not Google Translate
+2. **Agent that acts** — files returns, doesn't just advise
+3. **Built on real data** — PSD2 bank connections, not manual input
+4. **ZZP + expat** — serves both communities equally well
+5. **No accountant needed** for routine filing — 10x cheaper
+6. **Dutch-native tax logic** — zelfstandigenaftrek, MKB, KOR, schijnzelfstandigheid all handled
