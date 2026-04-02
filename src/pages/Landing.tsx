@@ -193,43 +193,39 @@ function Nav() {
 }
 
 // ══════════════════════════════════════════════════════════════════
-//  2. HERO
+//  2. HERO — Linear-style: centered heading, sub-text, full-bleed dashboard below
 // ══════════════════════════════════════════════════════════════════
 function Hero() {
   const ref = useFadeIn<HTMLDivElement>();
   return (
-    <section className="relative flex flex-col items-center justify-center pt-40 pb-20 px-6 text-center">
-      {/* Subtle radial glow */}
-      <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse 60% 40% at 50% 0%, rgba(94,106,210,0.08) 0%, transparent 70%)" }} />
-
-      <div ref={ref} className="relative z-10 max-w-3xl">
-        <h1 className="text-[clamp(40px,6.5vw,72px)] font-semibold leading-[1.08] tracking-[-0.03em] text-[#f7f8f8] mb-6">
+    <section className="relative pt-[calc(56px+96px)] pb-0 text-center">
+      <div ref={ref} className="relative z-10 max-w-[1344px] mx-auto px-8">
+        <h1 className="text-[56px] font-medium leading-[1.14] tracking-[-0.04em] text-[#f7f8f8] mb-6">
           Your Dutch taxes.{" "}
           <span className="block" style={{ color: C.muted }}>Fully automated.</span>
         </h1>
 
-        <p className="text-lg text-[#8a8f98] max-w-xl mx-auto mb-10 leading-relaxed">
-          askwijs connects your Dutch bank accounts, auto-categorizes every transaction, and keeps your BTW aangifte ready to file. Built for expats and ZZP'ers. English and Dutch.
-        </p>
+        <div className="flex items-center justify-center gap-6 text-[16px] leading-[1.5] text-[#8a8f98] mb-10">
+          <span>Connect your bank. askwijs categorizes every transaction, calculates your BTW, and files your returns.</span>
+        </div>
 
-        <div className="flex items-center justify-center gap-3 flex-wrap mb-4">
+        <div className="flex items-center justify-center gap-3 flex-wrap">
           <Link
             to="/signup"
-            className="inline-flex items-center gap-2 text-white text-[15px] font-medium px-7 py-3.5 rounded-lg transition-all hover:-translate-y-px"
+            className="inline-flex items-center gap-2 text-white text-[14px] font-medium px-5 py-2.5 rounded-[8px] transition-all hover:-translate-y-px"
             style={{ background: C.accent }}
           >
             Start free trial
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="ml-0.5"><path d="M6 3l5 5-5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
           </Link>
           <a
             href="#demo"
-            className="inline-flex items-center gap-2 text-[#8a8f98] text-[15px] font-medium px-7 py-3.5 rounded-lg transition-all hover:text-[#f7f8f8]"
+            className="inline-flex items-center gap-2 text-[#8a8f98] text-[14px] font-medium px-5 py-2.5 rounded-[8px] transition-all hover:text-[#f7f8f8]"
             style={{ border: `1px solid ${C.border}` }}
           >
             See how it works
           </a>
         </div>
-        <p className="text-sm text-[#62666d]">1 month free &middot; then &euro;19,99/mo &middot; no credit card needed</p>
       </div>
     </section>
   );
@@ -301,45 +297,90 @@ function DashboardDemo() {
   }, [chatInput, isTyping]);
 
   return (
-    <section id="demo" className="pb-32 px-4">
-      <div ref={ref} className="relative max-w-[960px] mx-auto">
-        {/* Glow behind the frame */}
-        <div className="absolute -inset-10 pointer-events-none" style={{ background: "radial-gradient(ellipse 70% 50% at 50% 30%, rgba(94,106,210,0.1), transparent)" }} />
+    <section id="demo" className="pt-16 pb-32 relative overflow-hidden">
+      {/* Full-bleed background glow — the "stage" the app sits on (Linear-style) */}
+      <div className="absolute inset-0 pointer-events-none" style={{
+        background: `
+          radial-gradient(ellipse 100% 70% at 50% 10%, rgba(94,106,210,0.10), transparent 60%),
+          radial-gradient(ellipse 80% 100% at 50% 80%, rgba(94,106,210,0.04), transparent 60%)
+        `,
+      }} />
+      {/* Subtle noise/grain overlay for depth */}
+      <div className="absolute inset-0 pointer-events-none opacity-[0.015]" style={{
+        backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
+        backgroundRepeat: "repeat",
+      }} />
 
-        {/* Browser chrome */}
-        <div className="relative rounded-xl overflow-hidden" style={{ border: `1px solid ${C.border}`, boxShadow: "0 40px 80px rgba(0,0,0,0.5)" }}>
-          {/* Title bar */}
-          <div className="flex items-center gap-2 px-4 py-3" style={{ background: "rgba(255,255,255,0.02)", borderBottom: `1px solid ${C.border}` }}>
-            <div className="w-3 h-3 rounded-full bg-[#ff5f57]" />
-            <div className="w-3 h-3 rounded-full bg-[#febc2e]" />
-            <div className="w-3 h-3 rounded-full bg-[#28c840]" />
-            <div className="flex-1 text-xs text-[#62666d] text-center" style={{ fontVariantNumeric: "tabular-nums" }}>app.askwijs.ai/dashboard</div>
-          </div>
+      {/* Full-bleed dashboard frame — breaks out of container like Linear */}
+      <div ref={ref} className="relative max-w-[1160px] mx-auto px-4">
+        <div className="relative rounded-xl overflow-hidden" style={{ border: `1px solid rgba(255,255,255,0.1)`, boxShadow: "0 40px 120px rgba(0,0,0,0.6), 0 0 1px rgba(255,255,255,0.1)" }}>
+          {/* App frame — sidebar + content (Linear-style layout) */}
+          <div className="flex" style={{ background: "#0e0f11" }}>
+            {/* Sidebar */}
+            <div className="hidden md:flex flex-col w-[220px] shrink-0 py-3 px-3" style={{ borderRight: `1px solid rgba(255,255,255,0.06)` }}>
+              <div className="flex items-center gap-2 px-2 py-1.5 mb-3">
+                <div className="w-5 h-5 rounded flex items-center justify-center text-[9px] font-bold text-white" style={{ background: C.accent }}>A</div>
+                <span className="text-[13px] font-medium text-[#f7f8f8]">askwijs</span>
+              </div>
+              {[
+                { label: "Overview", active: activeTab === "Overview" },
+                { label: "Transactions", active: activeTab === "Transactions" },
+                { label: "BTW", active: activeTab === "BTW" },
+                { label: "Invoices", active: activeTab === "Invoices" },
+              ].map(item => (
+                <button
+                  key={item.label}
+                  onClick={() => setActiveTab(item.label as DashTab)}
+                  className="flex items-center gap-2 px-2 py-1.5 rounded-md text-[13px] transition-colors text-left w-full"
+                  style={{
+                    color: item.active ? "#f7f8f8" : "#62666d",
+                    background: item.active ? "rgba(255,255,255,0.06)" : "transparent",
+                    border: "none",
+                    cursor: "pointer",
+                  }}
+                >
+                  {item.label}
+                </button>
+              ))}
+              <div className="mt-2 mb-1 px-2 pt-2" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+                <span className="text-[10px] font-medium uppercase tracking-wider text-[#4a4e57]">Tools</span>
+              </div>
+              {[
+                { label: "Receipts", active: activeTab === "Receipts" },
+                { label: "Banks", active: activeTab === "Banks" },
+                { label: "Settings", active: activeTab === "Settings" },
+              ].map(item => (
+                <button
+                  key={item.label}
+                  onClick={() => setActiveTab(item.label as DashTab)}
+                  className="flex items-center gap-2 px-2 py-1.5 rounded-md text-[13px] transition-colors text-left w-full"
+                  style={{
+                    color: item.active ? "#f7f8f8" : "#62666d",
+                    background: item.active ? "rgba(255,255,255,0.06)" : "transparent",
+                    border: "none",
+                    cursor: "pointer",
+                  }}
+                >
+                  {item.label}
+                </button>
+              ))}
+            </div>
 
-          {/* Top tab nav */}
-          <div className="flex items-center gap-0 px-1 overflow-x-auto" style={{ background: "rgba(255,255,255,0.02)", borderBottom: `1px solid ${C.border}` }}>
-            {DASH_TABS.map(tab => (
-              <button
-                key={tab}
-                onClick={() => setActiveTab(tab)}
-                className="px-4 py-2.5 text-xs font-medium transition-colors shrink-0 relative"
-                style={{
-                  color: activeTab === tab ? "#f7f8f8" : "#62666d",
-                  background: "transparent",
-                  border: "none",
-                  cursor: "pointer",
-                }}
-              >
-                {tab}
-                {activeTab === tab && (
-                  <div className="absolute bottom-0 left-2 right-2 h-px" style={{ background: C.accent }} />
-                )}
-              </button>
-            ))}
-          </div>
+            {/* Main content area */}
+            <div className="flex-1 flex flex-col min-w-0">
+              {/* Top bar */}
+              <div className="flex items-center justify-between px-4 py-2" style={{ borderBottom: `1px solid rgba(255,255,255,0.06)` }}>
+                <div className="flex items-center gap-2">
+                  <span className="text-[13px] font-medium text-[#f7f8f8]">{activeTab}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="text-[11px] text-[#4a4e57] px-2 py-1 rounded" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.06)" }}>Q1 2026</div>
+                  <div className="w-6 h-6 rounded-full bg-[#5e6ad2] flex items-center justify-center text-[9px] font-bold text-white">N</div>
+                </div>
+              </div>
 
           {/* Content area */}
-          <div className="min-h-[480px]" style={{ background: C.bg }}>
+          <div className="min-h-[480px]" style={{ background: "#0e0f11" }}>
             {activeTab === "Overview" && <DashOverview />}
             {activeTab === "Transactions" && <DashTransactions />}
             {activeTab === "BTW" && <DashBTW />}
@@ -350,7 +391,7 @@ function DashboardDemo() {
           </div>
 
           {/* Wijs chat bar at bottom */}
-          <div style={{ background: "rgba(255,255,255,0.02)", borderTop: `1px solid ${C.border}` }} className="px-4 py-3">
+          <div style={{ background: "rgba(255,255,255,0.02)", borderTop: `1px solid rgba(255,255,255,0.06)` }} className="px-4 py-3">
             <div className="flex items-center gap-3">
               <div className="w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-semibold text-white shrink-0" style={{ background: C.accent }}>W</div>
               <input
@@ -400,6 +441,8 @@ function DashboardDemo() {
                 )}
               </div>
             )}
+          </div>
+            </div>
           </div>
         </div>
       </div>
@@ -665,9 +708,9 @@ function BanksStrip() {
   ];
 
   return (
-    <div ref={ref} className="py-20 px-6">
-      <div className="max-w-3xl mx-auto text-center">
-        <p className="text-sm text-[#62666d] mb-8">Trusted by freelancers across the Netherlands</p>
+    <div ref={ref} className="py-20 px-8">
+      <div className="max-w-[1344px] mx-auto text-center">
+        <p className="text-[14px] text-[#4a4e57] mb-8 tracking-wide uppercase font-medium">Works with all major Dutch banks</p>
         <div className="flex items-center justify-center gap-3 md:gap-5 flex-wrap">
           {banks.map(b => (
             <div
@@ -721,9 +764,16 @@ function Pillars() {
   ];
 
   return (
-    <section id="features" ref={ref} className="py-24 px-6">
-      <div className="max-w-5xl mx-auto">
-        <div className="grid md:grid-cols-3 gap-px rounded-xl overflow-hidden" style={{ border: `1px solid ${C.border}` }}>
+    <section id="features" ref={ref} className="py-[96px] px-8">
+      <div className="max-w-[1344px] mx-auto">
+        {/* Linear-style intro text */}
+        <div className="mb-16 max-w-[720px]">
+          <p className="text-[24px] leading-[1.4] text-[#f7f8f8]">
+            <span className="font-medium">A new kind of financial tool.</span>{" "}
+            <span className="text-[#8a8f98]">Purpose-built for freelancers and expats in the Netherlands. Designed to replace your boekhouder, not just assist them.</span>
+          </p>
+        </div>
+        <div className="grid md:grid-cols-3 gap-px rounded-xl overflow-hidden" style={{ border: `1px solid rgba(255,255,255,0.06)` }}>
           {pillars.map(p => (
             <div key={p.title} className="p-8 md:p-10" style={{ background: "rgba(255,255,255,0.02)" }}>
               <div className="mb-5">{p.icon}</div>
@@ -746,12 +796,11 @@ function FeatureSection({ id, label, title, desc, children, reverse = false }: {
 }) {
   const ref = useFadeIn<HTMLDivElement>();
   return (
-    <section id={id} ref={ref} className="py-24 px-6">
-      <div className={`max-w-5xl mx-auto grid md:grid-cols-2 gap-12 md:gap-16 items-center ${reverse ? "md:[direction:rtl]" : ""}`}>
+    <section id={id} ref={ref} className="py-[96px] px-8">
+      <div className={`max-w-[1344px] mx-auto grid md:grid-cols-2 gap-12 md:gap-20 items-center ${reverse ? "md:[direction:rtl]" : ""}`}>
         <div style={{ direction: "ltr" }}>
-          <div className="text-[11px] font-semibold tracking-widest uppercase mb-3" style={{ color: C.accent }}>{label}</div>
-          <h2 className="text-[clamp(28px,4vw,40px)] font-semibold leading-[1.15] tracking-[-0.02em] text-[#f7f8f8] mb-4">{title}</h2>
-          <p className="text-base text-[#8a8f98] leading-relaxed">{desc}</p>
+          <h2 className="text-[32px] font-medium leading-[1.2] tracking-[-0.03em] text-[#f7f8f8] mb-4">{title}</h2>
+          <p className="text-[16px] text-[#8a8f98] leading-[1.6]">{desc}</p>
         </div>
         <div style={{ direction: "ltr" }}>{children}</div>
       </div>
@@ -1167,7 +1216,7 @@ function FinalCTA() {
 function Footer() {
   return (
     <footer className="py-10 px-6 md:px-10" style={{ borderTop: `1px solid ${C.border}` }}>
-      <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+      <div className="max-w-[1364px] mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
         <Link to="/" className="text-lg font-semibold text-[#f7f8f8] no-underline tracking-tight">
           ask<span style={{ color: C.accent }}>wijs</span>
         </Link>
