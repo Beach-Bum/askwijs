@@ -189,7 +189,7 @@ function Hero() {
       style={{ paddingLeft: "max(32px, calc((100vw - 1436px) / 2 + 46px))", paddingRight: "max(32px, calc((100vw - 1436px) / 2 + 46px))" }}>
       <div ref={ref} className="max-w-[1344px]">
         {/* Heading — emotional hook */}
-        <h1 className="text-[40px] sm:text-[56px] leading-[1.12] tracking-[-0.02em] text-[#F9FAFB] mb-4 max-w-[800px]" style={{ fontFamily: "'Instrument Serif', serif", fontWeight: 400 }}>
+        <h1 className="text-[40px] sm:text-[56px] leading-[1.12] tracking-[-0.02em] text-[#F9FAFB] mb-4 max-w-[800px]" style={{ fontFamily: "'Lora', serif", fontWeight: 600 }}>
           Stop dreading{"\n"}
           <span className="block">April 30.</span>
         </h1>
@@ -622,7 +622,7 @@ function IntroText() {
     <section ref={ref} className="pt-[128px] pb-[64px]"
       style={{ paddingLeft: "max(32px, calc((100vw - 1436px) / 2 + 46px))", paddingRight: "max(32px, calc((100vw - 1436px) / 2 + 46px))" }}>
       <p className="text-[24px] leading-[1.45] max-w-[900px]">
-        <span className="text-[#F9FAFB]" style={{ fontFamily: "'Instrument Serif', serif", fontWeight: 400 }}>A new kind of financial tool.</span>{" "}
+        <span className="text-[#F9FAFB]" style={{ fontFamily: "'Lora', serif", fontWeight: 600 }}>A new kind of financial tool.</span>{" "}
         <span className="text-[#9CA3AF]">Purpose-built for freelancers and expats in the Netherlands. Designed to replace your boekhouder, not just assist them.</span>
       </p>
     </section>
@@ -727,7 +727,7 @@ function NumberedSection({ num, label, heading, desc, children, id }: {
       <div className="max-w-[1344px]">
         {/* Header row: heading left, description right */}
         <div className="grid md:grid-cols-2 gap-8 mb-2">
-          <h2 className="text-[32px] leading-[1.2] tracking-[-0.02em] text-[#F9FAFB]" style={{ fontFamily: "'Instrument Serif', serif", fontWeight: 400 }}>{heading}</h2>
+          <h2 className="text-[32px] leading-[1.2] tracking-[-0.02em] text-[#F9FAFB]" style={{ fontFamily: "'Lora', serif", fontWeight: 600 }}>{heading}</h2>
           <p className="text-[16px] text-[#9CA3AF] leading-[1.6]">{desc}</p>
         </div>
 
@@ -1001,7 +1001,7 @@ function Pricing() {
       style={{ paddingLeft: "max(32px, calc((100vw - 1436px) / 2 + 46px))", paddingRight: "max(32px, calc((100vw - 1436px) / 2 + 46px))" }}>
       <div className="max-w-[960px] mx-auto">
         <div className="text-center mb-12">
-          <h2 className="text-[32px] leading-[1.2] tracking-[-0.02em] text-[#F9FAFB] mb-3" style={{ fontFamily: "'Instrument Serif', serif", fontWeight: 400 }}>Simple pricing. No surprises.</h2>
+          <h2 className="text-[32px] leading-[1.2] tracking-[-0.02em] text-[#F9FAFB] mb-3" style={{ fontFamily: "'Lora', serif", fontWeight: 600 }}>Simple pricing. No surprises.</h2>
           <p className="text-[16px] text-[#9CA3AF]">Start free. Upgrade when you need more.</p>
         </div>
 
@@ -1064,7 +1064,7 @@ function CTA() {
   return (
     <section ref={ref} className="py-[128px] text-center"
       style={{ paddingLeft: "max(32px, calc((100vw - 1436px) / 2 + 46px))", paddingRight: "max(32px, calc((100vw - 1436px) / 2 + 46px))" }}>
-      <h2 className="text-[32px] sm:text-[48px] leading-[1.15] tracking-[-0.02em] text-[#F9FAFB] mb-4" style={{ fontFamily: "'Instrument Serif', serif", fontWeight: 400 }}>
+      <h2 className="text-[32px] sm:text-[48px] leading-[1.15] tracking-[-0.02em] text-[#F9FAFB] mb-4" style={{ fontFamily: "'Lora', serif", fontWeight: 600 }}>
         Stop dreading tax season.{"\n"}<span className="block">Start today.</span>
       </h2>
       <p className="text-[16px] text-[#9CA3AF] mb-8 max-w-[480px] mx-auto">Join 2,400+ ZZP'ers and expats who automated their Dutch taxes with askwijs.</p>

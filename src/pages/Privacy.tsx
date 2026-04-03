@@ -14,7 +14,7 @@ export function Privacy() {
       </nav>
 
       <main className="max-w-[720px] mx-auto px-6 py-16">
-        <h1 className="text-[36px] tracking-[-0.02em] mb-8" style={{ fontFamily: "'Instrument Serif', serif", fontWeight: 400 }}>Privacy Policy</h1>
+        <h1 className="text-[36px] tracking-[-0.02em] mb-8" style={{ fontFamily: "'Lora', serif", fontWeight: 600 }}>Privacy Policy</h1>
         <div className="space-y-8 text-[15px] text-[#9CA3AF] leading-[1.7]">
           <section>
             <h2 className="text-[18px] font-medium text-[#F9FAFB] mb-3">What we collect</h2>

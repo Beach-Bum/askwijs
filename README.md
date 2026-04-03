@@ -88,7 +88,7 @@ Frontend: `http://localhost:5173` | API: `http://localhost:3001`
 askwijs/
 ├── src/
 │   ├── api/server.ts         # Hono API (auth middleware, Stripe, Tink, profile)
-│   ├── components/           # AppShell, ErrorBoundary
+│   ├── components/           # AppShell, ChatPanel, ErrorBoundary
 │   ├── db/                   # Drizzle schema + connection
 │   ├── hooks/useAuth.tsx     # Supabase auth context
 │   ├── lib/
@@ -97,26 +97,36 @@ askwijs/
 │   │   ├── ai/categorize.ts  # Claude transaction categorization
 │   │   └── tax/dutch-tax.ts  # BTW + income tax calculations
 │   └── pages/                # Landing, Login, Onboarding, Dashboard, Subscribe
-├── brand/                    # Brand strategy, design system
+├── DESIGN.md                 # Unified design system (Warm Premium Dark)
+├── brand/                    # Brand strategy docs
 ├── docs/                     # Design research
-└── .github/workflows/        # CI pipeline
+└── vercel.json               # SPA rewrite for client-side routing
 ```
 
 ---
 
-## Brand
+## Design System — Warm Premium Dark
 
-**Name:** askwijs · **Domain:** askwijs.ai  
-**Tagline:** *Your Dutch taxes, fully automated.*  
-**Feel:** Calm, secure financial command center — not a chatbot
+**Name:** askwijs · **Domain:** askwijs.ai · **Live:** askwijs-fresh.vercel.app
+**Tagline:** Your Dutch taxes, fully automated.
+**Direction:** Warm premium dark. Mercury meets Moneybird. Unified dark aesthetic across landing and app.
+
+**Typography:**
+- Display/Hero: Lora 600 (classical serif, warm + trustworthy)
+- Body/UI: Plus Jakarta Sans (geometric sans)
+- Code/Identifiers: JetBrains Mono (small sizes only)
 
 | Token | Hex | Role |
 |---|---|---|
-| Wijs Blue | `#2563eb` | Primary — trust, CTAs |
-| Clarity Green | `#059669` | Success, netto, confirmations |
-| Deep Slate | `#0a0f1a` | Sidebar, dark surfaces |
-| Off White | `#f8fafc` | App background |
-| Warm Amber | `#d97706` | Deadlines, alerts only |
+| Wijs Blue | `#2563EB` | Primary accent, CTAs, links |
+| Background | `#0B0F1A` | Base dark (warm near-black) |
+| Surface | `#111827` | Cards, panels, sidebar |
+| Elevated | `#1F2937` | Inputs, hover states |
+| Text Primary | `#F9FAFB` | Headings, amounts |
+| Text Secondary | `#9CA3AF` | Body, descriptions |
+| Success | `#059669` | Revenue, confirmations |
+| Warning | `#D97706` | Deadlines only |
+| Error | `#DC2626` | Errors, overdue |
 
 ---
 

@@ -14,17 +14,17 @@
 - **Anti-patterns:** No purple gradients, no 3-column icon grids, no centered-everything layouts, no stock photos, no gradient buttons, no italic text, no large monospace fonts, no cold/sterile clinical feel
 
 ## Typography
-- **Display/Hero:** Instrument Serif — warm editorial serif for hero headings and brand moments. Distinctive in the all-sans-serif fintech category. Signals authority + warmth.
+- **Display/Hero:** Lora — warm classical serif for hero headings and brand moments. Calligraphic roots with contemporary polish. Readable on dark backgrounds, signals authority + warmth without being trendy.
 - **Body/UI:** Plus Jakarta Sans — warm geometric sans-serif. Friendlier than Inter, excellent readability at all sizes. Used for body text, labels, buttons, navigation.
 - **Data/Tables:** Plus Jakarta Sans with `font-variant-numeric: tabular-nums` — never use monospace on large numbers
 - **Code/Identifiers:** JetBrains Mono — small sizes only (KvK numbers, BTW-ids, IBANs, invoice numbers). Never large, never for amounts.
 - **Loading:** Google Fonts CDN
   ```html
-  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
   ```
 - **Scale:**
-  - Hero: 56px / Instrument Serif 400 / tracking -0.02em / line-height 1.12
-  - H1: 36px / Instrument Serif 400 / line-height 1.2
+  - Hero: 56px / Lora 600 / tracking -0.02em / line-height 1.12
+  - H1: 36px / Lora 600 / line-height 1.2
   - H2: 24px / Plus Jakarta Sans 600 / line-height 1.3
   - H3: 17px / Plus Jakarta Sans 600 / line-height 1.4
   - Body: 15px / Plus Jakarta Sans 400 / line-height 1.6
@@ -89,7 +89,7 @@
 | Date | Decision | Rationale |
 |------|----------|-----------|
 | 2026-04-03 | Unified design system created | Replaced 3 conflicting files (DESIGN.md, brand/DESIGN.md, brand/BRAND.md) with one coherent warm premium dark system |
-| 2026-04-03 | Instrument Serif for display | Distinctive serif in all-sans-serif fintech category. Signals editorial authority + warmth. |
+| 2026-04-03 | Lora for display (was Instrument Serif) | Classical serif with calligraphic warmth. Better legibility on dark backgrounds than Instrument Serif. Less trendy, more trustworthy for financial product. |
 | 2026-04-03 | Plus Jakarta Sans for body | Warmer than Inter/Outfit, friendlier geometric sans. Every competitor uses Inter or Roboto. |
 | 2026-04-03 | Wijs Blue #2563EB as sole accent | Established brand color. Replaced Linear indigo #5e6ad2 for consistency. |
 | 2026-04-03 | Dark everywhere | Eliminated light/dark split (was: dark landing, light app). Unified warm dark palette. |
