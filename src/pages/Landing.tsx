@@ -7,22 +7,26 @@ import { useAuth } from "@/hooks/useAuth";
    Layout: Exact copy of linear.app/homepage structure
    ================================================================ */
 
-// ── Palette (Linear's exact tokens) ─────────────────────────────
+// ── Palette (DESIGN.md — Warm Premium Dark) ─────────────────────
 const C = {
-  bg: "#08090a",
-  surface: "rgba(255,255,255,0.03)",
-  surfaceHover: "rgba(255,255,255,0.06)",
+  bg: "#0B0F1A",
+  surface: "#111827",
+  surfaceHover: "#1F2937",
   border: "rgba(255,255,255,0.08)",
   borderSubtle: "rgba(255,255,255,0.04)",
-  text: "#f7f8f8",
-  muted: "#8a8f98",
-  faint: "#62666d",
-  dim: "#4a4e57",
-  accent: "#5e6ad2",
-  accentHover: "#6e7bdf",
-  green: "#3fb950",
-  orange: "#d29e5e",
-  red: "#d2765e",
+  text: "#F9FAFB",
+  muted: "#9CA3AF",
+  faint: "#6B7280",
+  dim: "#4B5563",
+  accent: "#2563EB",
+  accentHover: "#3B82F6",
+  accentPale: "rgba(37, 99, 235, 0.12)",
+  green: "#059669",
+  greenPale: "rgba(5, 150, 105, 0.12)",
+  orange: "#D97706",
+  orangePale: "rgba(217, 119, 6, 0.12)",
+  red: "#DC2626",
+  redPale: "rgba(220, 38, 38, 0.12)",
 };
 
 // ── Fade-in on scroll ───────────────────────────────────────────
@@ -85,7 +89,7 @@ export function Landing() {
   if (!loading && user) return <Navigate to="/dashboard" replace />;
 
   return (
-    <div className="min-h-screen text-[#f7f8f8] overflow-x-hidden" style={{ background: C.bg, fontFamily: "'Inter', system-ui, -apple-system, sans-serif" }}>
+    <div className="min-h-screen text-[#F9FAFB] overflow-x-hidden" style={{ background: C.bg }}>
       <Nav />
       <main>
         <Hero />
@@ -149,14 +153,17 @@ function Nav() {
       style={{
         paddingLeft: "max(32px, calc((100vw - 1436px) / 2 + 46px))",
         paddingRight: "max(32px, calc((100vw - 1436px) / 2 + 46px))",
-        background: scrolled ? "rgba(8,9,10,0.85)" : "linear-gradient(180deg, rgba(8,9,10,0.8) 0%, transparent 100%)",
+        background: scrolled ? "rgba(11,15,26,0.85)" : "linear-gradient(180deg, rgba(11,15,26,0.8) 0%, transparent 100%)",
         backdropFilter: scrolled ? "blur(20px) saturate(1.4)" : "none",
         borderBottom: scrolled ? `1px solid ${C.borderSubtle}` : "1px solid transparent",
         transform: visible ? "translateY(0)" : "translateY(-100%)",
         opacity: visible ? 1 : 0,
       }}>
-      <Link to="/" className="text-[16px] font-semibold text-[#f7f8f8] no-underline tracking-tight">
-        ask<span style={{ color: C.accent }}>wijs</span>
+      <Link to="/" className="flex items-center gap-2 no-underline">
+        <img src="/logo-white.svg" alt="askwijs" className="h-6 w-auto" />
+        <span className="text-[16px] font-semibold text-[#F9FAFB] tracking-tight" style={{ fontFamily: "'Instrument Serif', serif" }}>
+          ask<span style={{ color: C.accent }}>wijs</span>
+        </span>
       </Link>
       <div className="hidden md:flex items-center gap-8">
         <NavLink href="#features">Product</NavLink>
@@ -164,7 +171,7 @@ function Nav() {
         <NavLink href="#security">Security</NavLink>
       </div>
       <div className="flex items-center gap-4">
-        <Link to="/login" className="hidden md:inline text-[14px] text-[#8a8f98] hover:text-[#f7f8f8] transition-colors">Log in</Link>
+        <Link to="/login" className="hidden md:inline text-[14px] text-[#9CA3AF] hover:text-[#F9FAFB] transition-colors">Log in</Link>
         <Link to="/signup" className="text-[14px] font-medium text-white px-4 py-2 rounded-[8px] transition-all hover:brightness-110"
           style={{ background: C.accent }}>Sign up</Link>
       </div>
@@ -182,11 +189,11 @@ function Hero() {
       style={{ paddingLeft: "max(32px, calc((100vw - 1436px) / 2 + 46px))", paddingRight: "max(32px, calc((100vw - 1436px) / 2 + 46px))" }}>
       <div ref={ref} className="max-w-[1344px]">
         {/* Heading — emotional hook */}
-        <h1 className="text-[40px] sm:text-[56px] font-medium leading-[1.14] tracking-[-0.04em] text-[#f7f8f8] mb-4 max-w-[800px]">
+        <h1 className="text-[40px] sm:text-[56px] leading-[1.12] tracking-[-0.02em] text-[#F9FAFB] mb-4 max-w-[800px]" style={{ fontFamily: "'Instrument Serif', serif", fontWeight: 400 }}>
           Stop dreading{"\n"}
           <span className="block">April 30.</span>
         </h1>
-        <p className="text-[18px] sm:text-[22px] font-medium text-[#8a8f98] leading-[1.4] mb-8 max-w-[640px]">
+        <p className="text-[18px] sm:text-[22px] font-medium text-[#9CA3AF] leading-[1.4] mb-8 max-w-[640px]">
           Your Dutch taxes, fully automated. Connect your bank, and askwijs handles BTW, categorization, and filing.
         </p>
 
@@ -194,24 +201,24 @@ function Hero() {
         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-12">
           <Link to="/signup" className="text-[14px] font-medium text-white px-6 py-3 rounded-[8px] transition-all hover:-translate-y-px hover:brightness-110"
             style={{ background: C.accent }}>Start free trial</Link>
-          <span className="text-[13px] text-[#3a3e47]">No credit card required &middot; 30 days free</span>
+          <span className="text-[13px] text-[#4B5563]">No credit card required &middot; 30 days free</span>
         </div>
 
         {/* Social proof bar */}
         <div className="flex flex-wrap items-center gap-6 sm:gap-10 text-[13px]">
           <div>
-            <span className="text-[#f7f8f8] font-medium" style={{ fontVariantNumeric: "tabular-nums" }}>2,400+</span>
-            <span className="text-[#3a3e47] ml-1.5">ZZP'ers use askwijs</span>
+            <span className="text-[#F9FAFB] font-medium" style={{ fontVariantNumeric: "tabular-nums" }}>2,400+</span>
+            <span className="text-[#4B5563] ml-1.5">ZZP'ers use askwijs</span>
           </div>
           <div className="h-3 w-px bg-[rgba(255,255,255,0.08)]" />
           <div>
-            <span className="text-[#f7f8f8] font-medium" style={{ fontVariantNumeric: "tabular-nums" }}>&euro;4.2M</span>
-            <span className="text-[#3a3e47] ml-1.5">deductions found</span>
+            <span className="text-[#F9FAFB] font-medium" style={{ fontVariantNumeric: "tabular-nums" }}>&euro;4.2M</span>
+            <span className="text-[#4B5563] ml-1.5">deductions found</span>
           </div>
           <div className="h-3 w-px bg-[rgba(255,255,255,0.08)]" />
           <div>
-            <span className="text-[#f7f8f8] font-medium" style={{ fontVariantNumeric: "tabular-nums" }}>4.8</span>
-            <span className="text-[#3a3e47] ml-1.5">/ 5 user rating</span>
+            <span className="text-[#F9FAFB] font-medium" style={{ fontVariantNumeric: "tabular-nums" }}>4.8</span>
+            <span className="text-[#4B5563] ml-1.5">/ 5 user rating</span>
           </div>
         </div>
       </div>
@@ -294,20 +301,20 @@ function DashboardDemo() {
         padding: "0 16px",
       }}>
         <div className="rounded-[12px] overflow-hidden" style={{ border: `1px solid rgba(255,255,255,0.1)`, boxShadow: "0 40px 120px rgba(0,0,0,0.5), 0 0 1px rgba(255,255,255,0.1)" }}>
-          <div className="flex" style={{ background: "#0e0f11" }}>
+          <div className="flex" style={{ background: C.bg }}>
             {/* Sidebar — like Linear's nav */}
             <div className="hidden md:flex flex-col w-[232px] shrink-0 py-2" style={{ borderRight: "1px solid rgba(255,255,255,0.06)" }}>
               <div className="flex items-center justify-between px-3 py-2 mb-1">
                 <div className="flex items-center gap-2">
                   <div className="w-5 h-5 rounded flex items-center justify-center text-[9px] font-bold text-white" style={{ background: C.accent }}>A</div>
-                  <span className="text-[14px] font-medium text-[#f7f8f8]">askwijs</span>
+                  <span className="text-[14px] font-medium text-[#F9FAFB]">askwijs</span>
                 </div>
                 <div className="flex items-center gap-1">
                   <div className="w-7 h-7 rounded-md flex items-center justify-center hover:bg-[rgba(255,255,255,0.06)] cursor-pointer">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#62666d" strokeWidth="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6B7280" strokeWidth="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
                   </div>
                   <div className="w-7 h-7 rounded-md flex items-center justify-center hover:bg-[rgba(255,255,255,0.06)] cursor-pointer">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#62666d" strokeWidth="2"><path d="M12 5v14m-7-7h14"/></svg>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6B7280" strokeWidth="2"><path d="M12 5v14m-7-7h14"/></svg>
                   </div>
                 </div>
               </div>
@@ -323,7 +330,7 @@ function DashboardDemo() {
               </div>
 
               <div className="px-2 mt-4">
-                <div className="px-2 mb-1 text-[11px] font-medium text-[#3a3e47] uppercase tracking-wider">Tools</div>
+                <div className="px-2 mb-1 text-[11px] font-medium text-[#4B5563] uppercase tracking-wider">Tools</div>
                 <div className="space-y-0.5">
                   {toolItems.map(item => (
                     <button key={item.label} onClick={() => setActiveTab(item.tab)}
@@ -340,9 +347,9 @@ function DashboardDemo() {
             <div className="flex-1 flex flex-col min-w-0">
               {/* Top bar */}
               <div className="flex items-center justify-between px-5 h-[44px]" style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
-                <span className="text-[13px] font-medium text-[#f7f8f8]">{activeTab}</span>
+                <span className="text-[13px] font-medium text-[#F9FAFB]">{activeTab}</span>
                 <div className="flex items-center gap-3">
-                  <span className="text-[11px] text-[#3a3e47] px-2 py-1 rounded" style={{ border: "1px solid rgba(255,255,255,0.06)" }}>Q1 2026</span>
+                  <span className="text-[11px] text-[#4B5563] px-2 py-1 rounded" style={{ border: "1px solid rgba(255,255,255,0.06)" }}>Q1 2026</span>
                   <div className="w-6 h-6 rounded-full flex items-center justify-center text-[9px] font-bold text-white" style={{ background: C.accent }}>N</div>
                 </div>
               </div>
@@ -365,7 +372,7 @@ function DashboardDemo() {
                   <input type="text" value={chatInput} onChange={e => setChatInput(e.target.value)}
                     onKeyDown={e => e.key === "Enter" && handleSendChat()}
                     placeholder="Ask Wijs anything about your finances..."
-                    className="flex-1 text-[13px] text-[#f7f8f8] placeholder:text-[#3a3e47] outline-none bg-transparent" />
+                    className="flex-1 text-[13px] text-[#F9FAFB] placeholder:text-[#4B5563] outline-none bg-transparent" />
                   <button onClick={handleSendChat}
                     className="text-[12px] font-medium px-3 py-1.5 rounded-md transition-colors"
                     style={{ background: chatInput.trim() ? C.accent : "rgba(255,255,255,0.04)", color: "#fff", border: "none", cursor: "pointer" }}>
@@ -378,7 +385,7 @@ function DashboardDemo() {
                       <div key={i} className={`flex gap-2 ${msg.role === "user" ? "justify-end" : ""}`}>
                         {msg.role === "wijs" && <div className="w-5 h-5 rounded-full flex items-center justify-center text-[8px] font-bold text-white shrink-0 mt-0.5" style={{ background: C.accent }}>W</div>}
                         <div className="text-[12px] leading-relaxed px-3 py-2 rounded-lg max-w-[80%]"
-                          style={{ background: msg.role === "user" ? "rgba(94,106,210,0.15)" : "rgba(255,255,255,0.04)", color: msg.role === "user" ? "#c4c9f5" : C.muted }}>
+                          style={{ background: msg.role === "user" ? "rgba(37,99,235,0.15)" : "rgba(255,255,255,0.04)", color: msg.role === "user" ? "#93B4F6" : C.muted }}>
                           {msg.text}
                         </div>
                       </div>
@@ -386,11 +393,11 @@ function DashboardDemo() {
                     {isTyping && (
                       <div className="flex gap-2">
                         <div className="w-5 h-5 rounded-full flex items-center justify-center text-[8px] font-bold text-white shrink-0 mt-0.5" style={{ background: C.accent }}>W</div>
-                        <div className="text-[12px] text-[#62666d] px-3 py-2 rounded-lg" style={{ background: "rgba(255,255,255,0.04)" }}>
+                        <div className="text-[12px] text-[#6B7280] px-3 py-2 rounded-lg" style={{ background: "rgba(255,255,255,0.04)" }}>
                           <span className="inline-flex gap-1">
-                            <span className="w-1.5 h-1.5 rounded-full bg-[#62666d] animate-bounce" style={{ animationDelay: "0ms" }} />
-                            <span className="w-1.5 h-1.5 rounded-full bg-[#62666d] animate-bounce" style={{ animationDelay: "150ms" }} />
-                            <span className="w-1.5 h-1.5 rounded-full bg-[#62666d] animate-bounce" style={{ animationDelay: "300ms" }} />
+                            <span className="w-1.5 h-1.5 rounded-full bg-[#6B7280] animate-bounce" style={{ animationDelay: "0ms" }} />
+                            <span className="w-1.5 h-1.5 rounded-full bg-[#6B7280] animate-bounce" style={{ animationDelay: "150ms" }} />
+                            <span className="w-1.5 h-1.5 rounded-full bg-[#6B7280] animate-bounce" style={{ animationDelay: "300ms" }} />
                           </span>
                         </div>
                       </div>
@@ -411,7 +418,7 @@ function TabOverview() {
   return (
     <div className="p-5">
       <div className="mb-5">
-        <h2 className="text-[14px] font-medium text-[#f7f8f8]">Good morning, Ned</h2>
+        <h2 className="text-[14px] font-medium text-[#F9FAFB]">Good morning, Ned</h2>
         <p className="text-[12px] text-[#4a4e57] mt-1">Your Q1 BTW aangifte is ready to review.</p>
       </div>
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-5">
@@ -422,8 +429,8 @@ function TabOverview() {
           { label: "Tax forecast", target: 6340, badge: "Income tax", bc: C.faint },
         ].map(s => (
           <div key={s.label} className="rounded-lg p-4" style={{ background: C.surface, border: `1px solid ${C.borderSubtle}` }}>
-            <div className="text-[10px] font-medium uppercase tracking-wider text-[#3a3e47] mb-2">{s.label}</div>
-            <div className="text-[18px] font-medium text-[#f7f8f8]" style={{ fontVariantNumeric: "tabular-nums" }}>
+            <div className="text-[10px] font-medium uppercase tracking-wider text-[#4B5563] mb-2">{s.label}</div>
+            <div className="text-[18px] font-medium text-[#F9FAFB]" style={{ fontVariantNumeric: "tabular-nums" }}>
               <CountUp target={s.target} prefix={"\u20AC"} />
             </div>
             <span className="inline-block text-[10px] font-medium px-2 py-0.5 rounded-full mt-2" style={{ background: `${s.bc}15`, color: s.bc }}>{s.badge}</span>
@@ -431,12 +438,12 @@ function TabOverview() {
         ))}
       </div>
       <div className="rounded-lg" style={{ border: `1px solid ${C.borderSubtle}` }}>
-        <div className="px-4 py-2 text-[10px] font-medium uppercase tracking-wider text-[#3a3e47]" style={{ borderBottom: `1px solid ${C.borderSubtle}` }}>Recent transactions</div>
+        <div className="px-4 py-2 text-[10px] font-medium uppercase tracking-wider text-[#4B5563]" style={{ borderBottom: `1px solid ${C.borderSubtle}` }}>Recent transactions</div>
         {TRANSACTIONS.slice(0, 5).map((tx, i) => (
           <div key={i} className="flex items-center justify-between px-4 py-2.5" style={{ borderBottom: i < 4 ? `1px solid ${C.borderSubtle}` : "none" }}>
             <div className="flex items-center gap-3">
-              <span className="text-[11px] text-[#3a3e47] w-[44px]" style={{ fontVariantNumeric: "tabular-nums" }}>{tx.date}</span>
-              <span className="text-[13px] text-[#8a8f98]">{tx.name}</span>
+              <span className="text-[11px] text-[#4B5563] w-[44px]" style={{ fontVariantNumeric: "tabular-nums" }}>{tx.date}</span>
+              <span className="text-[13px] text-[#9CA3AF]">{tx.name}</span>
             </div>
             <div className="flex items-center gap-3">
               <span className="text-[10px] font-medium px-2 py-0.5 rounded-full" style={{ background: `${tx.color}15`, color: tx.color }}>{tx.cat}</span>
@@ -455,17 +462,17 @@ function TabTransactions() {
   return (
     <div className="p-5">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-[14px] font-medium text-[#f7f8f8]">Transactions</h2>
-        <span className="text-[11px] text-[#3a3e47]">Q1 2026</span>
+        <h2 className="text-[14px] font-medium text-[#F9FAFB]">Transactions</h2>
+        <span className="text-[11px] text-[#4B5563]">Q1 2026</span>
       </div>
       <div className="rounded-lg overflow-hidden" style={{ border: `1px solid ${C.borderSubtle}` }}>
-        <div className="grid grid-cols-[50px_1fr_90px_100px] gap-2 px-4 py-2 text-[10px] font-medium uppercase tracking-wider text-[#3a3e47]" style={{ background: C.surface }}>
+        <div className="grid grid-cols-[50px_1fr_90px_100px] gap-2 px-4 py-2 text-[10px] font-medium uppercase tracking-wider text-[#4B5563]" style={{ background: C.surface }}>
           <span>Date</span><span>Description</span><span>Category</span><span className="text-right">Amount</span>
         </div>
         {TRANSACTIONS.map((tx, i) => (
           <div key={i} className="grid grid-cols-[50px_1fr_90px_100px] gap-2 px-4 py-2.5 items-center" style={{ borderTop: `1px solid ${C.borderSubtle}` }}>
-            <span className="text-[11px] text-[#3a3e47]" style={{ fontVariantNumeric: "tabular-nums" }}>{tx.date}</span>
-            <span className="text-[13px] text-[#8a8f98]">{tx.name}</span>
+            <span className="text-[11px] text-[#4B5563]" style={{ fontVariantNumeric: "tabular-nums" }}>{tx.date}</span>
+            <span className="text-[13px] text-[#9CA3AF]">{tx.name}</span>
             <span className="text-[10px] font-medium px-2 py-0.5 rounded-full w-fit" style={{ background: `${tx.color}15`, color: tx.color }}>{tx.cat}</span>
             <span className="text-[13px] font-medium text-right" style={{ fontVariantNumeric: "tabular-nums", color: tx.amt > 0 ? C.green : C.text }}>
               {tx.amt > 0 ? "+" : ""}&euro;{Math.abs(tx.amt).toLocaleString("nl-NL", { minimumFractionDigits: 2 })}
@@ -482,19 +489,19 @@ function TabBTW() {
     <div className="p-5">
       <div className="flex items-center justify-between mb-4">
         <div>
-          <h2 className="text-[14px] font-medium text-[#f7f8f8]">BTW aangifte Q1 2026</h2>
+          <h2 className="text-[14px] font-medium text-[#F9FAFB]">BTW aangifte Q1 2026</h2>
           <p className="text-[12px] text-[#4a4e57] mt-1">Pre-filled from your transactions.</p>
         </div>
         <button className="text-[12px] font-medium px-4 py-2 rounded-md text-white" style={{ background: C.accent, border: "none", cursor: "pointer" }}>Submit to Belastingdienst</button>
       </div>
       <div className="rounded-lg overflow-hidden" style={{ border: `1px solid ${C.borderSubtle}` }}>
         {BTW_BOXES.map((box, i) => (
-          <div key={box.box} className="flex items-center justify-between px-4 py-3" style={{ borderTop: i > 0 ? `1px solid ${C.borderSubtle}` : "none", background: box.box === "5g" ? "rgba(94,106,210,0.04)" : "transparent" }}>
+          <div key={box.box} className="flex items-center justify-between px-4 py-3" style={{ borderTop: i > 0 ? `1px solid ${C.borderSubtle}` : "none", background: box.box === "5g" ? "rgba(37,99,235,0.04)" : "transparent" }}>
             <div className="flex items-center gap-3">
               <span className="text-[11px] font-medium w-6" style={{ color: C.accent, fontVariantNumeric: "tabular-nums" }}>{box.box}</span>
-              <span className="text-[13px] text-[#8a8f98]">{box.label}</span>
+              <span className="text-[13px] text-[#9CA3AF]">{box.label}</span>
             </div>
-            <span className="text-[13px] font-medium text-[#f7f8f8]" style={{ fontVariantNumeric: "tabular-nums" }}>&euro;{box.amount}</span>
+            <span className="text-[13px] font-medium text-[#F9FAFB]" style={{ fontVariantNumeric: "tabular-nums" }}>&euro;{box.amount}</span>
           </div>
         ))}
       </div>
@@ -512,20 +519,20 @@ function TabInvoices() {
   return (
     <div className="p-5">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-[14px] font-medium text-[#f7f8f8]">Invoices</h2>
+        <h2 className="text-[14px] font-medium text-[#F9FAFB]">Invoices</h2>
         <button className="text-[12px] font-medium px-4 py-2 rounded-md text-white" style={{ background: C.accent, border: "none", cursor: "pointer" }}>New invoice</button>
       </div>
       <div className="rounded-lg overflow-hidden" style={{ border: `1px solid ${C.borderSubtle}` }}>
         {invoices.map((inv, i) => (
           <div key={inv.id} className="flex items-center justify-between px-4 py-3" style={{ borderTop: i > 0 ? `1px solid ${C.borderSubtle}` : "none" }}>
             <div className="flex items-center gap-4">
-              <span className="text-[12px] text-[#5e6ad2]" style={{ fontVariantNumeric: "tabular-nums" }}>{inv.id}</span>
-              <span className="text-[13px] text-[#8a8f98]">{inv.client}</span>
+              <span className="text-[12px] text-[#2563EB]" style={{ fontVariantNumeric: "tabular-nums" }}>{inv.id}</span>
+              <span className="text-[13px] text-[#9CA3AF]">{inv.client}</span>
             </div>
             <div className="flex items-center gap-4">
               <span className="text-[10px] font-medium px-2 py-0.5 rounded-full" style={{ background: `${inv.sc}15`, color: inv.sc }}>{inv.status}</span>
-              <span className="text-[13px] font-medium text-[#f7f8f8] w-[80px] text-right" style={{ fontVariantNumeric: "tabular-nums" }}>&euro;{inv.amount}</span>
-              <span className="text-[11px] text-[#3a3e47] w-[44px]">{inv.date}</span>
+              <span className="text-[13px] font-medium text-[#F9FAFB] w-[80px] text-right" style={{ fontVariantNumeric: "tabular-nums" }}>&euro;{inv.amount}</span>
+              <span className="text-[11px] text-[#4B5563] w-[44px]">{inv.date}</span>
             </div>
           </div>
         ))}
@@ -538,18 +545,18 @@ function TabReceipts() {
   const [dragOver, setDragOver] = useState(false);
   return (
     <div className="p-5">
-      <h2 className="text-[14px] font-medium text-[#f7f8f8] mb-4">Receipts</h2>
+      <h2 className="text-[14px] font-medium text-[#F9FAFB] mb-4">Receipts</h2>
       <div className="flex flex-col items-center justify-center py-12 rounded-lg transition-colors"
-        style={{ border: `2px dashed ${dragOver ? C.accent : "rgba(255,255,255,0.08)"}`, background: dragOver ? "rgba(94,106,210,0.04)" : C.surface }}
+        style={{ border: `2px dashed ${dragOver ? C.accent : "rgba(255,255,255,0.08)"}`, background: dragOver ? "rgba(37,99,235,0.04)" : C.surface }}
         onDragOver={e => { e.preventDefault(); setDragOver(true); }} onDragLeave={() => setDragOver(false)} onDrop={e => { e.preventDefault(); setDragOver(false); }}>
-        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" className="mb-3" style={{ color: "#3a3e47" }}><path d="M12 16V4m0 0l-4 4m4-4l4 4M4 17v2a1 1 0 001 1h14a1 1 0 001-1v-2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
-        <p className="text-[13px] text-[#8a8f98]">Drop receipts here or click to upload</p>
-        <p className="text-[11px] text-[#3a3e47] mt-1">Wijs auto-matches to transactions</p>
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" className="mb-3" style={{ color: C.dim }}><path d="M12 16V4m0 0l-4 4m4-4l4 4M4 17v2a1 1 0 001 1h14a1 1 0 001-1v-2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+        <p className="text-[13px] text-[#9CA3AF]">Drop receipts here or click to upload</p>
+        <p className="text-[11px] text-[#4B5563] mt-1">Wijs auto-matches to transactions</p>
       </div>
       <div className="mt-3 space-y-2">
         {[{ name: "receipt_wework_mar.pdf", match: "WeWork Amsterdam" }, { name: "adobe_invoice_mar.pdf", match: "Adobe Creative Cloud" }].map(r => (
           <div key={r.name} className="flex items-center justify-between px-4 py-3 rounded-lg" style={{ background: C.surface, border: `1px solid ${C.borderSubtle}` }}>
-            <div><div className="text-[12px] text-[#8a8f98]">{r.name}</div><div className="text-[10px] text-[#3a3e47]">Matched to {r.match}</div></div>
+            <div><div className="text-[12px] text-[#9CA3AF]">{r.name}</div><div className="text-[10px] text-[#4B5563]">Matched to {r.match}</div></div>
             <span className="text-[10px] font-medium px-2 py-0.5 rounded-full" style={{ background: `${C.green}15`, color: C.green }}>Matched</span>
           </div>
         ))}
@@ -566,7 +573,7 @@ function TabBanks() {
   return (
     <div className="p-5">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-[14px] font-medium text-[#f7f8f8]">Connected banks</h2>
+        <h2 className="text-[14px] font-medium text-[#F9FAFB]">Connected banks</h2>
         <button className="text-[12px] font-medium px-4 py-2 rounded-md text-white" style={{ background: C.accent, border: "none", cursor: "pointer" }}>Connect bank</button>
       </div>
       <div className="space-y-2">
@@ -575,12 +582,12 @@ function TabBanks() {
             <div className="flex items-center gap-3">
               <div className="w-3 h-3 rounded-full" style={{ background: b.color }} />
               <div>
-                <div className="text-[13px] text-[#f7f8f8] font-medium">{b.name}</div>
-                <div className="text-[11px] text-[#3a3e47]" style={{ fontVariantNumeric: "tabular-nums" }}>{b.iban}</div>
+                <div className="text-[13px] text-[#F9FAFB] font-medium">{b.name}</div>
+                <div className="text-[11px] text-[#4B5563]" style={{ fontVariantNumeric: "tabular-nums" }}>{b.iban}</div>
               </div>
             </div>
             <div className="text-right">
-              <div className="text-[14px] font-medium text-[#f7f8f8]" style={{ fontVariantNumeric: "tabular-nums" }}>&euro;{b.balance}</div>
+              <div className="text-[14px] font-medium text-[#F9FAFB]" style={{ fontVariantNumeric: "tabular-nums" }}>&euro;{b.balance}</div>
               <span className="text-[10px] font-medium px-2 py-0.5 rounded-full" style={{ background: `${C.green}15`, color: C.green }}>Synced</span>
             </div>
           </div>
@@ -593,12 +600,12 @@ function TabBanks() {
 function TabSettings() {
   return (
     <div className="p-5">
-      <h2 className="text-[14px] font-medium text-[#f7f8f8] mb-4">Settings</h2>
+      <h2 className="text-[14px] font-medium text-[#F9FAFB] mb-4">Settings</h2>
       <div className="space-y-2">
         {[{ l: "Language", v: "English" }, { l: "Currency", v: "EUR (\u20AC)" }, { l: "BTW regime", v: "Standard (21%/9%)" }, { l: "KVK nummer", v: "90123456" }, { l: "BTW-id", v: "NL004567890B01" }].map(s => (
           <div key={s.l} className="flex items-center justify-between px-4 py-3 rounded-lg" style={{ background: C.surface, border: `1px solid ${C.borderSubtle}` }}>
-            <span className="text-[13px] text-[#8a8f98]">{s.l}</span>
-            <span className="text-[13px] text-[#f7f8f8]" style={{ fontVariantNumeric: "tabular-nums" }}>{s.v}</span>
+            <span className="text-[13px] text-[#9CA3AF]">{s.l}</span>
+            <span className="text-[13px] text-[#F9FAFB]" style={{ fontVariantNumeric: "tabular-nums" }}>{s.v}</span>
           </div>
         ))}
       </div>
@@ -615,8 +622,8 @@ function IntroText() {
     <section ref={ref} className="pt-[128px] pb-[64px]"
       style={{ paddingLeft: "max(32px, calc((100vw - 1436px) / 2 + 46px))", paddingRight: "max(32px, calc((100vw - 1436px) / 2 + 46px))" }}>
       <p className="text-[24px] leading-[1.45] max-w-[900px]">
-        <span className="font-medium text-[#f7f8f8]">A new kind of financial tool.</span>{" "}
-        <span className="text-[#8a8f98]">Purpose-built for freelancers and expats in the Netherlands. Designed to replace your boekhouder, not just assist them.</span>
+        <span className="text-[#F9FAFB]" style={{ fontFamily: "'Instrument Serif', serif", fontWeight: 400 }}>A new kind of financial tool.</span>{" "}
+        <span className="text-[#9CA3AF]">Purpose-built for freelancers and expats in the Netherlands. Designed to replace your boekhouder, not just assist them.</span>
       </p>
     </section>
   );
@@ -654,12 +661,12 @@ function SocialProof() {
         <div className="grid md:grid-cols-3 gap-6">
           {testimonials.map(t => (
             <div key={t.name} className="rounded-xl p-6" style={{ background: C.surface, border: `1px solid ${C.borderSubtle}` }}>
-              <p className="text-[14px] text-[#8a8f98] leading-[1.6] mb-6">"{t.text}"</p>
+              <p className="text-[14px] text-[#9CA3AF] leading-[1.6] mb-6">"{t.text}"</p>
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 rounded-full flex items-center justify-center text-[10px] font-bold text-white" style={{ background: C.accent }}>{t.initials}</div>
                 <div>
-                  <div className="text-[13px] font-medium text-[#f7f8f8]">{t.name}</div>
-                  <div className="text-[11px] text-[#3a3e47]">{t.role}</div>
+                  <div className="text-[13px] font-medium text-[#F9FAFB]">{t.name}</div>
+                  <div className="text-[11px] text-[#4B5563]">{t.role}</div>
                 </div>
               </div>
             </div>
@@ -686,13 +693,13 @@ function ThreeCards() {
       <div className="grid md:grid-cols-3 gap-6 max-w-[1344px]">
         {cards.map(c => (
           <div key={c.title} className="rounded-xl p-6" style={{ background: C.surface, border: `1px solid ${C.borderSubtle}` }}>
-            <div className="text-[11px] text-[#3a3e47] uppercase tracking-wider mb-4">FIG {c.fig}</div>
+            <div className="text-[11px] text-[#4B5563] uppercase tracking-wider mb-4">FIG {c.fig}</div>
             {/* Illustration placeholder — geometric shapes like Linear */}
             <div className="h-[200px] mb-6 rounded-lg flex items-center justify-center" style={{ background: "rgba(255,255,255,0.02)", border: `1px solid ${C.borderSubtle}` }}>
               <div className="w-16 h-16 rounded-xl" style={{ border: `1px solid rgba(255,255,255,0.08)` }} />
             </div>
-            <h3 className="text-[16px] font-medium text-[#f7f8f8] mb-2">{c.title}</h3>
-            <p className="text-[14px] text-[#8a8f98] leading-[1.5]">{c.desc}</p>
+            <h3 className="text-[16px] font-medium text-[#F9FAFB] mb-2">{c.title}</h3>
+            <p className="text-[14px] text-[#9CA3AF] leading-[1.5]">{c.desc}</p>
           </div>
         ))}
       </div>
@@ -720,12 +727,12 @@ function NumberedSection({ num, label, heading, desc, children, id }: {
       <div className="max-w-[1344px]">
         {/* Header row: heading left, description right */}
         <div className="grid md:grid-cols-2 gap-8 mb-2">
-          <h2 className="text-[32px] font-medium leading-[1.2] tracking-[-0.02em] text-[#f7f8f8]">{heading}</h2>
-          <p className="text-[16px] text-[#8a8f98] leading-[1.6]">{desc}</p>
+          <h2 className="text-[32px] leading-[1.2] tracking-[-0.02em] text-[#F9FAFB]" style={{ fontFamily: "'Instrument Serif', serif", fontWeight: 400 }}>{heading}</h2>
+          <p className="text-[16px] text-[#9CA3AF] leading-[1.6]">{desc}</p>
         </div>
 
         {/* Section number + label */}
-        <div className="flex items-center gap-3 mb-8 text-[14px] text-[#8a8f98]">
+        <div className="flex items-center gap-3 mb-8 text-[14px] text-[#9CA3AF]">
           <span style={{ fontVariantNumeric: "tabular-nums" }}>{num}</span>
           <span>{label} &rarr;</span>
         </div>
@@ -768,19 +775,19 @@ function SectionIntake() {
     <NumberedSection num="1.0" label="Categorize" heading="Make transaction categorization self-driving"
       desc="Turn raw bank transactions into organized, tax-ready categories. Wijs uses AI to tag every transaction: business or personal, deductible or not, correct BTW rate applied.">
       <div ref={ref} className="rounded-xl overflow-hidden" style={{ border: `1px solid ${C.borderSubtle}` }}>
-        <div className="px-5 py-3 text-[11px] font-medium uppercase tracking-wider text-[#3a3e47]" style={{ background: C.surface, borderBottom: `1px solid ${C.borderSubtle}` }}>
+        <div className="px-5 py-3 text-[11px] font-medium uppercase tracking-wider text-[#4B5563]" style={{ background: C.surface, borderBottom: `1px solid ${C.borderSubtle}` }}>
           Auto-categorization
         </div>
         {txs.map((tx, i) => (
           <div key={tx.name} className="flex items-center justify-between px-5 py-3 transition-all duration-500"
             style={{ borderTop: `1px solid ${C.borderSubtle}`, background: i < visible ? "rgba(255,255,255,0.02)" : "transparent" }}>
-            <span className="text-[13px] text-[#8a8f98]">{tx.name}</span>
+            <span className="text-[13px] text-[#9CA3AF]">{tx.name}</span>
             <div className="flex items-center gap-4">
               <span className="text-[10px] font-medium px-2 py-0.5 rounded-full transition-all duration-500"
                 style={{ background: i < visible ? `${tx.color}15` : "rgba(255,255,255,0.04)", color: i < visible ? tx.color : "#3a3e47" }}>
                 {i < visible ? tx.to : "Uncategorized"}
               </span>
-              <span className="text-[13px] font-medium text-[#8a8f98] w-[90px] text-right" style={{ fontVariantNumeric: "tabular-nums" }}>{tx.amt}</span>
+              <span className="text-[13px] font-medium text-[#9CA3AF] w-[90px] text-right" style={{ fontVariantNumeric: "tabular-nums" }}>{tx.amt}</span>
             </div>
           </div>
         ))}
@@ -813,15 +820,15 @@ function SectionBTW() {
     <NumberedSection num="2.0" label="File" heading="Your quarterly BTW. Pre-filled, ready to submit."
       desc="Wijs calculates every rubriek from your real transaction data. Review the numbers, click submit. No more staring at empty Belastingdienst forms.">
       <div ref={ref} className="rounded-xl overflow-hidden" style={{ border: `1px solid ${C.borderSubtle}` }}>
-        <div className="px-5 py-3 text-[11px] font-medium uppercase tracking-wider text-[#3a3e47]" style={{ background: C.surface, borderBottom: `1px solid ${C.borderSubtle}` }}>
+        <div className="px-5 py-3 text-[11px] font-medium uppercase tracking-wider text-[#4B5563]" style={{ background: C.surface, borderBottom: `1px solid ${C.borderSubtle}` }}>
           BTW aangifte Q1 2026
         </div>
         {BTW_BOXES.map((box, i) => (
           <div key={box.box} className="flex items-center justify-between px-5 py-3 transition-all duration-500"
-            style={{ borderTop: `1px solid ${C.borderSubtle}`, background: box.box === "5g" && i < filled ? "rgba(94,106,210,0.04)" : "transparent" }}>
+            style={{ borderTop: `1px solid ${C.borderSubtle}`, background: box.box === "5g" && i < filled ? "rgba(37,99,235,0.04)" : "transparent" }}>
             <div className="flex items-center gap-3">
               <span className="text-[11px] font-medium w-6" style={{ color: C.accent, fontVariantNumeric: "tabular-nums" }}>{box.box}</span>
-              <span className="text-[13px] text-[#8a8f98]">{box.label}</span>
+              <span className="text-[13px] text-[#9CA3AF]">{box.label}</span>
             </div>
             <span className="text-[13px] font-medium transition-all duration-500" style={{ fontVariantNumeric: "tabular-nums", color: i < filled ? C.text : "#3a3e47" }}>
               {i < filled ? `\u20AC${box.amount}` : "\u20AC--,--"}
@@ -872,7 +879,7 @@ function SectionWijs() {
           <div key={i} className={`flex gap-2.5 ${msg.role === "user" ? "justify-end" : ""}`}>
             {msg.role === "wijs" && <div className="w-6 h-6 rounded-full flex items-center justify-center text-[9px] font-bold text-white shrink-0 mt-0.5" style={{ background: C.accent }}>W</div>}
             <div className="text-[13px] leading-relaxed px-4 py-3 rounded-xl max-w-[85%]"
-              style={{ background: msg.role === "user" ? "rgba(94,106,210,0.12)" : "rgba(255,255,255,0.04)", color: msg.role === "user" ? "#c4c9f5" : C.muted }}>
+              style={{ background: msg.role === "user" ? "rgba(37,99,235,0.12)" : "rgba(255,255,255,0.04)", color: msg.role === "user" ? "#93B4F6" : C.muted }}>
               {msg.text}
             </div>
           </div>
@@ -880,11 +887,11 @@ function SectionWijs() {
         {count > 0 && count < WIJS_CONVERSATION.length && (
           <div className="flex gap-2.5">
             <div className="w-6 h-6 rounded-full flex items-center justify-center text-[9px] font-bold text-white shrink-0 mt-0.5" style={{ background: C.accent }}>W</div>
-            <div className="text-[13px] text-[#3a3e47] px-4 py-3 rounded-xl" style={{ background: "rgba(255,255,255,0.04)" }}>
+            <div className="text-[13px] text-[#4B5563] px-4 py-3 rounded-xl" style={{ background: "rgba(255,255,255,0.04)" }}>
               <span className="inline-flex gap-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#3a3e47] animate-bounce" style={{ animationDelay: "0ms" }} />
-                <span className="w-1.5 h-1.5 rounded-full bg-[#3a3e47] animate-bounce" style={{ animationDelay: "150ms" }} />
-                <span className="w-1.5 h-1.5 rounded-full bg-[#3a3e47] animate-bounce" style={{ animationDelay: "300ms" }} />
+                <span className="w-1.5 h-1.5 rounded-full bg-[#4B5563] animate-bounce" style={{ animationDelay: "0ms" }} />
+                <span className="w-1.5 h-1.5 rounded-full bg-[#4B5563] animate-bounce" style={{ animationDelay: "150ms" }} />
+                <span className="w-1.5 h-1.5 rounded-full bg-[#4B5563] animate-bounce" style={{ animationDelay: "300ms" }} />
               </span>
             </div>
           </div>
@@ -904,17 +911,17 @@ function SectionReceipts() {
         <div className="flex flex-col items-center justify-center py-14 rounded-xl transition-all cursor-pointer"
           style={{ border: `2px dashed rgba(255,255,255,0.08)`, background: C.surface }}
           onClick={() => setDropped(true)}>
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" className="mb-3" style={{ color: "#3a3e47" }}>
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" className="mb-3" style={{ color: C.dim }}>
             <path d="M12 16V4m0 0l-4 4m4-4l4 4M4 17v2a1 1 0 001 1h14a1 1 0 001-1v-2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
-          <p className="text-[13px] text-[#8a8f98]">Drop receipt here</p>
-          <p className="text-[11px] text-[#3a3e47] mt-1">PDF, JPG, or PNG</p>
+          <p className="text-[13px] text-[#9CA3AF]">Drop receipt here</p>
+          <p className="text-[11px] text-[#4B5563] mt-1">PDF, JPG, or PNG</p>
         </div>
         {dropped && (
           <div className="flex items-center justify-between px-5 py-3 rounded-lg" style={{ background: C.surface, border: `1px solid ${C.borderSubtle}` }}>
             <div>
-              <div className="text-[12px] text-[#8a8f98]">receipt_wework_mar.pdf</div>
-              <div className="text-[10px] text-[#3a3e47]">Matched to WeWork Amsterdam - &euro;290,00</div>
+              <div className="text-[12px] text-[#9CA3AF]">receipt_wework_mar.pdf</div>
+              <div className="text-[10px] text-[#4B5563]">Matched to WeWork Amsterdam - &euro;290,00</div>
             </div>
             <span className="text-[10px] font-medium px-2 py-0.5 rounded-full" style={{ background: `${C.green}15`, color: C.green }}>Matched</span>
           </div>
@@ -944,13 +951,13 @@ function SectionBanks() {
           <div key={b.name} className="flex items-center justify-between px-5 py-3" style={{ borderTop: i > 0 ? `1px solid ${C.borderSubtle}` : "none" }}>
             <div className="flex items-center gap-3">
               <div className="w-3 h-3 rounded-full" style={{ background: b.color }} />
-              <span className="text-[13px] text-[#8a8f98] font-medium">{b.name}</span>
+              <span className="text-[13px] text-[#9CA3AF] font-medium">{b.name}</span>
             </div>
             {state[i] ? (
               <span className="text-[10px] font-medium px-2 py-0.5 rounded-full" style={{ background: `${C.green}15`, color: C.green }}>Connected</span>
             ) : (
               <button className="text-[10px] font-medium px-3 py-1 rounded-md transition-colors"
-                style={{ background: "rgba(255,255,255,0.04)", color: "#8a8f98", border: `1px solid rgba(255,255,255,0.08)`, cursor: "pointer" }}
+                style={{ background: "rgba(255,255,255,0.04)", color: C.muted, border: `1px solid rgba(255,255,255,0.08)`, cursor: "pointer" }}
                 onClick={() => setState(prev => { const n = [...prev]; n[i] = true; return n; })}>
                 Connect
               </button>
@@ -994,24 +1001,24 @@ function Pricing() {
       style={{ paddingLeft: "max(32px, calc((100vw - 1436px) / 2 + 46px))", paddingRight: "max(32px, calc((100vw - 1436px) / 2 + 46px))" }}>
       <div className="max-w-[960px] mx-auto">
         <div className="text-center mb-12">
-          <h2 className="text-[32px] font-medium leading-[1.2] tracking-[-0.02em] text-[#f7f8f8] mb-3">Simple pricing. No surprises.</h2>
-          <p className="text-[16px] text-[#8a8f98]">Start free. Upgrade when you need more.</p>
+          <h2 className="text-[32px] leading-[1.2] tracking-[-0.02em] text-[#F9FAFB] mb-3" style={{ fontFamily: "'Instrument Serif', serif", fontWeight: 400 }}>Simple pricing. No surprises.</h2>
+          <p className="text-[16px] text-[#9CA3AF]">Start free. Upgrade when you need more.</p>
         </div>
 
         <div className="grid md:grid-cols-2 gap-6">
           {/* Starter */}
           <div className="rounded-xl p-8 text-left" style={{ background: C.surface, border: `1px solid ${C.borderSubtle}` }}>
-            <div className="text-[11px] font-medium uppercase tracking-wider text-[#3a3e47] mb-4">Starter</div>
+            <div className="text-[11px] font-medium uppercase tracking-wider text-[#4B5563] mb-4">Starter</div>
             <div className="flex items-baseline gap-1 mb-1">
-              <span className="text-[40px] font-medium text-[#f7f8f8]" style={{ fontVariantNumeric: "tabular-nums" }}>&euro;9,99</span>
-              <span className="text-[14px] text-[#3a3e47]">/month</span>
+              <span className="text-[40px] font-medium text-[#F9FAFB]" style={{ fontVariantNumeric: "tabular-nums" }}>&euro;9,99</span>
+              <span className="text-[14px] text-[#4B5563]">/month</span>
             </div>
-            <p className="text-[13px] text-[#3a3e47] mb-8">excl. BTW &middot; 30 days free</p>
+            <p className="text-[13px] text-[#4B5563] mb-8">excl. BTW &middot; 30 days free</p>
             <div className="space-y-3 mb-8">
               {starterFeatures.map(f => (
                 <div key={f} className="flex items-start gap-3">
                   <Check />
-                  <span className="text-[14px] text-[#8a8f98]">{f}</span>
+                  <span className="text-[14px] text-[#9CA3AF]">{f}</span>
                 </div>
               ))}
             </div>
@@ -1020,28 +1027,28 @@ function Pricing() {
           </div>
 
           {/* Pro — highlighted */}
-          <div className="rounded-xl p-8 text-left relative overflow-hidden" style={{ background: C.surface, border: `1px solid rgba(94,106,210,0.3)` }}>
+          <div className="rounded-xl p-8 text-left relative overflow-hidden" style={{ background: C.surface, border: `1px solid rgba(37,99,235,0.3)` }}>
             <div className="absolute top-0 left-0 right-0 h-px" style={{ background: `linear-gradient(90deg, transparent, ${C.accent}, transparent)` }} />
             <div className="flex items-center gap-2 mb-4">
-              <span className="text-[11px] font-medium uppercase tracking-wider text-[#3a3e47]">Pro</span>
+              <span className="text-[11px] font-medium uppercase tracking-wider text-[#4B5563]">Pro</span>
               <span className="text-[10px] font-medium px-2 py-0.5 rounded-full" style={{ background: `${C.accent}20`, color: C.accent }}>Most popular</span>
             </div>
             <div className="flex items-baseline gap-1 mb-1">
-              <span className="text-[40px] font-medium text-[#f7f8f8]" style={{ fontVariantNumeric: "tabular-nums" }}>&euro;24,99</span>
-              <span className="text-[14px] text-[#3a3e47]">/month</span>
+              <span className="text-[40px] font-medium text-[#F9FAFB]" style={{ fontVariantNumeric: "tabular-nums" }}>&euro;24,99</span>
+              <span className="text-[14px] text-[#4B5563]">/month</span>
             </div>
-            <p className="text-[13px] text-[#3a3e47] mb-8">excl. BTW &middot; 30 days free</p>
+            <p className="text-[13px] text-[#4B5563] mb-8">excl. BTW &middot; 30 days free</p>
             <div className="space-y-3 mb-8">
               {proFeatures.map(f => (
                 <div key={f} className="flex items-start gap-3">
                   <Check />
-                  <span className="text-[14px] text-[#8a8f98]">{f}</span>
+                  <span className="text-[14px] text-[#9CA3AF]">{f}</span>
                 </div>
               ))}
             </div>
             <Link to="/signup" className="block w-full text-center text-white text-[14px] font-medium py-3 rounded-lg transition-all hover:-translate-y-px"
               style={{ background: C.accent }}>Start free trial</Link>
-            <p className="text-center text-[12px] text-[#3a3e47] mt-3">No credit card required</p>
+            <p className="text-center text-[12px] text-[#4B5563] mt-3">No credit card required</p>
           </div>
         </div>
       </div>
@@ -1057,10 +1064,10 @@ function CTA() {
   return (
     <section ref={ref} className="py-[128px] text-center"
       style={{ paddingLeft: "max(32px, calc((100vw - 1436px) / 2 + 46px))", paddingRight: "max(32px, calc((100vw - 1436px) / 2 + 46px))" }}>
-      <h2 className="text-[32px] sm:text-[48px] font-medium leading-[1.15] tracking-[-0.03em] text-[#f7f8f8] mb-4">
+      <h2 className="text-[32px] sm:text-[48px] leading-[1.15] tracking-[-0.02em] text-[#F9FAFB] mb-4" style={{ fontFamily: "'Instrument Serif', serif", fontWeight: 400 }}>
         Stop dreading tax season.{"\n"}<span className="block">Start today.</span>
       </h2>
-      <p className="text-[16px] text-[#8a8f98] mb-8 max-w-[480px] mx-auto">Join 2,400+ ZZP'ers and expats who automated their Dutch taxes with askwijs.</p>
+      <p className="text-[16px] text-[#9CA3AF] mb-8 max-w-[480px] mx-auto">Join 2,400+ ZZP'ers and expats who automated their Dutch taxes with askwijs.</p>
       <div className="flex items-center justify-center gap-3">
         <Link to="/signup" className="text-[14px] font-medium text-white px-5 py-2.5 rounded-[8px] transition-all hover:-translate-y-px"
           style={{ background: C.accent }}>Get started</Link>
@@ -1092,18 +1099,21 @@ function Footer() {
         <div className="flex flex-col md:flex-row gap-12 mb-12">
           {/* Logo */}
           <div className="md:w-[200px] shrink-0">
-            <Link to="/" className="text-[16px] font-semibold text-[#f7f8f8] no-underline tracking-tight">
-              ask<span style={{ color: C.accent }}>wijs</span>
+            <Link to="/" className="flex items-center gap-2 no-underline">
+              <img src="/logo-white.svg" alt="askwijs" className="h-5 w-auto" />
+              <span className="text-[16px] font-semibold text-[#F9FAFB] tracking-tight" style={{ fontFamily: "'Instrument Serif', serif" }}>
+                ask<span style={{ color: C.accent }}>wijs</span>
+              </span>
             </Link>
           </div>
           {/* Columns */}
           <div className="grid grid-cols-2 md:grid-cols-5 gap-8 flex-1">
             {cols.map(col => (
               <div key={col.title}>
-                <div className="text-[13px] font-medium text-[#f7f8f8] mb-4">{col.title}</div>
+                <div className="text-[13px] font-medium text-[#F9FAFB] mb-4">{col.title}</div>
                 <div className="space-y-2.5">
                   {col.links.map(l => (
-                    <a key={l} href="#" className="block text-[13px] text-[#62666d] hover:text-[#8a8f98] transition-colors">{l}</a>
+                    <a key={l} href="#" className="block text-[13px] text-[#6B7280] hover:text-[#9CA3AF] transition-colors">{l}</a>
                   ))}
                 </div>
               </div>
@@ -1111,9 +1121,9 @@ function Footer() {
           </div>
         </div>
         {/* Bottom */}
-        <div className="flex items-center gap-6 text-[13px] text-[#3a3e47]" style={{ borderTop: `1px solid ${C.borderSubtle}`, paddingTop: "24px" }}>
-          <Link to="/privacy" className="hover:text-[#8a8f98] transition-colors">Privacy</Link>
-          <Link to="/terms" className="hover:text-[#8a8f98] transition-colors">Terms</Link>
+        <div className="flex items-center gap-6 text-[13px] text-[#4B5563]" style={{ borderTop: `1px solid ${C.borderSubtle}`, paddingTop: "24px" }}>
+          <Link to="/privacy" className="hover:text-[#9CA3AF] transition-colors">Privacy</Link>
+          <Link to="/terms" className="hover:text-[#9CA3AF] transition-colors">Terms</Link>
           <span>&copy; 2026 askwijs</span>
         </div>
       </div>
