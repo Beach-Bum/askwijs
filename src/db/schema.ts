@@ -17,8 +17,8 @@ import { relations } from "drizzle-orm";
 
 export const users = pgTable("users", {
   id: uuid("id").defaultRandom().primaryKey(),
-  authId: varchar("auth_id", { length: 255 }).unique().notNull(), // Supabase Auth UUID
-  email: varchar("email", { length: 255 }).notNull(),
+  authId: varchar("auth_id", { length: 255 }).unique().notNull(),
+  email: varchar("email", { length: 255 }).unique().notNull(),
   name: varchar("name", { length: 255 }),
   language: varchar("language", { length: 5 }).default("en").notNull(),
   companyName: varchar("company_name", { length: 255 }),
@@ -41,7 +41,7 @@ export const transactions = pgTable(
   {
     id: uuid("id").defaultRandom().primaryKey(),
     userId: uuid("user_id").references(() => users.id).notNull(),
-    externalId: varchar("external_id", { length: 255 }), // PSD2 transaction ID
+    externalId: varchar("external_id", { length: 255 }).unique(),
     date: timestamp("date").notNull(),
     amount: decimal("amount", { precision: 12, scale: 2 }).notNull(),
     currency: varchar("currency", { length: 3 }).default("EUR").notNull(),
@@ -67,21 +67,25 @@ export const transactions = pgTable(
 
 // ── Receipts ───────────────────────────────────────────────────────
 
-export const receipts = pgTable("receipts", {
-  id: uuid("id").defaultRandom().primaryKey(),
-  userId: uuid("user_id").references(() => users.id).notNull(),
-  imageUrl: text("image_url"),
-  vendor: varchar("vendor", { length: 255 }),
-  amount: decimal("amount", { precision: 12, scale: 2 }),
-  date: timestamp("date"),
-  btwAmount: decimal("btw_amount", { precision: 12, scale: 2 }),
-  btwRate: decimal("btw_rate", { precision: 5, scale: 2 }),
-  category: varchar("category", { length: 100 }),
-  source: varchar("source", { length: 20 }).default("upload"),
-  transactionId: uuid("transaction_id"),
-  extractedData: jsonb("extracted_data"), // AWS Textract output
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-});
+export const receipts = pgTable(
+  "receipts",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    userId: uuid("user_id").references(() => users.id).notNull(),
+    imageUrl: text("image_url"),
+    vendor: varchar("vendor", { length: 255 }),
+    amount: decimal("amount", { precision: 12, scale: 2 }),
+    date: timestamp("date"),
+    btwAmount: decimal("btw_amount", { precision: 12, scale: 2 }),
+    btwRate: decimal("btw_rate", { precision: 5, scale: 2 }),
+    category: varchar("category", { length: 100 }),
+    source: varchar("source", { length: 20 }).default("upload"),
+    transactionId: uuid("transaction_id"),
+    extractedData: jsonb("extracted_data"),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+  },
+  (table) => [index("idx_receipts_user").on(table.userId)]
+);
 
 // ── Invoices ───────────────────────────────────────────────────────
 
@@ -116,32 +120,46 @@ export const invoices = pgTable(
 
 // ── Clients ────────────────────────────────────────────────────────
 
-export const clients = pgTable("clients", {
-  id: uuid("id").defaultRandom().primaryKey(),
-  userId: uuid("user_id").references(() => users.id).notNull(),
-  name: varchar("name", { length: 255 }).notNull(),
-  email: varchar("email", { length: 255 }),
-  address: text("address"),
-  kvkNumber: varchar("kvk_number", { length: 20 }),
-  btwId: varchar("btw_id", { length: 30 }),
-  defaultPaymentTerms: integer("default_payment_terms").default(30),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-});
+export const clients = pgTable(
+  "clients",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    userId: uuid("user_id").references(() => users.id).notNull(),
+    name: varchar("name", { length: 255 }).notNull(),
+    email: varchar("email", { length: 255 }),
+    address: text("address"),
+    kvkNumber: varchar("kvk_number", { length: 20 }),
+    btwId: varchar("btw_id", { length: 30 }),
+    defaultPaymentTerms: integer("default_payment_terms").default(30),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+  },
+  (table) => [index("idx_clients_user").on(table.userId)]
+);
 
 // ── BTW Returns ────────────────────────────────────────────────────
 
-export const btwReturns = pgTable("btw_returns", {
-  id: uuid("id").defaultRandom().primaryKey(),
-  userId: uuid("user_id").references(() => users.id).notNull(),
-  quarter: integer("quarter").notNull(),
-  year: integer("year").notNull(),
-  btwCollected: decimal("btw_collected", { precision: 12, scale: 2 }).default("0"),
-  btwDeducted: decimal("btw_deducted", { precision: 12, scale: 2 }).default("0"),
-  btwNet: decimal("btw_net", { precision: 12, scale: 2 }).default("0"),
-  status: varchar("status", { length: 20 }).default("draft"),
-  filedDate: timestamp("filed_date"),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-});
+export const btwReturns = pgTable(
+  "btw_returns",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    userId: uuid("user_id").references(() => users.id).notNull(),
+    quarter: integer("quarter").notNull(),
+    year: integer("year").notNull(),
+    btwCollected: decimal("btw_collected", { precision: 12, scale: 2 }).default("0"),
+    btwDeducted: decimal("btw_deducted", { precision: 12, scale: 2 }).default("0"),
+    btwNet: decimal("btw_net", { precision: 12, scale: 2 }).default("0"),
+    status: varchar("status", { length: 20 }).default("draft"),
+    filedDate: timestamp("filed_date"),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+  },
+  (table) => [
+    index("idx_btw_returns_user_year_quarter").on(
+      table.userId,
+      table.year,
+      table.quarter
+    ),
+  ]
+);
 
 // ── Counterparty Rules (learned from user corrections) ─────────
 

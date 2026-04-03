@@ -138,10 +138,23 @@ export async function categorizeBatch(
 
   for (let i = 0; i < transactions.length; i += CONCURRENCY) {
     const batch = transactions.slice(i, i + CONCURRENCY);
-    const batchResults = await Promise.all(
+    const batchResults = await Promise.allSettled(
       batch.map((tx) => categorizeTransaction(tx, userRules))
     );
-    results.push(...batchResults);
+    for (const result of batchResults) {
+      if (result.status === "fulfilled") {
+        results.push(result.value);
+      } else {
+        results.push({
+          category: "other_business",
+          btwRate: 21,
+          isBusiness: true,
+          isDeductible: true,
+          confidenceScore: 0.3,
+          reasoning: `Categorization failed: ${result.reason?.message || "Unknown error"}`,
+        });
+      }
+    }
   }
 
   return results;

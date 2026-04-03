@@ -40,13 +40,45 @@ Every existing Dutch tax tool (Moneybird, e-Boekhouden, Twinfield) is Dutch-only
 ## Tech stack
 
 ```
-Frontend:     React + Vite + Tailwind CSS
-Backend:      Node.js / Bun + PostgreSQL (Supabase)
-Open Banking: Nordigen/GoCardless API (PSD2, all NL banks)
-AI Agent:     Claude API — claude-sonnet-4-6 with tool use
-OCR:          AWS Textract (receipt scanning)
+Frontend:     React 19 + Vite 6 + Tailwind CSS v4 + TypeScript
+Backend:      Hono 4 (Node.js) + PostgreSQL + Drizzle ORM
+Auth:         Supabase Auth (JWT)
+Open Banking: Tink PSD2 API (read-only, all NL banks)
+AI Agent:     Anthropic Claude API — claude-sonnet-4-6
+Payments:     Stripe (subscriptions, 30-day trial)
 Hosting:      Vercel
 ```
+
+## Getting started
+
+```bash
+# Install dependencies
+npm install
+
+# Copy environment variables
+cp .env.example .env
+# Fill in: Supabase, Stripe, Tink, Anthropic, DATABASE_URL
+
+# Run database migrations
+npm run db:migrate
+
+# Start development (frontend + API)
+npm run dev:all
+```
+
+Frontend: `http://localhost:5173` | API: `http://localhost:3001`
+
+### Scripts
+
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Vite dev server |
+| `npm run dev:server` | Hono API server |
+| `npm run dev:all` | Both concurrently |
+| `npm run build` | TypeScript check + Vite build |
+| `npm run db:generate` | Generate Drizzle migrations |
+| `npm run db:migrate` | Run migrations |
+| `npm run db:studio` | Drizzle Studio |
 
 ---
 
@@ -54,16 +86,20 @@ Hosting:      Vercel
 
 ```
 askwijs/
-├── README.md               ← This file
-├── PRODUCT.md              ← Full architecture spec for Claude Code
-├── brand/
-│   ├── BRAND.md            ← Brand strategy, voice, positioning
-│   ├── DESIGN.md           ← Design system: colors, type, components
-│   └── DOMAINS.md          ← Domain research
-├── docs/
-│   └── brand-ux-guide.html ← Visual design research guide
-└── src/
-    └── index.html          ← Landing page
+├── src/
+│   ├── api/server.ts         # Hono API (auth middleware, Stripe, Tink, profile)
+│   ├── components/           # AppShell, ErrorBoundary
+│   ├── db/                   # Drizzle schema + connection
+│   ├── hooks/useAuth.tsx     # Supabase auth context
+│   ├── lib/
+│   │   ├── api.ts            # Fetch client with JWT injection
+│   │   ├── supabase.ts       # Supabase client
+│   │   ├── ai/categorize.ts  # Claude transaction categorization
+│   │   └── tax/dutch-tax.ts  # BTW + income tax calculations
+│   └── pages/                # Landing, Login, Onboarding, Dashboard, Subscribe
+├── brand/                    # Brand strategy, design system
+├── docs/                     # Design research
+└── .github/workflows/        # CI pipeline
 ```
 
 ---

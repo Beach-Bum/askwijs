@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
-import { Building2, Landmark, ArrowRight, Check } from "lucide-react";
+import { api } from "@/lib/api";
+import { Building2, Landmark, ArrowRight, Check, AlertCircle } from "lucide-react";
 
 const steps = [
   { label: "Welcome", icon: Check },
@@ -18,28 +19,42 @@ const BANKS = [
   { id: "REVOLUT", name: "Revolut", color: "#0075eb" },
 ];
 
+interface FormErrors {
+  name?: string;
+  companyName?: string;
+  kvkNumber?: string;
+}
+
+function validateForm(form: { name: string; companyName: string; kvkNumber: string }): FormErrors {
+  const errors: FormErrors = {};
+  if (!form.name.trim()) errors.name = "Name is required";
+  if (!form.companyName.trim()) errors.companyName = "Company name is required";
+  if (form.kvkNumber && !/^\d{8}$/.test(form.kvkNumber)) errors.kvkNumber = "KvK number must be 8 digits";
+  return errors;
+}
+
 export function Onboarding() {
   const [step, setStep] = useState(0);
   const [form, setForm] = useState({ name: "", companyName: "", kvkNumber: "", btwId: "", phone: "" });
+  const [errors, setErrors] = useState<FormErrors>({});
   const [selectedBank, setSelectedBank] = useState<string | null>(null);
   const [connecting, setConnecting] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [apiError, setApiError] = useState<string | null>(null);
   const navigate = useNavigate();
   const { user } = useAuth();
 
   const handleBankConnect = async (bankId: string) => {
     setSelectedBank(bankId);
     setConnecting(true);
+    setApiError(null);
     try {
-      const res = await fetch("/api/banking/connect", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ bankId, userId: user?.id }),
-      });
-      const data = await res.json();
+      const data = await api.post<{ redirectUrl?: string }>("/banking/connect", { bankId });
       if (data.redirectUrl) {
         window.location.href = data.redirectUrl;
       }
-    } catch {
+    } catch (err) {
+      setApiError("Failed to connect to bank. Please try again.");
       setConnecting(false);
     }
   };
@@ -47,15 +62,30 @@ export function Onboarding() {
   const handleSkipBank = () => navigate("/subscribe");
 
   const handleSaveProfile = async () => {
-    await fetch("/api/user/profile", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ...form, userId: user?.id }),
-    });
-    setStep(2);
+    const validationErrors = validateForm(form);
+    setErrors(validationErrors);
+    if (Object.keys(validationErrors).length > 0) return;
+
+    setSaving(true);
+    setApiError(null);
+    try {
+      await api.post("/user/profile", {
+        name: form.name,
+        companyName: form.companyName,
+        kvkNumber: form.kvkNumber,
+        btwId: form.btwId,
+        phone: form.phone,
+      });
+      setStep(2);
+    } catch (err) {
+      setApiError("Failed to save profile. Please try again.");
+    } finally {
+      setSaving(false);
+    }
   };
 
   const inputClass = "w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white text-sm placeholder:text-slate-600 focus:outline-none focus:border-[#2563eb]";
+  const errorInputClass = "w-full bg-white/5 border border-red-500/50 rounded-lg px-4 py-3 text-white text-sm placeholder:text-slate-600 focus:outline-none focus:border-red-500";
 
   return (
     <div className="min-h-screen bg-[#0a0f1a] text-white flex flex-col">
@@ -76,6 +106,13 @@ export function Onboarding() {
 
       <div className="flex-1 flex items-center justify-center px-4 pb-12">
         <div className="w-full max-w-lg">
+
+          {apiError && (
+            <div className="mb-6 flex items-center gap-2 bg-red-500/10 border border-red-500/20 rounded-lg px-4 py-3 text-red-400 text-sm">
+              <AlertCircle className="w-4 h-4 shrink-0" />
+              {apiError}
+            </div>
+          )}
 
           {step === 0 && (
             <div className="text-center">
@@ -98,17 +135,20 @@ export function Onboarding() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-xs font-medium text-slate-400 uppercase tracking-wider mb-1.5">Your name</label>
-                    <input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className={inputClass} placeholder="Jan de Vries" />
+                    <input value={form.name} onChange={(e) => { setForm({ ...form, name: e.target.value }); setErrors({ ...errors, name: undefined }); }} className={errors.name ? errorInputClass : inputClass} placeholder="Jan de Vries" />
+                    {errors.name && <p className="text-red-400 text-xs mt-1">{errors.name}</p>}
                   </div>
                   <div>
                     <label className="block text-xs font-medium text-slate-400 uppercase tracking-wider mb-1.5">Company name</label>
-                    <input value={form.companyName} onChange={(e) => setForm({ ...form, companyName: e.target.value })} className={inputClass} placeholder="De Vries Consulting" />
+                    <input value={form.companyName} onChange={(e) => { setForm({ ...form, companyName: e.target.value }); setErrors({ ...errors, companyName: undefined }); }} className={errors.companyName ? errorInputClass : inputClass} placeholder="De Vries Consulting" />
+                    {errors.companyName && <p className="text-red-400 text-xs mt-1">{errors.companyName}</p>}
                   </div>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-xs font-medium text-slate-400 uppercase tracking-wider mb-1.5">KvK number</label>
-                    <input value={form.kvkNumber} onChange={(e) => setForm({ ...form, kvkNumber: e.target.value })} className={inputClass} placeholder="12345678" />
+                    <input value={form.kvkNumber} onChange={(e) => { setForm({ ...form, kvkNumber: e.target.value }); setErrors({ ...errors, kvkNumber: undefined }); }} className={errors.kvkNumber ? errorInputClass : inputClass} placeholder="12345678" />
+                    {errors.kvkNumber && <p className="text-red-400 text-xs mt-1">{errors.kvkNumber}</p>}
                   </div>
                   <div>
                     <label className="block text-xs font-medium text-slate-400 uppercase tracking-wider mb-1.5">BTW-id (optional)</label>
@@ -119,8 +159,8 @@ export function Onboarding() {
                   <label className="block text-xs font-medium text-slate-400 uppercase tracking-wider mb-1.5">Phone (WhatsApp/Telegram alerts)</label>
                   <input value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} className={inputClass} placeholder="+31 6 12345678" />
                 </div>
-                <button onClick={handleSaveProfile} className="w-full bg-[#2563eb] text-white py-3 rounded-lg font-medium hover:bg-[#1d4ed8] transition-colors mt-4">
-                  Continue
+                <button onClick={handleSaveProfile} disabled={saving} className="w-full bg-[#2563eb] text-white py-3 rounded-lg font-medium hover:bg-[#1d4ed8] transition-colors mt-4 disabled:opacity-50">
+                  {saving ? "Saving..." : "Continue"}
                 </button>
               </div>
             </div>
