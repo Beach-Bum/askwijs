@@ -161,7 +161,7 @@ function Nav() {
       }}>
       <Link to="/" className="flex items-center gap-2 no-underline">
         <img src="/logo-white.svg" alt="askwijs" className="h-6 w-auto" />
-        <span className="text-[16px] font-semibold text-[#F9FAFB] tracking-tight" style={{ fontFamily: "'Instrument Serif', serif" }}>
+        <span className="text-[16px] font-semibold text-[#F9FAFB] tracking-tight" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
           ask<span style={{ color: C.accent }}>wijs</span>
         </span>
       </Link>
@@ -1101,7 +1101,7 @@ function Footer() {
           <div className="md:w-[200px] shrink-0">
             <Link to="/" className="flex items-center gap-2 no-underline">
               <img src="/logo-white.svg" alt="askwijs" className="h-5 w-auto" />
-              <span className="text-[16px] font-semibold text-[#F9FAFB] tracking-tight" style={{ fontFamily: "'Instrument Serif', serif" }}>
+              <span className="text-[16px] font-semibold text-[#F9FAFB] tracking-tight" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
                 ask<span style={{ color: C.accent }}>wijs</span>
               </span>
             </Link>
