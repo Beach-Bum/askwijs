@@ -115,6 +115,7 @@ export function Landing() {
         <Divider />
         <Pricing />
         <CTA />
+        <Disclaimer />
       </main>
       <Footer />
     </div>
@@ -182,7 +183,7 @@ function Nav() {
         <div className="hidden md:flex items-center gap-8">
           <NavLink href="#features">Product</NavLink>
           <NavLink href="#pricing">Pricing</NavLink>
-          <NavLink href="#security">Security</NavLink>
+          <NavLink href="#security">Banks</NavLink>
         </div>
         <div className="flex items-center gap-4">
           <Link to="/login" className="hidden md:inline text-[14px] text-[#9CA3AF] hover:text-[#F9FAFB] transition-colors">Log in</Link>
@@ -207,7 +208,7 @@ function Nav() {
           <div className="flex flex-col items-start gap-1 px-8 py-6">
             <a href="#features" onClick={() => setMobileOpen(false)} className="text-[16px] text-[#9CA3AF] hover:text-[#F9FAFB] transition-colors py-3 w-full">Product</a>
             <a href="#pricing" onClick={() => setMobileOpen(false)} className="text-[16px] text-[#9CA3AF] hover:text-[#F9FAFB] transition-colors py-3 w-full">Pricing</a>
-            <a href="#security" onClick={() => setMobileOpen(false)} className="text-[16px] text-[#9CA3AF] hover:text-[#F9FAFB] transition-colors py-3 w-full">Security</a>
+            <a href="#security" onClick={() => setMobileOpen(false)} className="text-[16px] text-[#9CA3AF] hover:text-[#F9FAFB] transition-colors py-3 w-full">Banks</a>
             <div className="w-full h-px my-3" style={{ background: C.border }} />
             <Link to="/login" onClick={() => setMobileOpen(false)} className="text-[16px] text-[#9CA3AF] hover:text-[#F9FAFB] transition-colors py-3 w-full">Log in</Link>
             <Link to="/signup" onClick={() => setMobileOpen(false)} className="text-[14px] font-medium text-white text-center py-3 rounded-[8px] w-full mt-2 transition-all"
@@ -234,7 +235,7 @@ function Hero() {
           <span className="block">April 30.</span>
         </h1>
         <p className="text-[18px] sm:text-[22px] font-medium text-[#9CA3AF] leading-[1.4] mb-8 max-w-[640px]">
-          Your Dutch taxes, fully automated. Connect your bank, and askwijs handles BTW, categorization, and filing.
+          Your Dutch taxes, fully automated. Connect your bank, and askwijs handles BTW (Dutch VAT), categorization, and filing.
         </p>
 
         {/* CTA row */}
@@ -247,18 +248,18 @@ function Hero() {
         {/* Social proof bar */}
         <div className="flex flex-wrap items-center gap-6 sm:gap-10 text-[13px]">
           <div>
-            <span className="text-[#F9FAFB] font-medium" style={{ fontVariantNumeric: "tabular-nums" }}>2,400+</span>
-            <span className="text-[#4B5563] ml-1.5">ZZP'ers use askwijs</span>
+            <span className="text-[#F9FAFB] font-medium">PSD2 Open Banking</span>
+            <span className="text-[#4B5563] ml-1.5">read-only access</span>
           </div>
           <div className="h-3 w-px bg-[rgba(255,255,255,0.08)]" />
           <div>
-            <span className="text-[#F9FAFB] font-medium" style={{ fontVariantNumeric: "tabular-nums" }}>&euro;4.2M</span>
-            <span className="text-[#4B5563] ml-1.5">deductions found</span>
+            <span className="text-[#F9FAFB] font-medium">EU-hosted</span>
+            <span className="text-[#4B5563] ml-1.5">GDPR compliant</span>
           </div>
           <div className="h-3 w-px bg-[rgba(255,255,255,0.08)]" />
           <div>
-            <span className="text-[#F9FAFB] font-medium" style={{ fontVariantNumeric: "tabular-nums" }}>4.8</span>
-            <span className="text-[#4B5563] ml-1.5">/ 5 user rating</span>
+            <span className="text-[#F9FAFB] font-medium">30 days free</span>
+            <span className="text-[#4B5563] ml-1.5">no credit card required</span>
           </div>
         </div>
       </div>
@@ -310,7 +311,7 @@ function DashboardDemo() {
     let response = "Your current BTW position for Q1 is \u20AC1.890,00. Next filing deadline is April 30.";
     if (lower.includes("btw") || lower.includes("vat")) response = "Q1 BTW: \u20AC2.614,50 verschuldigd minus \u20AC724,50 voorbelasting = \u20AC1.890,00 to pay. Deadline: April 30.";
     else if (lower.includes("deduct")) response = "Found \u20AC4.210 in deductions: \u20AC290/mo WeWork, \u20AC60,49/mo Adobe, \u20AC89 NS travel, \u20AC349 monitor (KIA eligible).";
-    else if (lower.includes("revenue") || lower.includes("income")) response = "Q1 revenue: \u20AC5.600 across 2 clients. 18% above Q4. You'll cross the KOR drempel by August.";
+    else if (lower.includes("revenue") || lower.includes("income")) response = "Q1 revenue: \u20AC5.600 across 2 clients. 18% above Q4. You may exceed the KOR threshold (small business VAT exemption) by August.";
     setTimeout(() => { setChatMessages(prev => [...prev, { role: "wijs", text: response }]); setIsTyping(false); }, 1200);
   }, [chatInput, isTyping]);
 
@@ -458,7 +459,7 @@ function TabOverview() {
   return (
     <div className="p-5">
       <div className="mb-5">
-        <h2 className="text-[14px] font-medium text-[#F9FAFB]">Good morning, Ned</h2>
+        <h2 className="text-[14px] font-medium text-[#F9FAFB]">Good morning</h2>
         <p className="text-[12px] text-[#4a4e57] mt-1">Your Q1 BTW aangifte is ready to review.</p>
       </div>
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-5">
@@ -663,7 +664,7 @@ function IntroText() {
       style={{ paddingLeft: "max(32px, calc((100vw - 1436px) / 2 + 46px))", paddingRight: "max(32px, calc((100vw - 1436px) / 2 + 46px))" }}>
       <p className="text-[24px] leading-[1.45] max-w-[900px]">
         <span className="text-[#F9FAFB]" style={{ fontFamily: "'Lora', serif", fontWeight: 600 }}>A new kind of financial tool.</span>{" "}
-        <span className="text-[#9CA3AF]">Purpose-built for freelancers and expats in the Netherlands. Designed to replace your boekhouder, not just assist them.</span>
+        <span className="text-[#9CA3AF]">Purpose-built for freelancers and expats in the Netherlands. Handles the work your boekhouder (bookkeeper) charges for. Automatically.</span>
       </p>
     </section>
   );
@@ -674,24 +675,18 @@ function IntroText() {
 // ══════════════════════════════════════════════════════════════════
 function SocialProof() {
   const ref = useFadeIn<HTMLDivElement>();
-  const testimonials = [
+  const signals = [
     {
-      text: "I used to spend an entire weekend on my BTW aangifte. With askwijs, it was done before my coffee got cold.",
-      name: "Sarah K.",
-      role: "UX Designer, ZZP'er",
-      initials: "SK",
+      title: "PSD2 Open Banking",
+      desc: "Read-only bank access via Tink. askwijs can never move your money or see your credentials.",
     },
     {
-      text: "As an American expat, Dutch taxes were terrifying. askwijs explains everything in English and files automatically.",
-      name: "James W.",
-      role: "Software Developer, Expat",
-      initials: "JW",
+      title: "EU Data, GDPR First",
+      desc: "All data stored in the EU (AWS eu-west-1). Full GDPR rights: access, export, and delete anytime.",
     },
     {
-      text: "Wijs found deductions my previous boekhouder missed. Paid for itself in the first month.",
-      name: "Pieter V.",
-      role: "Freelance Consultant",
-      initials: "PV",
+      title: "AI You Can Trust",
+      desc: "Transaction categorization powered by Anthropic Claude. Your financial data is never used for model training.",
     },
   ];
   return (
@@ -699,16 +694,10 @@ function SocialProof() {
       style={{ paddingLeft: "max(32px, calc((100vw - 1436px) / 2 + 46px))", paddingRight: "max(32px, calc((100vw - 1436px) / 2 + 46px))" }}>
       <div className="max-w-[1344px]">
         <div className="grid md:grid-cols-3 gap-6">
-          {testimonials.map(t => (
-            <div key={t.name} className="rounded-xl p-6" style={{ background: C.surface, border: `1px solid ${C.borderSubtle}` }}>
-              <p className="text-[14px] text-[#9CA3AF] leading-[1.6] mb-6">"{t.text}"</p>
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full flex items-center justify-center text-[10px] font-bold text-white" style={{ background: C.accent }}>{t.initials}</div>
-                <div>
-                  <div className="text-[13px] font-medium text-[#F9FAFB]">{t.name}</div>
-                  <div className="text-[11px] text-[#4B5563]">{t.role}</div>
-                </div>
-              </div>
+          {signals.map(s => (
+            <div key={s.title} className="rounded-xl p-6" style={{ background: C.surface, border: `1px solid ${C.borderSubtle}` }}>
+              <h3 className="text-[15px] font-medium text-[#F9FAFB] mb-2">{s.title}</h3>
+              <p className="text-[14px] text-[#9CA3AF] leading-[1.6]">{s.desc}</p>
             </div>
           ))}
         </div>
@@ -723,9 +712,9 @@ function SocialProof() {
 function ThreeCards() {
   const ref = useFadeIn<HTMLDivElement>();
   const cards = [
-    { title: "Built for expats", desc: "Full English and Dutch. Every tax term explained. Switch languages anytime.", fig: "0.2" },
-    { title: "Powered by AI", desc: "Wijs categorizes transactions, finds deductions, and answers your tax questions.", fig: "0.3" },
-    { title: "Designed for speed", desc: "Connect your bank in seconds. BTW pre-filled in minutes. File in one click.", fig: "0.4" },
+    { title: "Built for expats", desc: "Full English and Dutch. Every tax term explained. Switch languages anytime." },
+    { title: "Powered by AI", desc: "Wijs categorizes transactions, finds deductions, and answers your tax questions." },
+    { title: "Designed for speed", desc: "Connect your bank in seconds. BTW pre-filled in minutes. File in one click." },
   ];
   return (
     <section id="features" ref={ref} className="pb-[96px]"
@@ -733,8 +722,7 @@ function ThreeCards() {
       <div className="grid md:grid-cols-3 gap-6 max-w-[1344px]">
         {cards.map(c => (
           <div key={c.title} className="rounded-xl p-6" style={{ background: C.surface, border: `1px solid ${C.borderSubtle}` }}>
-            <div className="text-[11px] text-[#4B5563] uppercase tracking-wider mb-4">FIG {c.fig}</div>
-            {/* Illustration placeholder — geometric shapes like Linear */}
+            {/* Illustration placeholder */}
             <div className="h-[200px] mb-6 rounded-lg flex items-center justify-center" style={{ background: "rgba(255,255,255,0.02)", border: `1px solid ${C.borderSubtle}` }}>
               <div className="w-16 h-16 rounded-xl" style={{ border: `1px solid rgba(255,255,255,0.08)` }} />
             </div>
@@ -1025,7 +1013,7 @@ function Pricing() {
     "Unlimited bank connections",
     "AI categorization + auto-rules",
     "Live BTW dashboard and tax forecast",
-    "Automatic BTW aangifte filing",
+    "One-click BTW aangifte filing",
     "Receipt scanning with OCR",
     "Unlimited Ask Wijs AI advisor",
     "WhatsApp/Telegram notifications",
@@ -1053,7 +1041,7 @@ function Pricing() {
               <span className="text-[40px] font-medium text-[#F9FAFB]" style={{ fontVariantNumeric: "tabular-nums" }}>&euro;9,99</span>
               <span className="text-[14px] text-[#4B5563]">/month</span>
             </div>
-            <p className="text-[13px] text-[#4B5563] mb-8">excl. BTW &middot; 30 days free</p>
+            <p className="text-[13px] text-[#4B5563] mb-8">excl. 21% BTW &middot; 30 days free</p>
             <div className="space-y-3 mb-8">
               {starterFeatures.map(f => (
                 <div key={f} className="flex items-start gap-3">
@@ -1063,7 +1051,8 @@ function Pricing() {
               ))}
             </div>
             <Link to="/signup" className="block w-full text-center text-[14px] font-medium py-3 rounded-lg transition-all hover:bg-[rgba(255,255,255,0.12)]"
-              style={{ background: "rgba(255,255,255,0.06)", color: C.text, border: `1px solid ${C.border}` }}>Get started</Link>
+              style={{ background: "rgba(255,255,255,0.06)", color: C.text, border: `1px solid ${C.border}` }}>Start free trial</Link>
+            <p className="text-center text-[12px] text-[#4B5563] mt-3">No credit card required</p>
           </div>
 
           {/* Pro — highlighted */}
@@ -1077,7 +1066,7 @@ function Pricing() {
               <span className="text-[40px] font-medium text-[#F9FAFB]" style={{ fontVariantNumeric: "tabular-nums" }}>&euro;24,99</span>
               <span className="text-[14px] text-[#4B5563]">/month</span>
             </div>
-            <p className="text-[13px] text-[#4B5563] mb-8">excl. BTW &middot; 30 days free</p>
+            <p className="text-[13px] text-[#4B5563] mb-8">excl. 21% BTW &middot; 30 days free</p>
             <div className="space-y-3 mb-8">
               {proFeatures.map(f => (
                 <div key={f} className="flex items-start gap-3">
@@ -1107,10 +1096,10 @@ function CTA() {
       <h2 className="text-[32px] sm:text-[48px] leading-[1.15] tracking-[-0.02em] text-[#F9FAFB] mb-4" style={{ fontFamily: "'Lora', serif", fontWeight: 600 }}>
         Stop dreading tax season.{"\n"}<span className="block">Start today.</span>
       </h2>
-      <p className="text-[16px] text-[#9CA3AF] mb-8 max-w-[480px] mx-auto">Join 2,400+ ZZP'ers and expats who automated their Dutch taxes with askwijs.</p>
+      <p className="text-[16px] text-[#9CA3AF] mb-8 max-w-[480px] mx-auto">Start your 30-day free trial. No credit card required.</p>
       <div className="flex items-center justify-center gap-3">
         <Link to="/signup" className="text-[14px] font-medium text-white px-5 py-2.5 rounded-[8px] transition-all hover:-translate-y-px"
-          style={{ background: C.accent }}>Get started</Link>
+          style={{ background: C.accent }}>Start free trial</Link>
         <a href="mailto:hello@askwijs.ai" className="text-[14px] font-medium px-5 py-2.5 rounded-[8px] transition-all hover:bg-[rgba(255,255,255,0.06)]"
           style={{ background: "rgba(255,255,255,0.04)", color: C.text, border: `1px solid ${C.borderSubtle}` }}>Contact us</a>
       </div>
@@ -1119,16 +1108,23 @@ function CTA() {
 }
 
 // ══════════════════════════════════════════════════════════════════
-//  FOOTER — Linear style: 5-column link grid
+//  DISCLAIMER
+// ══════════════════════════════════════════════════════════════════
+function Disclaimer() {
+  return (
+    <div className="text-center pb-12"
+      style={{ paddingLeft: "max(32px, calc((100vw - 1436px) / 2 + 46px))", paddingRight: "max(32px, calc((100vw - 1436px) / 2 + 46px))" }}>
+      <p className="text-[12px] text-[#4B5563] max-w-[600px] mx-auto leading-[1.6]">
+        askwijs automates financial administration. It is not a licensed tax advisor. We recommend consulting a professional for complex tax situations.
+      </p>
+    </div>
+  );
+}
+
+// ══════════════════════════════════════════════════════════════════
+//  FOOTER — clean link grid (only pages that exist)
 // ══════════════════════════════════════════════════════════════════
 function Footer() {
-  const cols = [
-    { title: "Product", links: ["Categorize", "BTW Filing", "Ask Wijs", "Receipts", "Banks", "Pricing", "Security"] },
-    { title: "Features", links: ["AI Categorization", "BTW Aangifte", "Receipt OCR", "Bank Sync", "Tax Forecast", "Invoicing"] },
-    { title: "Company", links: ["About", "Blog", "Careers", "Privacy", "Terms"] },
-    { title: "Resources", links: ["Documentation", "API", "Status", "Changelog"] },
-    { title: "Connect", links: ["Contact", "X (Twitter)", "LinkedIn", "GitHub"] },
-  ];
   return (
     <footer className="py-[64px]" style={{
       borderTop: `1px solid ${C.borderSubtle}`,
@@ -1147,17 +1143,28 @@ function Footer() {
             </Link>
           </div>
           {/* Columns */}
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-8 flex-1">
-            {cols.map(col => (
-              <div key={col.title}>
-                <div className="text-[13px] font-medium text-[#F9FAFB] mb-4">{col.title}</div>
-                <div className="space-y-2.5">
-                  {col.links.map(l => (
-                    <a key={l} href="#" className="block text-[13px] text-[#6B7280] hover:text-[#9CA3AF] transition-colors">{l}</a>
-                  ))}
-                </div>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-8 flex-1">
+            <div>
+              <div className="text-[13px] font-medium text-[#F9FAFB] mb-4">Product</div>
+              <div className="space-y-2.5">
+                <a href="#features" className="block text-[13px] text-[#6B7280] hover:text-[#9CA3AF] transition-colors">Features</a>
+                <a href="#pricing" className="block text-[13px] text-[#6B7280] hover:text-[#9CA3AF] transition-colors">Pricing</a>
+                <a href="#security" className="block text-[13px] text-[#6B7280] hover:text-[#9CA3AF] transition-colors">Banks</a>
               </div>
-            ))}
+            </div>
+            <div>
+              <div className="text-[13px] font-medium text-[#F9FAFB] mb-4">Company</div>
+              <div className="space-y-2.5">
+                <Link to="/privacy" className="block text-[13px] text-[#6B7280] hover:text-[#9CA3AF] transition-colors">Privacy</Link>
+                <Link to="/terms" className="block text-[13px] text-[#6B7280] hover:text-[#9CA3AF] transition-colors">Terms</Link>
+              </div>
+            </div>
+            <div>
+              <div className="text-[13px] font-medium text-[#F9FAFB] mb-4">Connect</div>
+              <div className="space-y-2.5">
+                <a href="mailto:hello@askwijs.ai" className="block text-[13px] text-[#6B7280] hover:text-[#9CA3AF] transition-colors">Contact</a>
+              </div>
+            </div>
           </div>
         </div>
         {/* Bottom */}

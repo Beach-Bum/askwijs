@@ -23,7 +23,7 @@ export function Privacy() {
 
           <section>
             <h2 className="text-[18px] font-medium text-[#F9FAFB] mb-3">How we use it</h2>
-            <p>Your transaction data is used solely to categorize transactions, calculate BTW positions, and generate tax filings. We use Anthropic Claude to categorize transactions — your data is sent to their API for processing but is not used for model training. We do not sell, share, or monetize your financial data.</p>
+            <p>Your transaction data is used solely to categorize transactions, calculate BTW positions, and generate tax filings. We use Anthropic Claude to categorize transactions — your data is sent to their API (processed in the US under standard contractual clauses) but is not used for model training. We do not sell, share, or monetize your financial data.</p>
           </section>
 
           <section>

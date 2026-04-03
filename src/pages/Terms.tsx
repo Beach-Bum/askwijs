@@ -18,7 +18,7 @@ export function Terms() {
         <div className="space-y-8 text-[15px] text-[#9CA3AF] leading-[1.7]">
           <section>
             <h2 className="text-[18px] font-medium text-[#F9FAFB] mb-3">Service</h2>
-            <p>askwijs ("the Service") is an AI-powered financial administration platform that helps Dutch freelancers (ZZP'ers) and expats manage their taxes, BTW filings, and bookkeeping. The Service is provided by askwijs B.V., registered in the Netherlands.</p>
+            <p>askwijs ("the Service") is an AI-powered financial administration platform that helps Dutch freelancers (ZZP'ers) and expats manage their taxes, BTW (Dutch VAT) filings, and bookkeeping.</p>
           </section>
 
           <section>

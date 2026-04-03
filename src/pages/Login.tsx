@@ -56,7 +56,7 @@ export function Login({ isSignUp = false }: { isSignUp?: boolean }) {
             </span>
           </Link>
           <p className="text-[14px] mt-2" style={{ color: C.muted }}>
-            {isSignUp ? "Create your account — first month free" : "Welcome back"}
+            {isSignUp ? "Create your account — 30 days free" : "Welcome back"}
           </p>
         </div>
 

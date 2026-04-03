@@ -57,7 +57,7 @@ export function Subscribe() {
     "Unlimited bank connections",
     "AI categorization + auto-rules",
     "Live BTW dashboard and tax forecast",
-    "Automatic BTW aangifte filing",
+    "One-click BTW aangifte filing",
     "Receipt scanning with OCR",
     "Unlimited Ask Wijs AI advisor",
     "WhatsApp/Telegram notifications",
@@ -86,7 +86,7 @@ export function Subscribe() {
               <span className="text-[36px] font-medium" style={{ color: C.text, fontVariantNumeric: "tabular-nums" }}>&euro;9,99</span>
               <span className="text-[14px]" style={{ color: C.dim }}>/month</span>
             </div>
-            <p className="text-[12px] mb-6" style={{ color: C.dim }}>excl. BTW &middot; 30 days free</p>
+            <p className="text-[12px] mb-6" style={{ color: C.dim }}>excl. 21% BTW &middot; 30 days free</p>
             <div className="space-y-3 mb-6">
               {starterFeatures.map(f => (
                 <div key={f} className="flex items-start gap-3">
@@ -98,8 +98,9 @@ export function Subscribe() {
             <button onClick={() => handleSubscribe("starter")} disabled={loading !== null}
               className="w-full text-center text-[14px] font-medium py-3 rounded-lg transition-all hover:bg-[rgba(255,255,255,0.10)] disabled:opacity-50"
               style={{ background: "rgba(255,255,255,0.06)", color: C.text, border: `1px solid ${C.border}` }}>
-              {loading === "starter" ? "Redirecting..." : "Get started"}
+              {loading === "starter" ? "Redirecting..." : "Start free trial"}
             </button>
+            <p className="text-center text-[11px] mt-2" style={{ color: C.dim }}>No credit card required</p>
           </div>
 
           {/* Pro */}
@@ -113,7 +114,7 @@ export function Subscribe() {
               <span className="text-[36px] font-medium" style={{ color: C.text, fontVariantNumeric: "tabular-nums" }}>&euro;24,99</span>
               <span className="text-[14px]" style={{ color: C.dim }}>/month</span>
             </div>
-            <p className="text-[12px] mb-6" style={{ color: C.dim }}>excl. BTW &middot; 30 days free</p>
+            <p className="text-[12px] mb-6" style={{ color: C.dim }}>excl. 21% BTW &middot; 30 days free</p>
             <div className="space-y-3 mb-6">
               {proFeatures.map(f => (
                 <div key={f} className="flex items-start gap-3">
