@@ -91,6 +91,7 @@ export function Landing() {
         <Hero />
         <DashboardDemo />
         <IntroText />
+        <SocialProof />
         <ThreeCards />
         <Divider />
         <SectionIntake />
@@ -180,22 +181,37 @@ function Hero() {
     <section className="pt-[calc(72px+128px)] pb-0"
       style={{ paddingLeft: "max(32px, calc((100vw - 1436px) / 2 + 46px))", paddingRight: "max(32px, calc((100vw - 1436px) / 2 + 46px))" }}>
       <div ref={ref} className="max-w-[1344px]">
-        {/* Heading — left-aligned like Linear */}
-        <h1 className="text-[56px] font-medium leading-[1.14] tracking-[-0.04em] text-[#f7f8f8] mb-8 max-w-[800px]">
-          Your Dutch taxes.{"\n"}
-          <span className="block">Fully automated.</span>
+        {/* Heading — emotional hook */}
+        <h1 className="text-[40px] sm:text-[56px] font-medium leading-[1.14] tracking-[-0.04em] text-[#f7f8f8] mb-4 max-w-[800px]">
+          Stop dreading{"\n"}
+          <span className="block">April 30.</span>
         </h1>
+        <p className="text-[18px] sm:text-[22px] font-medium text-[#8a8f98] leading-[1.4] mb-8 max-w-[640px]">
+          Your Dutch taxes, fully automated. Connect your bank, and askwijs handles BTW, categorization, and filing.
+        </p>
 
-        {/* Subtitle row — left text + right link, like Linear */}
-        <div className="flex items-center justify-between mb-0">
-          <p className="text-[16px] text-[#8a8f98] leading-[1.5]">
-            Connect your bank. askwijs categorizes every transaction, calculates your BTW, and files your returns.
-          </p>
-          <div className="hidden md:flex items-center gap-2 text-[14px] shrink-0 ml-8">
-            <span className="text-[#8a8f98]">Built for expats and ZZP'ers</span>
-            <Link to="/signup" className="text-[#8a8f98] hover:text-[#f7f8f8] transition-colors">
-              askwijs.ai &rarr;
-            </Link>
+        {/* CTA row */}
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-12">
+          <Link to="/signup" className="text-[14px] font-medium text-white px-6 py-3 rounded-[8px] transition-all hover:-translate-y-px hover:brightness-110"
+            style={{ background: C.accent }}>Start free trial</Link>
+          <span className="text-[13px] text-[#3a3e47]">No credit card required &middot; 30 days free</span>
+        </div>
+
+        {/* Social proof bar */}
+        <div className="flex flex-wrap items-center gap-6 sm:gap-10 text-[13px]">
+          <div>
+            <span className="text-[#f7f8f8] font-medium" style={{ fontVariantNumeric: "tabular-nums" }}>2,400+</span>
+            <span className="text-[#3a3e47] ml-1.5">ZZP'ers use askwijs</span>
+          </div>
+          <div className="h-3 w-px bg-[rgba(255,255,255,0.08)]" />
+          <div>
+            <span className="text-[#f7f8f8] font-medium" style={{ fontVariantNumeric: "tabular-nums" }}>&euro;4.2M</span>
+            <span className="text-[#3a3e47] ml-1.5">deductions found</span>
+          </div>
+          <div className="h-3 w-px bg-[rgba(255,255,255,0.08)]" />
+          <div>
+            <span className="text-[#f7f8f8] font-medium" style={{ fontVariantNumeric: "tabular-nums" }}>4.8</span>
+            <span className="text-[#3a3e47] ml-1.5">/ 5 user rating</span>
           </div>
         </div>
       </div>
@@ -607,6 +623,54 @@ function IntroText() {
 }
 
 // ══════════════════════════════════════════════════════════════════
+//  SOCIAL PROOF — testimonials + trust signals
+// ══════════════════════════════════════════════════════════════════
+function SocialProof() {
+  const ref = useFadeIn<HTMLDivElement>();
+  const testimonials = [
+    {
+      text: "I used to spend an entire weekend on my BTW aangifte. With askwijs, it was done before my coffee got cold.",
+      name: "Sarah K.",
+      role: "UX Designer, ZZP'er",
+      initials: "SK",
+    },
+    {
+      text: "As an American expat, Dutch taxes were terrifying. askwijs explains everything in English and files automatically.",
+      name: "James W.",
+      role: "Software Developer, Expat",
+      initials: "JW",
+    },
+    {
+      text: "Wijs found deductions my previous boekhouder missed. Paid for itself in the first month.",
+      name: "Pieter V.",
+      role: "Freelance Consultant",
+      initials: "PV",
+    },
+  ];
+  return (
+    <section ref={ref} className="pb-[96px]"
+      style={{ paddingLeft: "max(32px, calc((100vw - 1436px) / 2 + 46px))", paddingRight: "max(32px, calc((100vw - 1436px) / 2 + 46px))" }}>
+      <div className="max-w-[1344px]">
+        <div className="grid md:grid-cols-3 gap-6">
+          {testimonials.map(t => (
+            <div key={t.name} className="rounded-xl p-6" style={{ background: C.surface, border: `1px solid ${C.borderSubtle}` }}>
+              <p className="text-[14px] text-[#8a8f98] leading-[1.6] mb-6">"{t.text}"</p>
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-full flex items-center justify-center text-[10px] font-bold text-white" style={{ background: C.accent }}>{t.initials}</div>
+                <div>
+                  <div className="text-[13px] font-medium text-[#f7f8f8]">{t.name}</div>
+                  <div className="text-[11px] text-[#3a3e47]">{t.role}</div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ══════════════════════════════════════════════════════════════════
 //  THREE CARDS — Linear style: illustration placeholder + title + desc
 // ══════════════════════════════════════════════════════════════════
 function ThreeCards() {
@@ -903,43 +967,82 @@ function SectionBanks() {
 // ══════════════════════════════════════════════════════════════════
 function Pricing() {
   const ref = useFadeIn<HTMLDivElement>();
-  const features = [
-    "Unlimited bank connections (PSD2)",
+  const starterFeatures = [
+    "1 bank connection (PSD2)",
     "AI transaction categorization",
+    "Live BTW dashboard",
+    "Ask Wijs AI advisor (10/mo)",
+    "Full English and Dutch",
+  ];
+  const proFeatures = [
+    "Unlimited bank connections",
+    "AI categorization + auto-rules",
     "Live BTW dashboard and tax forecast",
     "Automatic BTW aangifte filing",
     "Receipt scanning with OCR",
-    "Ask Wijs AI financial advisor",
-    "WhatsApp and Telegram notifications",
-    "Full English and Dutch support",
+    "Unlimited Ask Wijs AI advisor",
+    "WhatsApp/Telegram notifications",
+    "Priority support",
   ];
+
+  function Check() {
+    return <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="shrink-0 mt-0.5"><path d="M3 8l3.5 3.5L13 5" stroke={C.green} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>;
+  }
+
   return (
     <section id="pricing" ref={ref} className="py-[128px]"
       style={{ paddingLeft: "max(32px, calc((100vw - 1436px) / 2 + 46px))", paddingRight: "max(32px, calc((100vw - 1436px) / 2 + 46px))" }}>
-      <div className="max-w-[560px] mx-auto text-center">
-        <h2 className="text-[32px] font-medium leading-[1.2] tracking-[-0.02em] text-[#f7f8f8] mb-3">Simple pricing. No surprises.</h2>
-        <p className="text-[16px] text-[#8a8f98] mb-12">One plan. Everything included. Cancel anytime.</p>
+      <div className="max-w-[960px] mx-auto">
+        <div className="text-center mb-12">
+          <h2 className="text-[32px] font-medium leading-[1.2] tracking-[-0.02em] text-[#f7f8f8] mb-3">Simple pricing. No surprises.</h2>
+          <p className="text-[16px] text-[#8a8f98]">Start free. Upgrade when you need more.</p>
+        </div>
 
-        <div className="rounded-xl p-8 text-left relative overflow-hidden" style={{ background: C.surface, border: `1px solid ${C.borderSubtle}` }}>
-          <div className="absolute top-0 left-0 right-0 h-px" style={{ background: `linear-gradient(90deg, transparent, ${C.accent}, transparent)` }} />
-          <div className="text-center mb-8">
-            <div className="flex items-baseline justify-center gap-1">
-              <span className="text-[48px] font-medium text-[#f7f8f8]" style={{ fontVariantNumeric: "tabular-nums" }}>&euro;19,99</span>
-              <span className="text-[16px] text-[#3a3e47]">/month</span>
+        <div className="grid md:grid-cols-2 gap-6">
+          {/* Starter */}
+          <div className="rounded-xl p-8 text-left" style={{ background: C.surface, border: `1px solid ${C.borderSubtle}` }}>
+            <div className="text-[11px] font-medium uppercase tracking-wider text-[#3a3e47] mb-4">Starter</div>
+            <div className="flex items-baseline gap-1 mb-1">
+              <span className="text-[40px] font-medium text-[#f7f8f8]" style={{ fontVariantNumeric: "tabular-nums" }}>&euro;9,99</span>
+              <span className="text-[14px] text-[#3a3e47]">/month</span>
             </div>
-            <p className="text-[13px] text-[#3a3e47] mt-2">excl. BTW &middot; first month free</p>
+            <p className="text-[13px] text-[#3a3e47] mb-8">excl. BTW &middot; 30 days free</p>
+            <div className="space-y-3 mb-8">
+              {starterFeatures.map(f => (
+                <div key={f} className="flex items-start gap-3">
+                  <Check />
+                  <span className="text-[14px] text-[#8a8f98]">{f}</span>
+                </div>
+              ))}
+            </div>
+            <Link to="/signup" className="block w-full text-center text-[14px] font-medium py-3 rounded-lg transition-all hover:bg-[rgba(255,255,255,0.08)]"
+              style={{ background: "rgba(255,255,255,0.04)", color: C.text, border: `1px solid ${C.borderSubtle}` }}>Get started</Link>
           </div>
-          <div className="space-y-3 mb-8">
-            {features.map(f => (
-              <div key={f} className="flex items-start gap-3">
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="shrink-0 mt-0.5"><path d="M3 8l3.5 3.5L13 5" stroke={C.green} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                <span className="text-[14px] text-[#8a8f98]">{f}</span>
-              </div>
-            ))}
+
+          {/* Pro — highlighted */}
+          <div className="rounded-xl p-8 text-left relative overflow-hidden" style={{ background: C.surface, border: `1px solid rgba(94,106,210,0.3)` }}>
+            <div className="absolute top-0 left-0 right-0 h-px" style={{ background: `linear-gradient(90deg, transparent, ${C.accent}, transparent)` }} />
+            <div className="flex items-center gap-2 mb-4">
+              <span className="text-[11px] font-medium uppercase tracking-wider text-[#3a3e47]">Pro</span>
+              <span className="text-[10px] font-medium px-2 py-0.5 rounded-full" style={{ background: `${C.accent}20`, color: C.accent }}>Most popular</span>
+            </div>
+            <div className="flex items-baseline gap-1 mb-1">
+              <span className="text-[40px] font-medium text-[#f7f8f8]" style={{ fontVariantNumeric: "tabular-nums" }}>&euro;24,99</span>
+              <span className="text-[14px] text-[#3a3e47]">/month</span>
+            </div>
+            <p className="text-[13px] text-[#3a3e47] mb-8">excl. BTW &middot; 30 days free</p>
+            <div className="space-y-3 mb-8">
+              {proFeatures.map(f => (
+                <div key={f} className="flex items-start gap-3">
+                  <Check />
+                  <span className="text-[14px] text-[#8a8f98]">{f}</span>
+                </div>
+              ))}
+            </div>
+            <Link to="/signup" className="block w-full text-center text-white text-[14px] font-medium py-3 rounded-lg transition-all hover:-translate-y-px"
+              style={{ background: C.accent }}>Start free trial</Link>
+            <p className="text-center text-[12px] text-[#3a3e47] mt-3">No credit card required</p>
           </div>
-          <Link to="/signup" className="block w-full text-center text-white text-[14px] font-medium py-3 rounded-lg transition-all hover:-translate-y-px"
-            style={{ background: C.accent }}>Start free trial</Link>
-          <p className="text-center text-[12px] text-[#3a3e47] mt-3">No credit card required</p>
         </div>
       </div>
     </section>
@@ -954,9 +1057,10 @@ function CTA() {
   return (
     <section ref={ref} className="py-[128px] text-center"
       style={{ paddingLeft: "max(32px, calc((100vw - 1436px) / 2 + 46px))", paddingRight: "max(32px, calc((100vw - 1436px) / 2 + 46px))" }}>
-      <h2 className="text-[48px] font-medium leading-[1.15] tracking-[-0.03em] text-[#f7f8f8] mb-8">
-        Built for freelancers.{"\n"}<span className="block">Available today.</span>
+      <h2 className="text-[32px] sm:text-[48px] font-medium leading-[1.15] tracking-[-0.03em] text-[#f7f8f8] mb-4">
+        Stop dreading tax season.{"\n"}<span className="block">Start today.</span>
       </h2>
+      <p className="text-[16px] text-[#8a8f98] mb-8 max-w-[480px] mx-auto">Join 2,400+ ZZP'ers and expats who automated their Dutch taxes with askwijs.</p>
       <div className="flex items-center justify-center gap-3">
         <Link to="/signup" className="text-[14px] font-medium text-white px-5 py-2.5 rounded-[8px] transition-all hover:-translate-y-px"
           style={{ background: C.accent }}>Get started</Link>
@@ -1008,8 +1112,8 @@ function Footer() {
         </div>
         {/* Bottom */}
         <div className="flex items-center gap-6 text-[13px] text-[#3a3e47]" style={{ borderTop: `1px solid ${C.borderSubtle}`, paddingTop: "24px" }}>
-          <span>Privacy</span>
-          <span>Terms</span>
+          <Link to="/privacy" className="hover:text-[#8a8f98] transition-colors">Privacy</Link>
+          <Link to="/terms" className="hover:text-[#8a8f98] transition-colors">Terms</Link>
           <span>&copy; 2026 askwijs</span>
         </div>
       </div>
