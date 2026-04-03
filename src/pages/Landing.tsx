@@ -44,11 +44,15 @@ function useFadeIn<T extends HTMLElement>(): React.RefObject<T | null> {
     el.style.transform = "translateY(24px)";
     el.style.transition = "opacity 0.7s ease, transform 0.7s ease";
     const io = new IntersectionObserver(
-      ([e]) => { if (e.isIntersecting) { el.style.opacity = "1"; el.style.transform = "translateY(0)"; io.disconnect(); } },
+      ([e]) => { if (e.isIntersecting) { el.style.opacity = "1"; el.style.transform = "translateY(0)"; io.disconnect(); clearTimeout(fallback); } },
       { threshold: 0.12 }
     );
     io.observe(el);
-    return () => io.disconnect();
+    // Safety fallback — reveal after 3s if IO never fires (fast scroll, anchor jump, Page Down)
+    const fallback = setTimeout(() => {
+      if (el.style.opacity === "0") { el.style.opacity = "1"; el.style.transform = "translateY(0)"; }
+    }, 3000);
+    return () => { io.disconnect(); clearTimeout(fallback); };
   }, []);
   return ref;
 }
@@ -95,8 +99,11 @@ export function Landing() {
 
   return (
     <div className="min-h-screen text-[#F9FAFB] overflow-x-hidden" style={{ background: C.bg }}>
+      <a href="#main" className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[60] focus:text-[14px] focus:text-white focus:bg-[#2563EB] focus:px-4 focus:py-2 focus:rounded-lg">
+        Skip to content
+      </a>
       <Nav />
-      <main>
+      <main id="main">
         <Hero />
         <DashboardDemo />
         <IntroText />
@@ -242,24 +249,24 @@ function Hero() {
         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-12">
           <Link to="/signup" className="text-[14px] font-medium text-white px-6 py-3 rounded-[8px] transition-all hover:-translate-y-px hover:brightness-110"
             style={{ background: C.accent }}>Start free trial</Link>
-          <span className="text-[13px] text-[#4B5563]">No credit card required &middot; 30 days free</span>
+          <span className="text-[13px] text-[#6B7280]">No credit card required &middot; 30 days free</span>
         </div>
 
         {/* Social proof bar */}
         <div className="flex flex-wrap items-center gap-6 sm:gap-10 text-[13px]">
           <div>
             <span className="text-[#F9FAFB] font-medium">PSD2 Open Banking</span>
-            <span className="text-[#4B5563] ml-1.5">read-only access</span>
+            <span className="text-[#6B7280] ml-1.5">read-only access</span>
           </div>
           <div className="h-3 w-px bg-[rgba(255,255,255,0.08)]" />
           <div>
             <span className="text-[#F9FAFB] font-medium">EU-hosted</span>
-            <span className="text-[#4B5563] ml-1.5">GDPR compliant</span>
+            <span className="text-[#6B7280] ml-1.5">GDPR compliant</span>
           </div>
           <div className="h-3 w-px bg-[rgba(255,255,255,0.08)]" />
           <div>
             <span className="text-[#F9FAFB] font-medium">30 days free</span>
-            <span className="text-[#4B5563] ml-1.5">no credit card required</span>
+            <span className="text-[#6B7280] ml-1.5">no credit card required</span>
           </div>
         </div>
       </div>
@@ -371,7 +378,7 @@ function DashboardDemo() {
               </div>
 
               <div className="px-2 mt-4">
-                <div className="px-2 mb-1 text-[11px] font-medium text-[#4B5563] uppercase tracking-wider">Tools</div>
+                <div className="px-2 mb-1 text-[11px] font-medium text-[#6B7280] uppercase tracking-wider">Tools</div>
                 <div className="space-y-0.5">
                   {toolItems.map(item => (
                     <button key={item.label} onClick={() => setActiveTab(item.tab)}
@@ -390,7 +397,7 @@ function DashboardDemo() {
               <div className="flex items-center justify-between px-5 h-[44px]" style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
                 <span className="text-[13px] font-medium text-[#F9FAFB]">{activeTab}</span>
                 <div className="flex items-center gap-3">
-                  <span className="text-[11px] text-[#4B5563] px-2 py-1 rounded" style={{ border: "1px solid rgba(255,255,255,0.06)" }}>Q1 2026</span>
+                  <span className="text-[11px] text-[#6B7280] px-2 py-1 rounded" style={{ border: "1px solid rgba(255,255,255,0.06)" }}>Q1 2026</span>
                   <div className="w-6 h-6 rounded-full flex items-center justify-center text-[9px] font-bold text-white" style={{ background: C.accent }}>N</div>
                 </div>
               </div>
@@ -413,7 +420,7 @@ function DashboardDemo() {
                   <input type="text" value={chatInput} onChange={e => setChatInput(e.target.value)}
                     onKeyDown={e => e.key === "Enter" && handleSendChat()}
                     placeholder="Ask Wijs anything about your finances..."
-                    className="flex-1 text-[13px] text-[#F9FAFB] placeholder:text-[#4B5563] outline-none bg-transparent" />
+                    className="flex-1 text-[13px] text-[#F9FAFB] placeholder:text-[#6B7280] outline-none bg-transparent" />
                   <button onClick={handleSendChat}
                     className="text-[12px] font-medium px-3 py-1.5 rounded-md transition-colors"
                     style={{ background: chatInput.trim() ? C.accent : "rgba(255,255,255,0.04)", color: "#fff", border: "none", cursor: "pointer" }}>
@@ -470,7 +477,7 @@ function TabOverview() {
           { label: "Tax forecast", target: 6340, badge: "Income tax", bc: C.faint },
         ].map(s => (
           <div key={s.label} className="rounded-lg p-4" style={{ background: C.surface, border: `1px solid ${C.borderSubtle}` }}>
-            <div className="text-[10px] font-medium uppercase tracking-wider text-[#4B5563] mb-2">{s.label}</div>
+            <div className="text-[10px] font-medium uppercase tracking-wider text-[#6B7280] mb-2">{s.label}</div>
             <div className="text-[18px] font-medium text-[#F9FAFB]" style={{ fontVariantNumeric: "tabular-nums" }}>
               <CountUp target={s.target} prefix={"\u20AC"} />
             </div>
@@ -479,11 +486,11 @@ function TabOverview() {
         ))}
       </div>
       <div className="rounded-lg" style={{ border: `1px solid ${C.borderSubtle}` }}>
-        <div className="px-4 py-2 text-[10px] font-medium uppercase tracking-wider text-[#4B5563]" style={{ borderBottom: `1px solid ${C.borderSubtle}` }}>Recent transactions</div>
+        <div className="px-4 py-2 text-[10px] font-medium uppercase tracking-wider text-[#6B7280]" style={{ borderBottom: `1px solid ${C.borderSubtle}` }}>Recent transactions</div>
         {TRANSACTIONS.slice(0, 5).map((tx, i) => (
           <div key={i} className="flex items-center justify-between px-4 py-2.5" style={{ borderBottom: i < 4 ? `1px solid ${C.borderSubtle}` : "none" }}>
             <div className="flex items-center gap-3">
-              <span className="text-[11px] text-[#4B5563] w-[44px]" style={{ fontVariantNumeric: "tabular-nums" }}>{tx.date}</span>
+              <span className="text-[11px] text-[#6B7280] w-[44px]" style={{ fontVariantNumeric: "tabular-nums" }}>{tx.date}</span>
               <span className="text-[13px] text-[#9CA3AF]">{tx.name}</span>
             </div>
             <div className="flex items-center gap-3">
@@ -504,15 +511,15 @@ function TabTransactions() {
     <div className="p-5">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-[14px] font-medium text-[#F9FAFB]">Transactions</h2>
-        <span className="text-[11px] text-[#4B5563]">Q1 2026</span>
+        <span className="text-[11px] text-[#6B7280]">Q1 2026</span>
       </div>
       <div className="rounded-lg overflow-hidden" style={{ border: `1px solid ${C.borderSubtle}` }}>
-        <div className="grid grid-cols-[50px_1fr_90px_100px] gap-2 px-4 py-2 text-[10px] font-medium uppercase tracking-wider text-[#4B5563]" style={{ background: C.surface }}>
+        <div className="grid grid-cols-[50px_1fr_90px_100px] gap-2 px-4 py-2 text-[10px] font-medium uppercase tracking-wider text-[#6B7280]" style={{ background: C.surface }}>
           <span>Date</span><span>Description</span><span>Category</span><span className="text-right">Amount</span>
         </div>
         {TRANSACTIONS.map((tx, i) => (
           <div key={i} className="grid grid-cols-[50px_1fr_90px_100px] gap-2 px-4 py-2.5 items-center" style={{ borderTop: `1px solid ${C.borderSubtle}` }}>
-            <span className="text-[11px] text-[#4B5563]" style={{ fontVariantNumeric: "tabular-nums" }}>{tx.date}</span>
+            <span className="text-[11px] text-[#6B7280]" style={{ fontVariantNumeric: "tabular-nums" }}>{tx.date}</span>
             <span className="text-[13px] text-[#9CA3AF]">{tx.name}</span>
             <span className="text-[10px] font-medium px-2 py-0.5 rounded-full w-fit" style={{ background: `${tx.color}15`, color: tx.color }}>{tx.cat}</span>
             <span className="text-[13px] font-medium text-right" style={{ fontVariantNumeric: "tabular-nums", color: tx.amt > 0 ? C.green : C.text }}>
@@ -573,7 +580,7 @@ function TabInvoices() {
             <div className="flex items-center gap-4">
               <span className="text-[10px] font-medium px-2 py-0.5 rounded-full" style={{ background: `${inv.sc}15`, color: inv.sc }}>{inv.status}</span>
               <span className="text-[13px] font-medium text-[#F9FAFB] w-[80px] text-right" style={{ fontVariantNumeric: "tabular-nums" }}>&euro;{inv.amount}</span>
-              <span className="text-[11px] text-[#4B5563] w-[44px]">{inv.date}</span>
+              <span className="text-[11px] text-[#6B7280] w-[44px]">{inv.date}</span>
             </div>
           </div>
         ))}
@@ -592,12 +599,12 @@ function TabReceipts() {
         onDragOver={e => { e.preventDefault(); setDragOver(true); }} onDragLeave={() => setDragOver(false)} onDrop={e => { e.preventDefault(); setDragOver(false); }}>
         <svg width="32" height="32" viewBox="0 0 24 24" fill="none" className="mb-3" style={{ color: C.dim }}><path d="M12 16V4m0 0l-4 4m4-4l4 4M4 17v2a1 1 0 001 1h14a1 1 0 001-1v-2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
         <p className="text-[13px] text-[#9CA3AF]">Drop receipts here or click to upload</p>
-        <p className="text-[11px] text-[#4B5563] mt-1">Wijs auto-matches to transactions</p>
+        <p className="text-[11px] text-[#6B7280] mt-1">Wijs auto-matches to transactions</p>
       </div>
       <div className="mt-3 space-y-2">
         {[{ name: "receipt_wework_mar.pdf", match: "WeWork Amsterdam" }, { name: "adobe_invoice_mar.pdf", match: "Adobe Creative Cloud" }].map(r => (
           <div key={r.name} className="flex items-center justify-between px-4 py-3 rounded-lg" style={{ background: C.surface, border: `1px solid ${C.borderSubtle}` }}>
-            <div><div className="text-[12px] text-[#9CA3AF]">{r.name}</div><div className="text-[10px] text-[#4B5563]">Matched to {r.match}</div></div>
+            <div><div className="text-[12px] text-[#9CA3AF]">{r.name}</div><div className="text-[10px] text-[#6B7280]">Matched to {r.match}</div></div>
             <span className="text-[10px] font-medium px-2 py-0.5 rounded-full" style={{ background: `${C.green}15`, color: C.green }}>Matched</span>
           </div>
         ))}
@@ -624,7 +631,7 @@ function TabBanks() {
               <div className="w-3 h-3 rounded-full" style={{ background: b.color }} />
               <div>
                 <div className="text-[13px] text-[#F9FAFB] font-medium">{b.name}</div>
-                <div className="text-[11px] text-[#4B5563]" style={{ fontVariantNumeric: "tabular-nums" }}>{b.iban}</div>
+                <div className="text-[11px] text-[#6B7280]" style={{ fontVariantNumeric: "tabular-nums" }}>{b.iban}</div>
               </div>
             </div>
             <div className="text-right">
@@ -690,12 +697,13 @@ function SocialProof() {
     },
   ];
   return (
-    <section ref={ref} className="pb-[96px]"
-      style={{ paddingLeft: "max(32px, calc((100vw - 1436px) / 2 + 46px))", paddingRight: "max(32px, calc((100vw - 1436px) / 2 + 46px))" }}>
+    <section ref={ref} className="py-[96px]"
+      style={{ background: C.surface, borderTop: `1px solid ${C.borderSubtle}`, borderBottom: `1px solid ${C.borderSubtle}`,
+        paddingLeft: "max(32px, calc((100vw - 1436px) / 2 + 46px))", paddingRight: "max(32px, calc((100vw - 1436px) / 2 + 46px))" }}>
       <div className="max-w-[1344px]">
         <div className="grid md:grid-cols-3 gap-6">
           {signals.map(s => (
-            <div key={s.title} className="rounded-xl p-6" style={{ background: C.surface, border: `1px solid ${C.borderSubtle}` }}>
+            <div key={s.title} className="rounded-xl p-6" style={{ background: C.bg, border: `1px solid ${C.borderSubtle}` }}>
               <h3 className="text-[15px] font-medium text-[#F9FAFB] mb-2">{s.title}</h3>
               <p className="text-[14px] text-[#9CA3AF] leading-[1.6]">{s.desc}</p>
             </div>
@@ -712,9 +720,12 @@ function SocialProof() {
 function ThreeCards() {
   const ref = useFadeIn<HTMLDivElement>();
   const cards = [
-    { title: "Built for expats", desc: "Full English and Dutch. Every tax term explained. Switch languages anytime." },
-    { title: "Powered by AI", desc: "Wijs categorizes transactions, finds deductions, and answers your tax questions." },
-    { title: "Designed for speed", desc: "Connect your bank in seconds. BTW pre-filled in minutes. File in one click." },
+    { title: "Built for expats", desc: "Full English and Dutch. Every tax term explained. Switch languages anytime.",
+      icon: <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke={C.accent} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10A15.3 15.3 0 0 1 12 2z"/></svg> },
+    { title: "Powered by AI", desc: "Wijs categorizes transactions, finds deductions, and answers your tax questions.",
+      icon: <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke={C.accent} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2l2.09 6.26L20 10l-5.91 1.74L12 18l-2.09-6.26L4 10l5.91-1.74L12 2z"/><path d="M19 15l1.04 3.13L23 19l-2.96.87L19 23l-1.04-3.13L15 19l2.96-.87L19 15z"/></svg> },
+    { title: "Designed for speed", desc: "Connect your bank in seconds. BTW pre-filled in minutes. File in one click.",
+      icon: <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke={C.accent} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg> },
   ];
   return (
     <section id="features" ref={ref} className="pb-[96px]"
@@ -722,9 +733,8 @@ function ThreeCards() {
       <div className="grid md:grid-cols-3 gap-6 max-w-[1344px]">
         {cards.map(c => (
           <div key={c.title} className="rounded-xl p-6" style={{ background: C.surface, border: `1px solid ${C.borderSubtle}` }}>
-            {/* Illustration placeholder */}
-            <div className="h-[200px] mb-6 rounded-lg flex items-center justify-center" style={{ background: "rgba(255,255,255,0.02)", border: `1px solid ${C.borderSubtle}` }}>
-              <div className="w-16 h-16 rounded-xl" style={{ border: `1px solid rgba(255,255,255,0.08)` }} />
+            <div className="w-12 h-12 rounded-lg flex items-center justify-center mb-5" style={{ background: C.accentPale }}>
+              {c.icon}
             </div>
             <h3 className="text-[16px] font-medium text-[#F9FAFB] mb-2">{c.title}</h3>
             <p className="text-[14px] text-[#9CA3AF] leading-[1.5]">{c.desc}</p>
@@ -803,7 +813,7 @@ function SectionIntake() {
     <NumberedSection num="1.0" label="Categorize" heading="Make transaction categorization self-driving"
       desc="Turn raw bank transactions into organized, tax-ready categories. Wijs uses AI to tag every transaction: business or personal, deductible or not, correct BTW rate applied.">
       <div ref={ref} className="rounded-xl overflow-hidden" style={{ border: `1px solid ${C.borderSubtle}` }}>
-        <div className="px-5 py-3 text-[11px] font-medium uppercase tracking-wider text-[#4B5563]" style={{ background: C.surface, borderBottom: `1px solid ${C.borderSubtle}` }}>
+        <div className="px-5 py-3 text-[11px] font-medium uppercase tracking-wider text-[#6B7280]" style={{ background: C.surface, borderBottom: `1px solid ${C.borderSubtle}` }}>
           Auto-categorization
         </div>
         {txs.map((tx, i) => (
@@ -848,7 +858,7 @@ function SectionBTW() {
     <NumberedSection num="2.0" label="File" heading="Your quarterly BTW. Pre-filled, ready to submit."
       desc="Wijs calculates every rubriek from your real transaction data. Review the numbers, click submit. No more staring at empty Belastingdienst forms.">
       <div ref={ref} className="rounded-xl overflow-hidden" style={{ border: `1px solid ${C.borderSubtle}` }}>
-        <div className="px-5 py-3 text-[11px] font-medium uppercase tracking-wider text-[#4B5563]" style={{ background: C.surface, borderBottom: `1px solid ${C.borderSubtle}` }}>
+        <div className="px-5 py-3 text-[11px] font-medium uppercase tracking-wider text-[#6B7280]" style={{ background: C.surface, borderBottom: `1px solid ${C.borderSubtle}` }}>
           BTW aangifte Q1 2026
         </div>
         {BTW_BOXES.map((box, i) => (
@@ -915,7 +925,7 @@ function SectionWijs() {
         {count > 0 && count < WIJS_CONVERSATION.length && (
           <div className="flex gap-2.5">
             <div className="w-6 h-6 rounded-full flex items-center justify-center text-[9px] font-bold text-white shrink-0 mt-0.5" style={{ background: C.accent }}>W</div>
-            <div className="text-[13px] text-[#4B5563] px-4 py-3 rounded-xl" style={{ background: "rgba(255,255,255,0.04)" }}>
+            <div className="text-[13px] text-[#6B7280] px-4 py-3 rounded-xl" style={{ background: "rgba(255,255,255,0.04)" }}>
               <span className="inline-flex gap-1">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#4B5563] animate-bounce" style={{ animationDelay: "0ms" }} />
                 <span className="w-1.5 h-1.5 rounded-full bg-[#4B5563] animate-bounce" style={{ animationDelay: "150ms" }} />
@@ -943,13 +953,13 @@ function SectionReceipts() {
             <path d="M12 16V4m0 0l-4 4m4-4l4 4M4 17v2a1 1 0 001 1h14a1 1 0 001-1v-2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
           <p className="text-[13px] text-[#9CA3AF]">Drop receipt here</p>
-          <p className="text-[11px] text-[#4B5563] mt-1">PDF, JPG, or PNG</p>
+          <p className="text-[11px] text-[#6B7280] mt-1">PDF, JPG, or PNG</p>
         </div>
         {dropped && (
           <div className="flex items-center justify-between px-5 py-3 rounded-lg" style={{ background: C.surface, border: `1px solid ${C.borderSubtle}` }}>
             <div>
               <div className="text-[12px] text-[#9CA3AF]">receipt_wework_mar.pdf</div>
-              <div className="text-[10px] text-[#4B5563]">Matched to WeWork Amsterdam - &euro;290,00</div>
+              <div className="text-[10px] text-[#6B7280]">Matched to WeWork Amsterdam - &euro;290,00</div>
             </div>
             <span className="text-[10px] font-medium px-2 py-0.5 rounded-full" style={{ background: `${C.green}15`, color: C.green }}>Matched</span>
           </div>
@@ -1026,7 +1036,7 @@ function Pricing() {
 
   return (
     <section id="pricing" ref={ref} className="py-[128px]"
-      style={{ paddingLeft: "max(32px, calc((100vw - 1436px) / 2 + 46px))", paddingRight: "max(32px, calc((100vw - 1436px) / 2 + 46px))" }}>
+      style={{ background: C.surface, borderTop: `1px solid ${C.borderSubtle}`, borderBottom: `1px solid ${C.borderSubtle}`, paddingLeft: "max(32px, calc((100vw - 1436px) / 2 + 46px))", paddingRight: "max(32px, calc((100vw - 1436px) / 2 + 46px))" }}>
       <div className="max-w-[960px] mx-auto">
         <div className="text-center mb-12">
           <h2 className="text-[32px] leading-[1.2] tracking-[-0.02em] text-[#F9FAFB] mb-3" style={{ fontFamily: "'Lora', serif", fontWeight: 600 }}>Simple pricing. No surprises.</h2>
@@ -1035,13 +1045,13 @@ function Pricing() {
 
         <div className="grid md:grid-cols-2 gap-6">
           {/* Starter */}
-          <div className="rounded-xl p-8 text-left" style={{ background: C.surface, border: `1px solid ${C.borderSubtle}` }}>
-            <div className="text-[11px] font-medium uppercase tracking-wider text-[#4B5563] mb-4">Starter</div>
+          <div className="rounded-xl p-8 text-left" style={{ background: C.bg, border: `1px solid ${C.borderSubtle}` }}>
+            <div className="text-[11px] font-medium uppercase tracking-wider text-[#6B7280] mb-4">Starter</div>
             <div className="flex items-baseline gap-1 mb-1">
               <span className="text-[40px] font-medium text-[#F9FAFB]" style={{ fontVariantNumeric: "tabular-nums" }}>&euro;9,99</span>
-              <span className="text-[14px] text-[#4B5563]">/month</span>
+              <span className="text-[14px] text-[#6B7280]">/month</span>
             </div>
-            <p className="text-[13px] text-[#4B5563] mb-8">excl. 21% BTW &middot; 30 days free</p>
+            <p className="text-[13px] text-[#6B7280] mb-8">excl. 21% BTW &middot; 30 days free</p>
             <div className="space-y-3 mb-8">
               {starterFeatures.map(f => (
                 <div key={f} className="flex items-start gap-3">
@@ -1052,21 +1062,21 @@ function Pricing() {
             </div>
             <Link to="/signup" className="block w-full text-center text-[14px] font-medium py-3 rounded-lg transition-all hover:bg-[rgba(255,255,255,0.12)]"
               style={{ background: "rgba(255,255,255,0.06)", color: C.text, border: `1px solid ${C.border}` }}>Start free trial</Link>
-            <p className="text-center text-[12px] text-[#4B5563] mt-3">No credit card required</p>
+            <p className="text-center text-[12px] text-[#6B7280] mt-3">No credit card required</p>
           </div>
 
           {/* Pro — highlighted */}
-          <div className="rounded-xl p-8 text-left relative overflow-hidden" style={{ background: C.surface, border: `1px solid rgba(37,99,235,0.3)` }}>
+          <div className="rounded-xl p-8 text-left relative overflow-hidden" style={{ background: C.bg, border: `1px solid rgba(37,99,235,0.3)` }}>
             <div className="absolute top-0 left-0 right-0 h-px" style={{ background: `linear-gradient(90deg, transparent, ${C.accent}, transparent)` }} />
             <div className="flex items-center gap-2 mb-4">
-              <span className="text-[11px] font-medium uppercase tracking-wider text-[#4B5563]">Pro</span>
+              <span className="text-[11px] font-medium uppercase tracking-wider text-[#6B7280]">Pro</span>
               <span className="text-[10px] font-medium px-2 py-0.5 rounded-full" style={{ background: `${C.accent}20`, color: C.accent }}>Most popular</span>
             </div>
             <div className="flex items-baseline gap-1 mb-1">
               <span className="text-[40px] font-medium text-[#F9FAFB]" style={{ fontVariantNumeric: "tabular-nums" }}>&euro;24,99</span>
-              <span className="text-[14px] text-[#4B5563]">/month</span>
+              <span className="text-[14px] text-[#6B7280]">/month</span>
             </div>
-            <p className="text-[13px] text-[#4B5563] mb-8">excl. 21% BTW &middot; 30 days free</p>
+            <p className="text-[13px] text-[#6B7280] mb-8">excl. 21% BTW &middot; 30 days free</p>
             <div className="space-y-3 mb-8">
               {proFeatures.map(f => (
                 <div key={f} className="flex items-start gap-3">
@@ -1077,7 +1087,7 @@ function Pricing() {
             </div>
             <Link to="/signup" className="block w-full text-center text-white text-[14px] font-medium py-3 rounded-lg transition-all hover:-translate-y-px"
               style={{ background: C.accent }}>Start free trial</Link>
-            <p className="text-center text-[12px] text-[#4B5563] mt-3">No credit card required</p>
+            <p className="text-center text-[12px] text-[#6B7280] mt-3">No credit card required</p>
           </div>
         </div>
       </div>
@@ -1114,7 +1124,7 @@ function Disclaimer() {
   return (
     <div className="text-center pb-12"
       style={{ paddingLeft: "max(32px, calc((100vw - 1436px) / 2 + 46px))", paddingRight: "max(32px, calc((100vw - 1436px) / 2 + 46px))" }}>
-      <p className="text-[12px] text-[#4B5563] max-w-[600px] mx-auto leading-[1.6]">
+      <p className="text-[12px] text-[#6B7280] max-w-[600px] mx-auto leading-[1.6]">
         askwijs automates financial administration. It is not a licensed tax advisor. We recommend consulting a professional for complex tax situations.
       </p>
     </div>
@@ -1168,7 +1178,7 @@ function Footer() {
           </div>
         </div>
         {/* Bottom */}
-        <div className="flex items-center gap-6 text-[13px] text-[#4B5563]" style={{ borderTop: `1px solid ${C.borderSubtle}`, paddingTop: "24px" }}>
+        <div className="flex items-center gap-6 text-[13px] text-[#6B7280]" style={{ borderTop: `1px solid ${C.borderSubtle}`, paddingTop: "24px" }}>
           <Link to="/privacy" className="hover:text-[#9CA3AF] transition-colors">Privacy</Link>
           <Link to="/terms" className="hover:text-[#9CA3AF] transition-colors">Terms</Link>
           <span>&copy; 2026 askwijs</span>
