@@ -35,6 +35,11 @@ function useFadeIn<T extends HTMLElement>(): React.RefObject<T | null> {
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
+    // Respect prefers-reduced-motion — show content immediately
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      el.style.opacity = "1";
+      return;
+    }
     el.style.opacity = "0";
     el.style.transform = "translateY(24px)";
     el.style.transition = "opacity 0.7s ease, transform 0.7s ease";
@@ -135,6 +140,7 @@ function NavLink({ href, children }: { href: string; children: React.ReactNode }
 function Nav() {
   const [scrolled, setScrolled] = useState(false);
   const [visible, setVisible] = useState(true);
+  const [mobileOpen, setMobileOpen] = useState(false);
   const lastScroll = useRef(0);
 
   useEffect(() => {
@@ -148,34 +154,68 @@ function Nav() {
     return () => window.removeEventListener("scroll", handler);
   }, []);
 
+  // Close mobile menu on route change / resize
+  useEffect(() => {
+    const close = () => setMobileOpen(false);
+    window.addEventListener("resize", close);
+    return () => window.removeEventListener("resize", close);
+  }, []);
+
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between h-[72px] transition-all duration-300"
-      style={{
-        paddingLeft: "max(32px, calc((100vw - 1436px) / 2 + 46px))",
-        paddingRight: "max(32px, calc((100vw - 1436px) / 2 + 46px))",
-        background: scrolled ? "rgba(11,15,26,0.85)" : "linear-gradient(180deg, rgba(11,15,26,0.8) 0%, transparent 100%)",
-        backdropFilter: scrolled ? "blur(20px) saturate(1.4)" : "none",
-        borderBottom: scrolled ? `1px solid ${C.borderSubtle}` : "1px solid transparent",
-        transform: visible ? "translateY(0)" : "translateY(-100%)",
-        opacity: visible ? 1 : 0,
-      }}>
-      <Link to="/" className="flex items-center gap-2 no-underline">
-        <img src="/logo-white.svg" alt="askwijs" className="h-6 w-auto" />
-        <span className="text-[16px] font-semibold text-[#F9FAFB] tracking-tight" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
-          ask<span style={{ color: C.accent }}>wijs</span>
-        </span>
-      </Link>
-      <div className="hidden md:flex items-center gap-8">
-        <NavLink href="#features">Product</NavLink>
-        <NavLink href="#pricing">Pricing</NavLink>
-        <NavLink href="#security">Security</NavLink>
-      </div>
-      <div className="flex items-center gap-4">
-        <Link to="/login" className="hidden md:inline text-[14px] text-[#9CA3AF] hover:text-[#F9FAFB] transition-colors">Log in</Link>
-        <Link to="/signup" className="text-[14px] font-medium text-white px-4 py-2 rounded-[8px] transition-all hover:brightness-110"
-          style={{ background: C.accent }}>Sign up</Link>
-      </div>
-    </nav>
+    <>
+      <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between h-[72px] transition-all duration-300"
+        style={{
+          paddingLeft: "max(32px, calc((100vw - 1436px) / 2 + 46px))",
+          paddingRight: "max(32px, calc((100vw - 1436px) / 2 + 46px))",
+          background: scrolled || mobileOpen ? "rgba(11,15,26,0.95)" : "linear-gradient(180deg, rgba(11,15,26,0.8) 0%, transparent 100%)",
+          backdropFilter: scrolled || mobileOpen ? "blur(20px) saturate(1.4)" : "none",
+          borderBottom: scrolled ? `1px solid ${C.borderSubtle}` : "1px solid transparent",
+          transform: visible ? "translateY(0)" : "translateY(-100%)",
+          opacity: visible ? 1 : 0,
+        }}>
+        <Link to="/" className="flex items-center gap-2 no-underline">
+          <img src="/logo-white.svg" alt="askwijs" className="h-6 w-auto" />
+          <span className="text-[16px] font-semibold text-[#F9FAFB] tracking-tight" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+            ask<span style={{ color: C.accent }}>wijs</span>
+          </span>
+        </Link>
+        <div className="hidden md:flex items-center gap-8">
+          <NavLink href="#features">Product</NavLink>
+          <NavLink href="#pricing">Pricing</NavLink>
+          <NavLink href="#security">Security</NavLink>
+        </div>
+        <div className="flex items-center gap-4">
+          <Link to="/login" className="hidden md:inline text-[14px] text-[#9CA3AF] hover:text-[#F9FAFB] transition-colors">Log in</Link>
+          <Link to="/signup" className="hidden md:inline text-[14px] font-medium text-white px-4 py-2 rounded-[8px] transition-all hover:brightness-110"
+            style={{ background: C.accent }}>Sign up</Link>
+          {/* Mobile hamburger */}
+          <button className="md:hidden flex flex-col gap-[5px] p-2 -mr-2" onClick={() => setMobileOpen(!mobileOpen)}
+            aria-label="Toggle menu" aria-expanded={mobileOpen}>
+            <span className="block w-5 h-[1.5px] bg-[#F9FAFB] transition-all duration-200"
+              style={{ transform: mobileOpen ? "rotate(45deg) translate(2px, 2px)" : "none" }} />
+            <span className="block w-5 h-[1.5px] bg-[#F9FAFB] transition-all duration-200"
+              style={{ opacity: mobileOpen ? 0 : 1 }} />
+            <span className="block w-5 h-[1.5px] bg-[#F9FAFB] transition-all duration-200"
+              style={{ transform: mobileOpen ? "rotate(-45deg) translate(2px, -2px)" : "none" }} />
+          </button>
+        </div>
+      </nav>
+
+      {/* Mobile menu overlay */}
+      {mobileOpen && (
+        <div className="fixed inset-0 z-40 md:hidden" style={{ background: "rgba(11,15,26,0.95)", backdropFilter: "blur(20px)", paddingTop: 72 }}>
+          <div className="flex flex-col items-start gap-1 px-8 py-6">
+            <a href="#features" onClick={() => setMobileOpen(false)} className="text-[16px] text-[#9CA3AF] hover:text-[#F9FAFB] transition-colors py-3 w-full">Product</a>
+            <a href="#pricing" onClick={() => setMobileOpen(false)} className="text-[16px] text-[#9CA3AF] hover:text-[#F9FAFB] transition-colors py-3 w-full">Pricing</a>
+            <a href="#security" onClick={() => setMobileOpen(false)} className="text-[16px] text-[#9CA3AF] hover:text-[#F9FAFB] transition-colors py-3 w-full">Security</a>
+            <div className="w-full h-px my-3" style={{ background: C.border }} />
+            <Link to="/login" onClick={() => setMobileOpen(false)} className="text-[16px] text-[#9CA3AF] hover:text-[#F9FAFB] transition-colors py-3 w-full">Log in</Link>
+            <Link to="/signup" onClick={() => setMobileOpen(false)} className="text-[14px] font-medium text-white text-center py-3 rounded-[8px] w-full mt-2 transition-all"
+              style={{ background: C.accent }}>Sign up</Link>
+          </div>
+        </div>
+      )}
+    </>
   );
 }
 
@@ -1022,8 +1062,8 @@ function Pricing() {
                 </div>
               ))}
             </div>
-            <Link to="/signup" className="block w-full text-center text-[14px] font-medium py-3 rounded-lg transition-all hover:bg-[rgba(255,255,255,0.08)]"
-              style={{ background: "rgba(255,255,255,0.04)", color: C.text, border: `1px solid ${C.borderSubtle}` }}>Get started</Link>
+            <Link to="/signup" className="block w-full text-center text-[14px] font-medium py-3 rounded-lg transition-all hover:bg-[rgba(255,255,255,0.12)]"
+              style={{ background: "rgba(255,255,255,0.06)", color: C.text, border: `1px solid ${C.border}` }}>Get started</Link>
           </div>
 
           {/* Pro — highlighted */}
