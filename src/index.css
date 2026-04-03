@@ -1,24 +1,32 @@
 @import "tailwindcss";
 
 @theme {
-  --font-display: "Playfair Display", serif;
-  --font-body: "Outfit", sans-serif;
+  --font-display: "Instrument Serif", serif;
+  --font-body: "Plus Jakarta Sans", sans-serif;
   --font-mono: "JetBrains Mono", monospace;
 
-  --color-wijs-blue: #2563eb;
-  --color-wijs-blue-light: #3b82f6;
-  --color-wijs-blue-pale: #eff6ff;
-  --color-clarity-green: #059669;
-  --color-clarity-green-light: #10b981;
-  --color-clarity-green-pale: #ecfdf5;
-  --color-warm-amber: #d97706;
-  --color-warm-amber-pale: #fffbeb;
-  --color-deep-slate: #0a0f1a;
-  --color-off-white: #f8fafc;
+  --color-wijs-blue: #2563EB;
+  --color-wijs-blue-hover: #3B82F6;
+  --color-wijs-blue-pale: rgba(37, 99, 235, 0.12);
+  --color-success: #059669;
+  --color-success-pale: rgba(5, 150, 105, 0.12);
+  --color-warning: #D97706;
+  --color-warning-pale: rgba(217, 119, 6, 0.12);
+  --color-error: #DC2626;
+  --color-error-pale: rgba(220, 38, 38, 0.12);
+  --color-bg: #0B0F1A;
+  --color-surface: #111827;
+  --color-surface-elevated: #1F2937;
+  --color-text-primary: #F9FAFB;
+  --color-text-secondary: #9CA3AF;
+  --color-text-tertiary: #6B7280;
+  --color-border: rgba(255, 255, 255, 0.08);
+  --color-border-subtle: rgba(255, 255, 255, 0.04);
 }
 
 body {
   font-family: var(--font-body);
-  background: var(--color-off-white);
-  color: #0f172a;
+  background: var(--color-bg);
+  color: var(--color-text-primary);
+  -webkit-font-smoothing: antialiased;
 }
